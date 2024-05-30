@@ -7,7 +7,7 @@
     "lint": "eslint --ext .ts,.tsx --ignore-pattern node_modules .",
     "lint:fix": "eslint --ext .ts,.tsx --ignore-pattern node_modules --fix .",
     "tsc": "tsc --noEmit -p widget-src",
-    "watch": "pnpm run build -- --watch",
+    "dev": "pnpm run build --watch",
     "test": "vitest",
     "generate:component": "turbo gen react-component"
   },

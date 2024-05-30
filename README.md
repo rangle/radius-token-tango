@@ -1,69 +1,88 @@
+Here's a README file for your repository:
+
+---
+
 # Radius Token Tango
 
-A set of tools to 
+This repository contains the codebase for the Radius Token Tango project, which includes a Figma Widget and a web UI. The project is structured as a monorepo, containing multiple applications and packages.
 
-### Apps and Packages
+## Table of Contents
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Development](#development)
+- [Build](#build)
+- [Linting and Formatting](#linting-and-formatting)
+- [Publishing the Widget](#publishing-the-widget)
+- [Future Plans](#future-plans)
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+## Project Structure
 
-### Utilities
+The repository is organized as follows:
 
-This Turborepo has some additional tools already setup for you:
+- **apps/token-tango-web-ui**: The web UI application for the Token Tango project.
+- **apps/token-tango-widget**: The Figma Widget application for the Token Tango project.
+- **packages/eslint-config**: Internal ESLint configuration package.
+- **packages/typescript-config**: Internal TypeScript configuration package.
+- **packages/bandoneon**: Small UI library for the web part of the app.
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+## Installation
 
-### Build
+To set up the project, you'll need to have [pnpm](https://pnpm.io/) installed. Once you have `pnpm`, run the following command to install all dependencies:
 
-To build all apps and packages, run the following command:
-
+```sh
+pnpm install
 ```
-cd my-turborepo
-pnpm build
-```
 
-### Develop
+## Development
 
-To develop all apps and packages, run the following command:
+To start the development server for all apps, use the following command:
 
-```
-cd my-turborepo
+```sh
 pnpm dev
 ```
 
-### Remote Caching
+This will run `turbo dev`, which starts the development server for all applications and packages.
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+## Build
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
+To build all applications and packages, run:
 
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
+```sh
+pnpm build
 ```
 
-## Useful Links
+This will run `turbo build`, which builds all the projects in the monorepo.
 
-Learn more about the power of Turborepo:
+## Linting and Formatting
 
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+To lint the codebase, run:
+
+```sh
+pnpm lint
+```
+
+To format the codebase using Prettier, run:
+
+```sh
+pnpm format
+```
+
+## Publishing the Widget
+
+To publish the Figma Widget, follow these steps:
+
+1. Navigate to the `apps/token-tango-widget` directory.
+2. Ensure you have the correct Figma manifest file located at `apps/token-tango.manifest.json`.
+3. Follow the steps in [Figma's documentation](https://www.figma.com/widget-docs/) to publish the widget.
+
+## Future Plans
+
+We plan to add more packages in the future, including:
+
+- **Common Logic Library**: A library containing common logic used across the applications.
+- **Command-Line Tool**: A tool for converting layer files to other formats.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
