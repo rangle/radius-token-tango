@@ -1,0 +1,12 @@
+{
+  "extends": "@repo/typescript-config/web.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "paths": {
+      "react": ["./node_modules/preact/compat/"],
+      "react-dom": ["./node_modules/preact/compat/"]
+    }
+  },
+  "include": ["src/**/*.tsx", "src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

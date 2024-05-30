@@ -1,0 +1,22 @@
+{
+  "name": "Radius Token Tango",
+  "id": "1378047373035189637",
+  "api": "1.0.0",
+  "main": "token-tango-widget/dist/code.js",
+  "ui": "token-tango-web-ui/dist/index.html",
+  "capabilities": [],
+  "permissions": ["currentuser"],
+  "enableProposedApi": false,
+  "editorType": ["figma"],
+  "containsWidget": true,
+  "widgetApi": "1.0.0",
+  "networkAccess": {
+    "allowedDomains": [
+      "https://*.github.com",
+      "https://*.githubusercontent.com"
+    ],
+    "reasoning": "Fetch and save token files in Github",
+    "devAllowedDomains": []
+  },
+  "documentAccess": "dynamic-page"
+}

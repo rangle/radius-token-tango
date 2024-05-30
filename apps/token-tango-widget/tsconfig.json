@@ -1,0 +1,16 @@
+{
+  "extends": "@repo/typescript-config/figma.json",
+  "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "figma.widget.h",
+    "jsxFragmentFactory": "figma.widget.Fragment",
+    "target": "es2016",
+    "lib": ["es2016", "ESNext"],
+    "strict": true,
+    "typeRoots": ["node_modules/@types", "node_modules/@figma"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
+  },
+  "include": ["src/**/*.tsx", "src//**/*.ts", "types"],
+  "exclude": ["node_modules", "dist"]
+}
