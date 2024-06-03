@@ -1,20 +1,3 @@
-export type TokenVariable = {
-  name: string;
-  value?: VariableValue;
-  alias?: string;
-  description?: string;
-  type: string;
-};
-
-export type VariablesMode = {
-  name: string;
-  variables: TokenVariable[];
-};
-
-export type TokenCollection = {
-  name: string;
-  modes: VariablesMode[];
-};
 
 // type guard for VariableValue is alias
 function isVariableAlias(value: VariableValue): value is VariableAlias {
@@ -53,6 +36,7 @@ export const getAllLocalVariableTokens = async () => {
   // iterate through all the collections
   for (let x = 0; x < variableCollections.length; x++) {
     const collection = variableCollections[x];
+
     if (collection.name === "03-color modes")
       console.log(
         "==> Collection",
