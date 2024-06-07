@@ -10,6 +10,17 @@ export interface RGBA {
   readonly b: number;
   readonly a: number;
 }
+export interface HSL {
+  readonly h: number;
+  readonly s: number;
+  readonly l: number;
+}
+export interface HSLA {
+  readonly h: number;
+  readonly s: number;
+  readonly l: number;
+  readonly a: number;
+}
 export interface VariableAlias {
   type: "VARIABLE_ALIAS";
   id: string;

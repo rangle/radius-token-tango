@@ -1,18 +1,22 @@
-import { TokenRuleSet } from "../format.types";
-import { isCamelCase } from "../format.utils";
+import {
+  isCamelCase,
+  isNumberOrFraction,
+  ruleSet,
+  validationError,
+  validationResult,
+} from "../format.utils";
 import { isTokenType } from "../token-name-format.types";
 
-export const rules: TokenRuleSet = {
+export const rules = ruleSet({
   "min-two-segments": {
     description: "Token names must have at least two segments",
     validate: (name: string) => {
       const segments = name.split(".");
       return segments.length >= 2
-        ? [true]
-        : [
-            false,
-            `Token names must have at least two segments (found ${segments.length})`,
-          ];
+        ? validationResult(true)
+        : validationError(
+            `Token names must have at least two segments (found ${segments.length})`
+          );
     },
   },
   "dot-separation": {
@@ -20,11 +24,10 @@ export const rules: TokenRuleSet = {
       "Segments within a token name must be separated by a single dot",
     validate: (name: string) => {
       return name.includes(".")
-        ? [true]
-        : [
-            false,
-            "Segments within a token name must be separated by a single dot",
-          ];
+        ? validationResult(true)
+        : validationError(
+            "Segments within a token name must be separated by a single dot"
+          );
     },
   },
   "type-as-first-segment": {
@@ -33,55 +36,55 @@ export const rules: TokenRuleSet = {
     validate: (name: string) => {
       const [firstSegment] = name.split(".");
       return isTokenType(firstSegment)
-        ? [true]
-        : [
-            false,
-            `Segment ${firstSegment} is not a valid token type`,
-            [firstSegment],
-          ];
+        ? validationResult(true)
+        : validationError(`Segment ${firstSegment} is not a valid token type`, [
+            firstSegment,
+          ]);
     },
   },
   "lowercase-or-camelcase": {
-    description: "Each segment can be in lowercase or camelCase",
+    description:
+      "Each segment can be in lowercase or camelCase unless it's the last segment, that can be either a camelCase value or a numeric value",
     validate: (name: string) => {
       const segments = name.split(".");
-      return segments.every(isCamelCase)
-        ? [true]
-        : [
-            false,
+      const allButLast = segments.slice(0, segments.length - 1);
+      const lastSegment = segments[segments.length - 1];
+      return allButLast.every(isCamelCase) &&
+        (isCamelCase(lastSegment) || isNumberOrFraction(lastSegment))
+        ? validationResult(true)
+        : validationError(
             "Segments should be in lowercase or camelCase",
-            segments.filter((s) => !isCamelCase(s)),
-          ];
+            segments.filter((s) => !isCamelCase(s))
+          );
     },
   },
   "no-leading-or-trailing-dots": {
     description: "Token names must not start or end with a dot",
     validate: (name: string) => {
       return !name.startsWith(".") && !name.endsWith(".")
-        ? [true]
-        : [false, "Token names must not start or end with a dot"];
+        ? validationResult(true)
+        : validationError("Token names must not start or end with a dot");
     },
   },
   length: {
     description:
-      "Each segment within a token name should be between 1 to 20 characters long",
+      "Each segment within a token name should be between 1 to 25 characters long",
     validate: (name: string) => {
       const segments = name.split(".");
-      return segments.every((s) => s.length >= 1 && s.length <= 20)
-        ? [true]
-        : [
-            false,
-            "Each segment within a token name should be between 1 to 20 characters long",
-            segments.filter((s) => s.length < 1 || s.length > 20),
-          ];
+      return segments.every((s) => s.length >= 1 && s.length <= 25)
+        ? validationResult(true)
+        : validationError(
+            "Each segment within a token name should be between 1 to 25 characters long",
+            segments.filter((s) => s.length < 1 || s.length > 25)
+          );
     },
   },
   "no-consecutive-dots": {
     description: "Multiple consecutive dots are not allowed",
     validate: (name: string) => {
       return !name.includes("..")
-        ? [true]
-        : [false, "Multiple consecutive dots are not allowed"];
+        ? validationResult(true)
+        : validationError("Multiple consecutive dots are not allowed");
     },
   },
-};
+});

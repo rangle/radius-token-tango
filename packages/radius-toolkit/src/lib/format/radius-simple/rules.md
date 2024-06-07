@@ -14,35 +14,35 @@ The first segment of the token name must indicate the token type. Types should b
 _Valid_: `borderRadius.small`
 _Invalid_: `radius.small`
 
-## Lowercase or CamelCase
+## Lowercase or CamelCase (lowercase-or-camelcase)
 
 Each segment can be in lowercase or camelCase. Spaces, hyphens or other special characters are strongly discouraged.
 
 _Valid_: `fontSize.large`
 _Invalid_: `font size.large`
 
-## Dot Separation
+## Dot Separation (dot-separation)
 
 Segments within a token name must be separated by a single dot (`.`). No spaces or other punctuation marks are allowed.
 
 _Valid_: `spacing.medium`
 _Invalid_: `spacing.standard-medium`
 
-## No Leading or Trailing Dots
+## No Leading or Trailing Dots (no-leading-or-trailing-dots)
 
 Token names must not start or end with a dot.
 
 _Valid_: `.borderRadius.small`
 _Invalid_: `.borderRadius.small`
 
-## Length
+## Length (length)
 
-Each segment within a token name should be between 1 to 20 characters long.
+Each segment within a token name should be between 1 to 25 characters long.
 
 _Valid_: `borderRadius.small.relativelyLongSegment`
 _Invalid_: `borderRadius.small.thisIsIndeedAVeryLongSegment`
 
-## No Consecutive Dots
+## No Consecutive Dots (no-consecutive-dots)
 
 Multiple consecutive dots (`..`) are not allowed.
 

@@ -1,29 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
-  isCamelCase,
-  TokenError,
   validateTokenName,
   calculateSubjectsFromProps,
   inferVariableType,
   combineComponentUsage,
 } from "./token.utils";
 import { ComponentUsage } from "./token.types";
-
-describe("isCamelCase", () => {
-  it("should return true for valid camel case strings", () => {
-    expect(isCamelCase("test")).toBe(true);
-    expect(isCamelCase("testNoveo")).toBe(true);
-    expect(isCamelCase("nodaSmellSa")).toBe(true);
-  });
-
-  it("should return false for invalid camel case strings", () => {
-    expect(isCamelCase("test noveo")).toBe(false);
-    expect(isCamelCase("test_")).toBe(false);
-    expect(isCamelCase("Dstest")).toBe(false);
-    expect(isCamelCase("nodaSSmellSa")).toBe(false);
-    expect(isCamelCase("NADA")).toBe(false);
-  });
-});
 
 describe("validateTokenName", () => {
   it("should return valid for a valid token name", () => {
@@ -40,7 +22,7 @@ describe("validateTokenName", () => {
     expect(theName).toBe(name);
     expect(valid).toBe(false);
     expect(errors).toHaveLength(3);
-    expect(errors[0]).toMatchObject<Partial<TokenError>>({
+    expect(errors[0]).toMatchObject({
       key: "two-segments",
     });
   });

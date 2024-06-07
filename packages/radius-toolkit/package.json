@@ -6,7 +6,7 @@
   "module": "dist/lib/radius-toolkit.es.js",
   "types": "dist/lib/types/index.d.ts",
   "bin": {
-    "radius": "dist/cli/cli.cjs.js"
+    "radius-toolkit": "dist/cli/cli.cjs.js"
   },
   "keywords": [
     "design tokens",
