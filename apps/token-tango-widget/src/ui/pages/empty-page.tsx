@@ -1,23 +1,31 @@
 const { widget } = figma;
 const { AutoLayout, Text, Frame, SVG } = widget;
 
-import { URL_ACCESS_TOKEN_DOCS } from "../../constants";
+import { URL_ACCESS_TOKEN_DOCS, URL_TOKEN_FORMAT_DOCS } from "../../constants";
 import { NameFormat } from "../components/name-format";
 import { MessageRibbon } from "../components/message-ribbon";
 import { RefreshedContent } from "../components/refreshed-content";
 import { WidgetConfiguration } from "@repo/config";
 
+import { FormatName, formats, getFormat } from "radius-toolkit";
+import { typography } from "@repo/bandoneon";
+
 type EmptyPageProps = {
   synchConfig: WidgetConfiguration | null;
   loadTokens: () => void;
   openConfig: () => void;
+  selectedFormat: FormatName | null;
+  selectFormat: (format: FormatName) => void;
 };
 
-export const EmptyPage = ({
+export const EmptyPage: FunctionalWidget<EmptyPageProps> = ({
   synchConfig,
   loadTokens,
   openConfig,
-}: EmptyPageProps) => {
+  selectedFormat,
+  selectFormat,
+}) => {
+  const format = getFormat(selectedFormat ?? formats[0].name) ?? formats[0];
   return (
     <AutoLayout
       cornerRadius={12}
@@ -28,7 +36,7 @@ export const EmptyPage = ({
       fill="#fff"
       width="fill-parent"
     >
-      <NameFormat />
+      <NameFormat {...{ format, selectFormat, formats }} />
       {synchConfig ? (
         <RefreshedContent
           name={synchConfig.name}
@@ -45,6 +53,22 @@ export const EmptyPage = ({
           verticalAlignItems="center"
           horizontalAlignItems="center"
         >
+          <Text
+            name="Learn more about our naming convention"
+            fill="#262626"
+            width={348}
+            verticalAlignText="center"
+            horizontalAlignText="center"
+            {...typography.small}
+            textDecoration="underline"
+            onClick={() =>
+              figma.openExternal(
+                `${URL_TOKEN_FORMAT_DOCS}${format.name}/README.md`,
+              )
+            }
+          >
+            About the {format.description} naming convention
+          </Text>
           <AutoLayout
             name="Frame 1000002080"
             overflow="visible"

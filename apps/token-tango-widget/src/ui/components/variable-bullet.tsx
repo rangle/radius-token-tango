@@ -8,6 +8,7 @@ export type VariableBulletProps = {
   name: string;
   colors?: Array<string>;
   issues?: TokenValidationResult["errors"];
+  separator?: string;
   onClick?: () => void;
   icon?: IconProps["icon"];
 } & BaseProps &
@@ -18,13 +19,14 @@ export const VariableBullet: FunctionalWidget<VariableBulletProps> = ({
   name,
   colors = [],
   issues = [],
+  separator = ".",
   onClick,
   icon,
   children,
   ...props
 }) => {
   const { base } = colorTokens;
-  const segments = name.split(/[/.]/);
+  const segments = name.split(".");
   const iconSelection = icon || ("variables" as const);
   const errorSegments = issues.flatMap(({ segments }) => segments);
   return (
@@ -97,8 +99,12 @@ export const VariableBullet: FunctionalWidget<VariableBulletProps> = ({
               height="fill-parent"
               verticalAlignItems="center"
             >
-              <Text name="." verticalAlignText="center" {...typography.code}>
-                .
+              <Text
+                name="separator"
+                verticalAlignText="center"
+                {...typography.code}
+              >
+                {separator}
               </Text>
             </AutoLayout>
           )}

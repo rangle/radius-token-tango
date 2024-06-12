@@ -22,7 +22,11 @@ import { PageLayout } from "./ui/pages/layout.js";
 import { version } from "../package.json";
 
 import { WidgetConfiguration } from "@repo/config";
-import { TokenCollection } from "radius-toolkit";
+import {
+  FormatName,
+  TokenCollection,
+  TokenNameFormatType,
+} from "radius-toolkit";
 
 const { widget } = figma;
 const { AutoLayout, useSyncedState, Text, waitForTask } = widget;
@@ -47,10 +51,8 @@ export function Widget() {
     "errorState",
     null,
   );
-  const [lastSynched, setLastSynched] = useSyncedState<string | null>(
-    "lastSynched",
-    null,
-  );
+  const [tokenNameFormat, setTokenNameFormat] =
+    useSyncedState<FormatName | null>("tokenNameFormat", null);
   const [synchDetails, setSynchDetails] =
     useSyncedState<RepositoryTokenLayers | null>("synchDetails", null);
   const [allTokens, setAllTokens] = useSyncedState<LoadedTokens | null>(
@@ -61,7 +63,6 @@ export function Widget() {
   const doSynchronize = synchRepository(
     synchConfiguration,
     setErrorMessage,
-    setLastSynched,
     setSynchDetails,
   );
 
@@ -97,6 +98,8 @@ export function Widget() {
     >
       {allTokens === null || synchDetails === null ? (
         <EmptyPage
+          selectedFormat={tokenNameFormat}
+          selectFormat={(newFormat) => setTokenNameFormat(newFormat)}
           synchConfig={synchConfiguration}
           loadTokens={async () => {
             console.log("Loading your tokens!");
@@ -205,7 +208,6 @@ function saveTokensToRepository(
 function synchRepository(
   synchConfiguration: WidgetConfiguration | null,
   setErrorMessage: (newValue: string | null) => void,
-  setLastSynched: (newValue: string | null) => void,
   setSynchDetails: (newValue: RepositoryTokenLayers | null) => void,
 ): (updateConfiguration: (err?: string) => void) => Promise<void> {
   return async (updateConfiguration) => {
@@ -227,7 +229,6 @@ function synchRepository(
     })
       .then((details) => {
         console.log("synchronizing...DONE!");
-        setLastSynched(new Date().toISOString());
 
         updateConfiguration(); // success!
 
