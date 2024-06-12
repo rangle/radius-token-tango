@@ -1,11 +1,11 @@
 const { widget } = figma;
 const { AutoLayout, Text, Frame, SVG } = widget;
 
-import { URL_ACCESS_TOKEN_DOCS } from "../../constants.js";
-import { NameFormat } from "../components/name-format.js";
-import { MessageRibbon } from "../components/message-ribbon.js";
-import { RefreshedContent } from "../components/refreshed-content.js";
-import { WidgetConfiguration } from "../../../types/state.js";
+import { URL_ACCESS_TOKEN_DOCS } from "../../constants";
+import { NameFormat } from "../components/name-format";
+import { MessageRibbon } from "../components/message-ribbon";
+import { RefreshedContent } from "../components/refreshed-content";
+import { WidgetConfiguration } from "@repo/config";
 
 type EmptyPageProps = {
   synchConfig: WidgetConfiguration | null;

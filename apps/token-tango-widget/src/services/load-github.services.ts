@@ -6,7 +6,7 @@ import {
   GithubClient,
   isPackageJSON,
   isGithubFileDetails,
-} from "../common/github.utils.js";
+} from "@repo/utils";
 import { TokenLayers } from "../common/token-parser.types.js";
 
 /**

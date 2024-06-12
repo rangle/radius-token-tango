@@ -1,10 +1,11 @@
 {
   "name": "radius-toolkit",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A toolkit for handling design tokens",
   "main": "dist/lib/radius-toolkit.cjs.js",
   "module": "dist/lib/radius-toolkit.es.js",
-  "types": "dist/lib/types/index.d.ts",
+  "types": "dist/lib/types/src/index.d.ts",
+  "source": "src",
   "bin": {
     "radius-toolkit": "dist/cli/cli.cjs.js"
   },

@@ -1,5 +1,5 @@
-import { h, FunctionalComponent } from "preact";
-import { useRef } from "preact/hooks";
+import React, { FC } from "react";
+import { useRef } from "react";
 import { emit } from "@create-figma-plugin/utilities";
 import {
   CommitMessageConfirmation,
@@ -11,7 +11,7 @@ export type PushConfirmationProps = {
   updateState: (newState: CommitMessageConfirmation) => void;
 };
 
-export const PushConfirmation: FunctionalComponent<PushConfirmationProps> = ({
+export const PushConfirmation: FC<PushConfirmationProps> = ({
   state,
   updateState,
 }) => {
@@ -19,10 +19,10 @@ export const PushConfirmation: FunctionalComponent<PushConfirmationProps> = ({
   const branchRef = useRef<HTMLInputElement>(null);
   const messageRef = useRef<HTMLTextAreaElement>(null);
   return (
-    <div class="container">
+    <div className="container p-4">
       <h2>Push Confirmation</h2>
-      <div class="form-group">
-        <label for="branchName">Branch Name:</label>
+      <div className="form-group">
+        <label htmlFor="branchName">Branch Name:</label>
         <input
           type="text"
           ref={branchRef}
@@ -32,8 +32,8 @@ export const PushConfirmation: FunctionalComponent<PushConfirmationProps> = ({
           value={branchName}
         />
       </div>
-      <div class="form-group">
-        <label for="commitMessage">Commit Message:</label>
+      <div className="form-group">
+        <label htmlFor="commitMessage">Commit Message:</label>
         <textarea
           id="commitMessage"
           ref={messageRef}
@@ -43,15 +43,15 @@ export const PushConfirmation: FunctionalComponent<PushConfirmationProps> = ({
           value={commitMessage}
         ></textarea>
       </div>
-      <div class="btn-group">
+      <div className="btn-group">
         <button
-          class="btn btn-cancel"
+          className={"p-4 bg-cyan-300"}
           onClick={() => emit<UiCloseHandler>("UI_CLOSE")}
         >
           Cancel
         </button>
         <button
-          class="btn btn-finish"
+          className="btn btn-finish"
           onClick={() =>
             updateState({
               branchName: branchRef.current?.value ?? branchName,

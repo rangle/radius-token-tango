@@ -4,6 +4,7 @@
   "compilerOptions": {
     "declaration": true,
     "declarationMap": true,
+    "noEmit": true,
     "esModuleInterop": true,
     "incremental": false,
     "isolatedModules": true,

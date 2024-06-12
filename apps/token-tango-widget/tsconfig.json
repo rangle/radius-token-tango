@@ -4,13 +4,17 @@
     "jsx": "react",
     "jsxFactory": "figma.widget.h",
     "jsxFragmentFactory": "figma.widget.Fragment",
-    "target": "es2016",
-    "lib": ["es2016", "ESNext"],
+    "target": "esnext",
+    "lib": ["esnext", "DOM"],
     "strict": true,
     "typeRoots": ["node_modules/@types", "node_modules/@figma"],
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext"
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "paths": {
+      "@repo/utils": ["../../packages/utils/index.ts"],
+      "@repo/config": ["../../packages/repository-config/index.ts"]
+    }
   },
-  "include": ["src/**/*.tsx", "src//**/*.ts", "types"],
+  "include": ["src/**/*.tsx", "src/**/*.ts", "types"],
   "exclude": ["node_modules", "dist"]
 }

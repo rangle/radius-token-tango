@@ -1,6 +1,6 @@
-import { Command } from "commander";
+import { Command, Option } from "commander";
 import { version } from "../package.json";
-import { validateTokenName } from "./index";
+import { createValidators } from "./lib";
 
 export const THIS_IS_THE_CLI_ENTRYPOINT = "This is the CLI entrypoint";
 
@@ -19,9 +19,27 @@ program
   });
 
 program
-  .command("validate-token-name <name>")
-  .description("Checks if a token name is valid")
-  .action((name) => {
+  .command("validate-token-name")
+  .argument("<name>", "Token name to validate")
+  .addOption(
+    new Option("-f, --format <FORMAT>", "Format to use for validation")
+      .choices(["radius-simple", "radius-layer-subject-type"])
+      .default("radius-simple")
+  )
+  .addOption(
+    new Option(
+      "-o, --output <OUTPUT>",
+      "Format for the output of the validation"
+    )
+      .choices(["text", "json"])
+      .default("text")
+  )
+  .description(
+    "Checks if a token name is valid. list error messages and warnings if it is not."
+  )
+  .action(async (name: string, options: any) => {
+    console.log(name, options);
+    const [validateTokenName] = createValidators(options.format);
     console.log(validateTokenName(name));
   });
 

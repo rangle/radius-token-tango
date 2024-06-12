@@ -1,34 +1,17 @@
 import { describe, expect, it } from "vitest";
 import {
-  validateTokenName,
   calculateSubjectsFromProps,
   inferVariableType,
   combineComponentUsage,
 } from "./token.utils";
 import { ComponentUsage } from "./token.types";
-
-describe("validateTokenName", () => {
-  it("should return valid for a valid token name", () => {
-    const name = "density.static.color.primary";
-    const [theName, valid, errors] = validateTokenName(name);
-    expect(theName).toBe(name);
-    expect(valid).toBe(true);
-    expect(errors).toHaveLength(0);
-  });
-
-  it("should return invalid for an invalid token name", () => {
-    const name = "color";
-    const [theName, valid, errors] = validateTokenName(name);
-    expect(theName).toBe(name);
-    expect(valid).toBe(false);
-    expect(errors).toHaveLength(3);
-    expect(errors[0]).toMatchObject({
-      key: "two-segments",
-    });
-  });
-});
+import { getFormat, radiusLayerSubjectTypeFormat } from "../formats";
 
 describe("calculateSubjectsFromProps", () => {
+  const getSubjects = calculateSubjectsFromProps(
+    getFormat("radius-layer-subject-type") ?? radiusLayerSubjectTypeFormat
+  );
+
   it("should return an array of subjects from component props", () => {
     const componentProps = [
       "semantic.static.color.primary",
@@ -36,13 +19,14 @@ describe("calculateSubjectsFromProps", () => {
       "density.action.margin.sm",
       "semantic.action.color.secondary",
     ];
-    const subjects = calculateSubjectsFromProps(componentProps);
+
+    const subjects = getSubjects(componentProps);
     expect(subjects).toEqual(["static", "action"]);
   });
 
   it("should return an empty array if component props is empty", () => {
     const componentProps: string[] = [];
-    const subjects = calculateSubjectsFromProps(componentProps);
+    const subjects = getSubjects(componentProps);
     expect(subjects).toEqual([]);
   });
 });
@@ -54,7 +38,10 @@ describe("inferVariableType", () => {
       value: "#FF0000",
       type: "color",
     };
-    const type = inferVariableType(variable);
+    const getTokenType = inferVariableType(
+      getFormat("radius-layer-subject-type") ?? radiusLayerSubjectTypeFormat
+    );
+    const type = getTokenType(variable);
     expect(type).toBe("color");
   });
 });

@@ -1,27 +1,32 @@
-import { h, Fragment, FunctionalComponent, render } from "preact";
+import React, { Fragment, FC } from "react";
+import { render } from "react-dom";
 
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "react";
 import { emit, on } from "@create-figma-plugin/utilities";
 
-import "@create-figma-plugin/ui/css/base.css";
 import {
   CommitMessageConfirmation,
   ConfirmPushHandler,
   UiCommitHandler,
   UiStateHandler,
-  WidgetConfiguration,
   WidgetStateHandler,
 } from "../../../apps/token-tango-widget/types/state";
 
 import { PushConfirmation } from "./components/push";
 import { ConfigForm } from "./components/config";
+import { RepositoryConfig } from "./components/repository";
+import { WidgetConfiguration } from "@repo/config";
+
+import "./index.css";
 
 const initialState: WidgetConfiguration = {
+  tool: "GitHub",
   name: "",
   repository: "",
   accessToken: "",
   branch: "",
-  path: "",
+  filePath: "",
+  createNewFile: false,
 };
 
 const initialCommitState: CommitMessageConfirmation = {
@@ -29,9 +34,9 @@ const initialCommitState: CommitMessageConfirmation = {
   commitMessage: "",
 };
 
-export type AppRoute = "loading" | "config" | "push";
+export type AppRoute = "loading" | "config" | "push" | "repository";
 
-export const App: FunctionalComponent = () => {
+export const App: FC = () => {
   const [route, setRoute] = useState<AppRoute>("loading");
   const [config, setConfig] = useState<WidgetConfiguration>(initialState);
   const [commit, setCommit] =
@@ -42,7 +47,7 @@ export const App: FunctionalComponent = () => {
     on<WidgetStateHandler>("PLUGIN_STATE_CHANGE", (state) => {
       console.log("WEB: PLUGIN_STATE_CHANGE", state);
       setConfig(state ?? initialState);
-      setRoute("config");
+      setRoute("repository");
     });
 
     on<ConfirmPushHandler>("PLUGIN_CONFIRM_PUSH", (state) => {
@@ -50,6 +55,15 @@ export const App: FunctionalComponent = () => {
       setCommit(state ?? initialCommitState);
       setRoute("push");
     });
+
+    const hash = window.location.hash.substring(1);
+    if (hash === "config") {
+      setRoute("config");
+    } else if (hash === "push") {
+      setRoute("push");
+    } else if (hash === "repository") {
+      setRoute("repository");
+    }
   }, []);
 
   const updateState = (newState: WidgetConfiguration) => {
@@ -65,9 +79,11 @@ export const App: FunctionalComponent = () => {
   return (
     <Fragment>
       {route === "config" ? (
-        <ConfigForm state={config} updateState={updateState} />
+        <RepositoryConfig state={config} updateState={updateState} />
       ) : route === "push" ? (
         <PushConfirmation state={commit} updateState={updateCommitState} />
+      ) : route === "repository" ? (
+        <RepositoryConfig state={config} updateState={updateState} />
       ) : (
         <div>Loading</div>
       )}

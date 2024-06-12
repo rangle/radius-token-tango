@@ -1,13 +1,13 @@
 const { widget } = figma;
 const { AutoLayout, Text, SVG, Frame } = widget;
 
-import { WidgetHeader } from "../components/widget-header.js";
-import { BottomLogo } from "../components/bottom-logo.js";
-import { Button } from "../components/button.js";
-import { Icon16px } from "../components/icon.js";
-import { RepositoryTokenLayers } from "../../services/load-github.services.js";
-import { CommitRibbon } from "../components/commit-ribbon.js";
-import { RepositoryRibbon } from "../components/repository-ribbon.js";
+import { WidgetHeader } from "../components/widget-header";
+import { BottomLogo } from "../components/bottom-logo";
+import { Button } from "../components/button";
+import { Icon16px } from "../components/icon";
+import { RepositoryTokenLayers } from "../../services/load-github.services";
+import { CommitRibbon } from "../components/commit-ribbon";
+import { RepositoryRibbon } from "../components/repository-ribbon";
 
 type PageLayoutProps = {
   synched: boolean;

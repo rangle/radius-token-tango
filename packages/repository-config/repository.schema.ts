@@ -14,7 +14,9 @@ const githubSchema = z.object({
       /^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/,
       "Invalid repository format (user/name)"
     ),
-  accessToken: z.string().min(1, "Access token is required"),
+  accessToken: z
+    .string()
+    .length(40, "Access token must be in the correct format"),
   filePath: z
     .string()
     .regex(

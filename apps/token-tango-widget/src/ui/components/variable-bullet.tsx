@@ -1,28 +1,36 @@
 const { widget } = figma;
 const { Text, AutoLayout, Frame, SVG } = widget;
 import { TokenValidationResult } from "../../common/token.utils.js";
-import { Icon16px } from "./icon.js";
+import { Icon16px, IconProps } from "./icon.js";
+import { active, colors as colorTokens, typography } from "@repo/bandoneon";
 
 export type VariableBulletProps = {
   name: string;
+  colors?: Array<string>;
   issues?: TokenValidationResult["errors"];
+  onClick?: () => void;
+  icon?: IconProps["icon"];
 } & BaseProps &
   AutoLayoutProps &
   TextChildren;
 
 export const VariableBullet: FunctionalWidget<VariableBulletProps> = ({
   name,
+  colors = [],
   issues = [],
+  onClick,
+  icon,
   children,
   ...props
 }) => {
+  const { base } = colorTokens;
   const segments = name.split(/[/.]/);
-  const [first, second, third, ...rest] = segments;
+  const iconSelection = icon || ("variables" as const);
   const errorSegments = issues.flatMap(({ segments }) => segments);
   return (
     <AutoLayout
       name="FormatBullet"
-      stroke="#EFEFEF"
+      stroke={active.bg}
       cornerRadius={16}
       height={24}
       verticalAlignItems="center"
@@ -31,7 +39,7 @@ export const VariableBullet: FunctionalWidget<VariableBulletProps> = ({
     >
       <AutoLayout
         name="Spacer"
-        fill="#FFF"
+        fill={active.bg}
         overflow="visible"
         spacing={10}
         padding={{
@@ -43,164 +51,59 @@ export const VariableBullet: FunctionalWidget<VariableBulletProps> = ({
       />
       <AutoLayout
         name="TokenType"
-        fill="#fff"
+        fill={active.bg}
         overflow="visible"
         spacing={4}
         padding={4}
         verticalAlignItems="center"
+        onClick={onClick}
       >
         <Icon16px
-          icon="variables"
+          icon={iconSelection}
           size={11}
           color={issues.length > 0 ? "#F00" : "#FFF"}
         />
       </AutoLayout>
-      <AutoLayout
-        name="Layer"
-        stroke="#EFEFEF"
-        overflow="visible"
-        spacing={4}
-        padding={4}
-        height="fill-parent"
-        verticalAlignItems="center"
-      >
-        <Text
-          name="layer"
-          fill={errorSegments.includes(first) ? "#FF0000" : "#262626"}
-          verticalAlignText="center"
-          fontFamily="Roboto Mono"
-          fontSize={12}
-        >
-          {first}
-        </Text>
-      </AutoLayout>
-      <AutoLayout
-        name="Dot"
-        fill="#FFF"
-        overflow="visible"
-        spacing={4}
-        padding={{
-          vertical: 4,
-          horizontal: 0,
-        }}
-        height="fill-parent"
-        verticalAlignItems="center"
-      >
-        <Text
-          name="."
-          fill="#262626"
-          verticalAlignText="center"
-          fontFamily="Roboto Mono"
-          fontSize={12}
-        >
-          .
-        </Text>
-      </AutoLayout>
-      <AutoLayout
-        name="Subject"
-        stroke="#F8FBD2"
-        overflow="visible"
-        spacing={4}
-        padding={4}
-        height="fill-parent"
-        verticalAlignItems="center"
-      >
-        <Text
-          name="subject"
-          fill={errorSegments.includes(second) ? "#FF0000" : "#262626"}
-          verticalAlignText="center"
-          fontFamily="Roboto Mono"
-          fontSize={12}
-        >
-          {second}
-        </Text>
-      </AutoLayout>
-      <AutoLayout
-        name="Dot"
-        fill="#FFF"
-        overflow="visible"
-        spacing={4}
-        padding={{
-          vertical: 4,
-          horizontal: 0,
-        }}
-        height="fill-parent"
-        verticalAlignItems="center"
-      >
-        <Text
-          name="."
-          fill="#262626"
-          verticalAlignText="center"
-          fontFamily="Roboto Mono"
-          fontSize={12}
-        >
-          .
-        </Text>
-      </AutoLayout>
-      <AutoLayout
-        name="Type"
-        stroke="#E9F3FF"
-        overflow="visible"
-        spacing={4}
-        padding={4}
-        height="fill-parent"
-        verticalAlignItems="center"
-      >
-        <Text
-          name="type"
-          fill={errorSegments.includes(third) ? "#FF0000" : "#262626"}
-          verticalAlignText="center"
-          fontFamily="Roboto Mono"
-          fontSize={12}
-        >
-          {third}
-        </Text>
-      </AutoLayout>
-      {rest.length > 0 ? (
-        <AutoLayout
-          name="Dot"
-          fill="#FFF"
-          overflow="visible"
-          spacing={4}
-          padding={{
-            vertical: 4,
-            horizontal: 0,
-          }}
-          height="fill-parent"
-          verticalAlignItems="center"
-        >
-          <Text
-            name="."
-            fill="#262626"
-            verticalAlignText="center"
-            fontFamily="Roboto Mono"
-            fontSize={12}
+      {segments.map((segment, idx) => (
+        <>
+          <AutoLayout
+            name="Layer"
+            stroke="#EFEFEF"
+            overflow="visible"
+            spacing={4}
+            padding={4}
+            height="fill-parent"
+            verticalAlignItems="center"
           >
-            .
-          </Text>
-        </AutoLayout>
-      ) : (
-        <></>
-      )}
-      <AutoLayout
-        name="Attributes"
-        stroke="#FFF0FE"
-        overflow="visible"
-        spacing={4}
-        padding={4}
-        height="fill-parent"
-        verticalAlignItems="center"
-      >
-        <Text
-          name="attributes"
-          fill="#262626"
-          verticalAlignText="center"
-          fontFamily="Roboto Mono"
-          fontSize={12}
-        >
-          {rest.join(".")}
-        </Text>
-      </AutoLayout>
+            <Text
+              name="layer"
+              verticalAlignText="center"
+              {...typography.monotype}
+              {...(errorSegments.includes(segment) ? { fill: "#FF0000" } : {})}
+            >
+              {segment}
+            </Text>
+          </AutoLayout>
+          {idx < segments.length - 1 && (
+            <AutoLayout
+              name="Dot"
+              fill="#FFF"
+              overflow="visible"
+              spacing={4}
+              padding={{
+                vertical: 4,
+                horizontal: 0,
+              }}
+              height="fill-parent"
+              verticalAlignItems="center"
+            >
+              <Text name="." verticalAlignText="center" {...typography.code}>
+                .
+              </Text>
+            </AutoLayout>
+          )}
+        </>
+      ))}
       <AutoLayout
         name="Spacer"
         overflow="visible"

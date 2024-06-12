@@ -8,10 +8,7 @@ export default defineConfig({
   plugins: [viteSingleFile()],
   resolve: {
     alias: {
-      "!../css": path.resolve(
-        __dirname,
-        "./node_modules/@create-figma-plugin/ui/lib/css"
-      ),
+      "@": path.resolve(__dirname, "@"),
     },
   },
   build: {

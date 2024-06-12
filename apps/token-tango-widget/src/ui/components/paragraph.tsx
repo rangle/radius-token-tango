@@ -1,3 +1,4 @@
+import { typography } from "@repo/bandoneon";
 const { widget } = figma;
 const { Text } = widget;
 
@@ -8,15 +9,7 @@ export const Paragraph: FunctionalWidget<ParagraphProps> = ({
   ...props
 }) => {
   return (
-    <Text
-      name="paragraph"
-      fill="#262626"
-      lineHeight="140%"
-      fontFamily="Roboto"
-      fontSize={9}
-      fontWeight={400}
-      {...props}
-    >
+    <Text name="paragraph" {...typography.body} {...props}>
       {children}
     </Text>
   );

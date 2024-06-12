@@ -6,25 +6,14 @@ import {
   isGeneratorMappingSpecificDictionaryItem,
   isString,
 } from "./token-parser.types.js";
-
-/** convert names to kebab-case in case they come as CamelCase or pascalCase */
-export const toKebabCase = (s: string) =>
-  s
-    .replace(/\./g, "-")
-    .replace(/[^A-Za-z0-9_-]/g, " ")
-    .replace(/([A-Z]+)/g, " $1")
-    .replace(/\s+/g, " ")
-    .trim()
-    .toLowerCase()
-    .replace(/\s/g, "-")
-    .replace(/--/g, "-");
+import { toKebabCase } from "../formats";
 
 /** create a formatted key that's more css-friendly */
 export const formatKey = (str: string) => toKebabCase(str);
 
 export const renderKey = <T extends Pick<TokenOutput, "name" | "type">>(
   { name, type }: T,
-  subtoken?: string,
+  subtoken?: string
 ): string | undefined => {
   if (type !== "other") {
     const cleanName = name
@@ -46,12 +35,12 @@ export const renderOtherKey = (name: string, subtoken?: string): string => {
 
 export const renderName = <T extends Pick<TokenOutput, "name" | "type">>(
   { name }: T,
-  subtoken?: string,
+  subtoken?: string
 ): string => `${name}${subtoken ? `.${subtoken}` : ""}`;
 
 export const isEqual = <T extends Record<string, string | undefined>>(
   a: T,
-  b: T,
+  b: T
 ): boolean => {
   const aProps = Object.getOwnPropertyNames(a);
   const bProps = Object.getOwnPropertyNames(b);
@@ -76,16 +65,16 @@ export const removeDuplicates = <T>(arr: T[]): T[] =>
 
 export const processParameters = (
   specialNames: string[],
-  dataSet: JSONStructure,
+  dataSet: JSONStructure
 ) =>
   Object.entries(dataSet)
     .filter(
       ([name, { value }]) =>
-        specialNames.includes(name) && typeof value === "string",
+        specialNames.includes(name) && typeof value === "string"
     )
     .reduce(
       (res, [name, { value }]) => ({ ...res, [name]: value as string }),
-      {} as Record<string, string>,
+      {} as Record<string, string>
     );
 
 /** createReplaceFunction
@@ -94,7 +83,7 @@ export const processParameters = (
  * @returns a function that takes a key and a value and returns the value with the replacements
  */
 export const createReplaceFunction = (
-  mapping: GeneratorMappingDictionary[string],
+  mapping: GeneratorMappingDictionary[string]
 ): GeneratorMappingFunction => {
   const items = mapping || [];
   const replacingFunctions = items.flatMap((item) => {
@@ -107,7 +96,7 @@ export const createReplaceFunction = (
           tokenRegex.test(key) && regex.test(value)
             ? value.replace(
                 regex,
-                isString(to) ? to : to(value, value.match(regex)),
+                isString(to) ? to : to(value, value.match(regex))
               )
             : value;
       });
@@ -119,7 +108,7 @@ export const createReplaceFunction = (
         regex.test(value)
           ? value.replace(
               regex,
-              isString(to) ? to : to(value, value.match(regex)),
+              isString(to) ? to : to(value, value.match(regex))
             )
           : value;
     }

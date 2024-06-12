@@ -1,6 +1,6 @@
 {
   "name": "@repo/widget",
-  "version": "0.4.0",
+  "version": "0.6.0",
   "description": "Radius Token Tango -- a Figma widget to Synchronize Design Tokens between Figma and Code",
   "type": "module",
   "scripts": {
@@ -53,6 +53,10 @@
     }
   },
   "dependencies": {
+    "@repo/utils": "workspace:*",
+    "@repo/config": "workspace:*",
+    "@repo/bandoneon": "workspace:*",
+    "radius-toolkit": "workspace:*",
     "@create-figma-plugin/ui": "^3.1.0",
     "@create-figma-plugin/utilities": "^3.2.0",
     "buffer": "^6.0.3",

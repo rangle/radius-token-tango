@@ -351,8 +351,12 @@ export const createGithubRepositoryClient = ({
     );
   };
 
-  const getFileDetailsByPath = async (path: string) => {
-    const result = await command(`contents/${path}`, undefined, "GET");
+  const getFileDetailsByPath = async (path: string, branch?: string) => {
+    const result = await command(
+      `contents/${path}${branch ? `?ref=${branch}` : ""}`,
+      undefined,
+      "GET"
+    );
     console.log("getFileDetailsByPath", result);
     if (!(typeof result === "object" && isGithubFileDetails(result)))
       throw new Error(`Could not obtain contents of file ${path}`);

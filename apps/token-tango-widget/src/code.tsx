@@ -6,7 +6,6 @@ import {
   UiCloseHandler,
   UiCommitHandler,
   UiStateHandler,
-  WidgetConfiguration,
   WidgetStateHandler,
 } from "../types/state.js";
 import {
@@ -16,12 +15,14 @@ import {
 } from "./services/load-github.services.js";
 import { getTokenLayers } from "./services/load-tokens.services.js";
 import { TokenLayers } from "./common/token-parser.types.js";
-import { TokenCollection } from "./common/variables.utils.js";
 import { TokenValidationResult } from "./common/token.utils.js";
 import { LoadedPage } from "./ui/pages/loaded-page.js";
 import { PageLayout } from "./ui/pages/layout.js";
 
 import { version } from "../package.json";
+
+import { WidgetConfiguration } from "@repo/config";
+import { TokenCollection } from "radius-toolkit";
 
 const { widget } = figma;
 const { AutoLayout, useSyncedState, Text, waitForTask } = widget;
@@ -186,7 +187,7 @@ function saveTokensToRepository(
           repoFullName: synchConfiguration?.repository,
         },
         branch: synchConfiguration.branch,
-        tokenFilePath: synchConfiguration.path,
+        tokenFilePath: synchConfiguration.filePath,
       },
       synchDetails,
       commitMessage,
@@ -222,7 +223,7 @@ function synchRepository(
         repoFullName: synchConfiguration?.repository,
       },
       branch: synchConfiguration.branch,
-      tokenFilePath: synchConfiguration.path,
+      tokenFilePath: synchConfiguration.filePath,
     })
       .then((details) => {
         console.log("synchronizing...DONE!");
@@ -251,8 +252,8 @@ function openConfiguration(
       new Promise((resolve) => {
         figma.showUI(__html__, {
           title: "Configure Token Export",
-          width: 320,
-          height: 400,
+          width: 575,
+          height: 700,
         });
         emit<WidgetStateHandler>("PLUGIN_STATE_CHANGE", synchConfiguration);
         on<UiStateHandler>("UI_STATE_CHANGE", (msg) => {

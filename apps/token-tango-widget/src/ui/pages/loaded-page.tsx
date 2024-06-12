@@ -1,15 +1,15 @@
 const { widget } = figma;
 const { AutoLayout, Text, useSyncedState } = widget;
 
-import { NameFormat } from "../components/name-format.js";
-import { LoadedTokens } from "../../code.js";
-import { Icon16px } from "../components/icon.js";
-import { TokenIssuesSummaryProps } from "../components/token-issues-summary.js";
-import { TokenValidationResult } from "../../common/token.utils.js";
-import { PushPanel } from "../components/push-panel.js";
-import { RepositoryTokenLayers } from "../../services/load-github.services.js";
-import { diffTokenLayers } from "../../common/layer-diff.utils.js";
-import { isTokenLayers } from "../../common/generator.utils.js";
+import { NameFormat } from "../components/name-format";
+import { LoadedTokens } from "../../code";
+import { Icon16px } from "../components/icon";
+import { TokenIssuesSummaryProps } from "../components/token-issues-summary";
+import { TokenValidationResult } from "../../common/token.utils";
+import { PushPanel } from "../components/push-panel";
+import { RepositoryTokenLayers } from "../../services/load-github.services";
+import { diffTokenLayers } from "../../common/layer-diff.utils";
+import { isTokenLayers } from "../../common/generator.utils";
 
 type LoadedPageProps = {
   allTokens: LoadedTokens;

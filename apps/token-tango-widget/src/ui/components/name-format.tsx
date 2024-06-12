@@ -1,23 +1,25 @@
+import { typography } from "@repo/bandoneon";
 import { Icon16px } from "./icon.js";
 import { VariableBullet } from "./variable-bullet.js";
+
+import { } from 'radius-toolkit';
 
 const { widget } = figma;
 const { Text, AutoLayout, Frame, SVG } = widget;
 
 const FORMAT = "layer.subject.type.attributes";
 
+export type NameFormatProps = {
+  formats: 
+};
+
+
+
 export const NameFormat = () => {
   return (
     <AutoLayout name="FormatGroup" spacing={8} verticalAlignItems="center">
       <AutoLayout name="FormatRow" spacing={8} verticalAlignItems="center">
-        <Text
-          name="Format:"
-          fill="#262626"
-          lineHeight="140%"
-          fontFamily="Roboto"
-          fontSize={12}
-          letterSpacing={0.24}
-        >
+        <Text name="Format:" {...typography.label}>
           Format:
         </Text>
         <VariableBullet name={FORMAT} />

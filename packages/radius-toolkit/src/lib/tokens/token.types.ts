@@ -21,7 +21,7 @@ export type TokenCollection = {
 export type TokenUse = {
   name: string;
   value: string;
-  from: "variable" | "token studio";
+  from: "variable" | "token studio" | "style";
 };
 
 export const isTokenUse = (o: unknown): o is TokenUse =>

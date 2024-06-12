@@ -1,14 +1,5 @@
 import { EventHandler } from "@create-figma-plugin/utilities";
-
-export type WidgetConfiguration = {
-  name: string;
-  repository: string;
-  accessToken: string;
-  branch: string;
-  path: string;
-  status?: "disconnected" | "error" | "online";
-  error?: string;
-};
+import { WidgetConfiguration } from "@repo/config";
 
 export type CommitMessageConfirmation = {
   branchName: string;

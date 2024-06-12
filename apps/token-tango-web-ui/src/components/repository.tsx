@@ -4,6 +4,7 @@ import React, {
   Ref,
   SVGProps,
   forwardRef,
+  useEffect,
   useState,
 } from "react";
 import {
@@ -34,7 +35,10 @@ import { WidgetConfiguration, FormSchema, formSchema } from "@repo/config";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { testRepositoryConnection } from "../services/repository.services";
+import {
+  testFileExists,
+  testRepositoryConnection,
+} from "../services/repository.services";
 import {
   Select,
   SelectContent,
@@ -62,12 +66,19 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
   const [branches, setBranches] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  const { register, handleSubmit, formState, getValues, setValue } =
-    useForm<FormSchema>({
-      resolver: zodResolver(formSchema),
-      defaultValues: state,
-      mode: "onBlur",
-    });
+  const {
+    register,
+    handleSubmit,
+    formState,
+    getValues,
+    setValue,
+    watch,
+    clearErrors,
+  } = useForm<FormSchema>({
+    resolver: zodResolver(formSchema),
+    defaultValues: state,
+    mode: "onBlur",
+  });
 
   const onSubmit = (values: FormSchema) => {
     console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", values);
@@ -120,10 +131,13 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
 
   const handleCheckFile = async () => {
     try {
-      if (Math.random() > 0.5) {
-        throw new Error();
-      }
-      if (getValues("filePath") === "path/to/tokens-file.json") {
+      const { status, file } = await testFileExists({
+        repository: getValues("repository"),
+        accessToken: getValues("accessToken"),
+        branch: getValues("branch"),
+        filePath: getValues("filePath"),
+      });
+      if (status === "found") {
         setFileStatus("found");
       } else {
         setFileStatus("not-found");
@@ -140,9 +154,17 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
   const branch = register("branch");
   const filePath = register("filePath");
 
+  const watchAccessToken = watch("accessToken");
+
+  useEffect(() => {
+    if (watchAccessToken && watchAccessToken.length === 40) {
+      clearErrors("accessToken");
+    }
+  }, [watchAccessToken]);
+
   return (
     <Card>
-      <CardContent className="sm:max-w-[550px]">
+      <CardContent className="sm:max-w-[550px] bg-slate-50">
         <form
           onSubmit={handleSubmit(onSubmit, (errors) => {
             console.error("ERROR!!", errors);
@@ -189,7 +211,7 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
                 />
                 <FieldDescription
                   error={formState.errors.name}
-                  text={"How you call your project"}
+                  text={"What are you calling this project"}
                   className="col-span-2"
                 />
               </div>
@@ -204,7 +226,7 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
                 />
                 <FieldDescription
                   error={formState.errors.repository}
-                  text={"Name of your repository on Github"}
+                  text={"Name of the repository in Github"}
                 />
               </div>
             </div>
@@ -219,40 +241,43 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
                     autoComplete="off"
                     {...register("accessToken")}
                   />
-
-                  <Switch
-                    checked={isConnected}
-                    onCheckedChange={(checked) => {
-                      checked ? handleTestConnection() : setIsConnected(false);
-                    }}
-                    data-state={
-                      error && error.includes("credentials")
-                        ? "error"
-                        : isConnected
-                          ? "checked"
-                          : "unchecked"
-                    }
-                    className={`p-2`}
+                  <Button
+                    variant="secondary"
                     disabled={
                       formState.errors.accessToken !== undefined ||
                       getValues("accessToken") === "" ||
                       formState.errors.repository !== undefined ||
                       getValues("repository") === ""
                     }
-                  />
+                    onClick={handleTestConnection}
+                    className={
+                      error && error.includes("credentials")
+                        ? "bg-red-500"
+                        : isConnected
+                          ? "bg-green-500 hover:bg-green-600"
+                          : "bg-neutral-200"
+                    }
+                  >
+                    {error && error.includes("credentials") ? (
+                      <TriangleAlertIcon />
+                    ) : isConnected ? (
+                      <CheckIcon />
+                    ) : (
+                      "validate"
+                    )}
+                  </Button>
                 </div>
                 <FieldDescription
                   error={formState.errors.accessToken}
                   text={
                     <>
-                      Github access token. Obtain one{" "}
+                      Get a Github Access Token{" "}
                       <a
                         href="https://github.com/settings/tokens"
                         className="underline text-blue-500"
                       >
                         here
-                      </a>{" "}
-                      and switch to validate
+                      </a>
                     </>
                   }
                 />
@@ -304,7 +329,7 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
                   <Button
                     variant="secondary"
                     onClick={handleCheckFile}
-                    className={`p-2 ${fileStatus === "found" ? "bg-green-500" : fileStatus === "error" ? "bg-red-500" : fileStatus === "not-found" ? "bg-yellow-500" : ""}`}
+                    className={`p-2 ${fileStatus === "found" ? "bg-green-500 hover:bg-green-600" : fileStatus === "error" ? "bg-red-500 hover:bg-red-600" : fileStatus === "not-found" ? "bg-yellow-500 hover:bg-yellow-500" : ""}`}
                     type="button"
                     aria-label="Check if file path exists"
                     disabled={
@@ -313,15 +338,15 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
                       getValues("filePath") === ""
                     }
                   >
-                    <CheckIcon className="w-4 h-4" />
+                    <FileSearchIcon />
                   </Button>
                 </div>
                 {fileStatus === "found" ? (
-                  <span className="text-green-800 text-xs">
+                  <span className="text-green-800 text-xs text-medium p-2">
                     File exists in repository
                   </span>
                 ) : fileStatus === "not-found" ? (
-                  <span className="text-yellow-800 text-xs">
+                  <span className="text-yellow-800 text-xs text-medium p-2">
                     File does not exist. Check option below to create a new file
                   </span>
                 ) : (
@@ -335,11 +360,10 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
           </div>
 
           <CardFooter className="justify-between sm:justify-between">
-            {fileStatus in ["not-found", "create-new"] ? (
+            {fileStatus === "not-found" || fileStatus === "create-new" ? (
               <div className="inline-flex items-center p-4 space-x-2">
                 <Checkbox
                   id="create-new-file"
-                  disabled={fileStatus !== "found"}
                   onCheckedChange={(checked) => {
                     if (checked) {
                       setFileStatus("create-new");
@@ -354,7 +378,7 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
                   htmlFor="create-new-file"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  Create new token file
+                  Create new token file on Export
                 </label>
               </div>
             ) : (
@@ -368,7 +392,10 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
               <Button
                 type="submit"
                 disabled={
-                  isSaveDisabled || fileStatus in ["error", "not-found", "none"]
+                  isSaveDisabled ||
+                  fileStatus === "error" ||
+                  fileStatus === "not-found" ||
+                  fileStatus === "none"
                 }
               >
                 Save
@@ -537,17 +564,38 @@ const CheckIcon = forwardRef<SVGSVGElement, SVGProps<{}>>(
       width="24"
       height="24"
       viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
+      fill="currentColor"
+      stroke="none"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path
+        d="M9.00002 16.2L4.80002 12L3.40002 13.4L9.00002 19L21 6.99998L19.6 5.59998L9.00002 16.2Z"
+        fill="#262626"
+      />
+    </svg>
+  )
+);
+
+const FileSearchIcon = forwardRef<SVGSVGElement, SVGProps<{}>>(
+  (props, ref: Ref<SVGSVGElement>) => (
+    <svg
+      {...props}
+      ref={ref}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      stroke="none"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
-        d="M14.71 14H15.5L20.49 19L19 20.49L14 15.5V14.71L13.73 14.43C12.59 15.41 11.11 16 9.5 16C5.91 16 3 13.09 3 9.5C3 5.91 5.91 3 9.5 3C13.09 3 16 5.91 16 9.5C16 11.11 15.41 12.59 14.43 13.73L14.71 14ZM5 9.5C5 11.99 7.01 14 9.5 14C11.99 14 14 11.99 14 9.5C14 7.01 11.99 5 9.5 5C7.01 5 5 7.01 5 9.5Z"
-        fill="#262626"
+        d="M20 8V19.59L16.17 15.75C16.69 14.96 17 14.02 17 13C17 10.24 14.76 8 12 8C9.24 8 7 10.24 7 13C7 15.76 9.24 18 12 18C13.02 18 13.96 17.69 14.76 17.17L19.19 21.6C18.85 21.85 18.45 22 18 22H5.99C4.89 22 4 21.1 4 20L4.01 4C4.01 2.9 4.9 2 6 2H14L20 8ZM12 16C10.34 16 9 14.66 9 13C9 11.34 10.34 10 12 10C13.66 10 15 11.34 15 13C15 14.66 13.66 16 12 16Z"
+        fill="currentColor"
       />
     </svg>
   )
