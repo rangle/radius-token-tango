@@ -1,0 +1,21 @@
+{
+  "name": "@repo/utils",
+  "version": "0.0.0",
+  "private": true,
+  "files": [
+    "index.ts",
+    "github.utils.ts"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "url-parse": "^1.5.10"
+  },
+  "devDependencies": {
+    "@types/url-parse": "^1.4.11",
+    "typescript": "^5.3.3",
+    "vitest": "^1.4.0"
+  }
+}
