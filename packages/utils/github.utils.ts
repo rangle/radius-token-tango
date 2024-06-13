@@ -124,17 +124,21 @@ export const isCommitList = (l: unknown): l is Array<CommitListItem> => {
   return Array.isArray(l) && l.every(isCommitListItem);
 };
 
+export const githubUrlToPath = (url: string) => {
+  return url.replace(/^.*\/contents\//, "").replace(/\?[^\/]*$/, "");
+};
+
 // this recursive function should receive a path, that is either a path or a url, and run the visitor function for each path segment until it's true or until the execution reaches either the host or the root
 export const findInPreviousPath = async (
   pathOrUrl: string,
-  visit: (f: string) => Promise<boolean>
-): Promise<string | undefined> => {
+  visit: (f: string) => Promise<GithubFileDetails | undefined>
+): Promise<GithubFileDetails | undefined> => {
   // if it's a url, extricate the path part and pass only the path to the visitor
   const isUrl = pathOrUrl.startsWith("http");
   const path = isUrl ? new URL(pathOrUrl).pathname : pathOrUrl;
   const pathSegments = path.split("/").filter(Boolean);
 
-  if (pathSegments.length === 0) {
+  if (pathSegments.length < 0) {
     return undefined;
   }
 
@@ -142,7 +146,7 @@ export const findInPreviousPath = async (
   const visitResult = await visit(newPath);
 
   if (visitResult || newPath === "") {
-    return newPath;
+    return visitResult;
   }
 
   return findInPreviousPath(pathSegments.slice(0, -1).join("/"), visit);
@@ -157,6 +161,7 @@ export type GithubOptions = {
   credentials: GithubCredentials;
   branch: string;
   tokenFilePath: string;
+  createFile: boolean;
 };
 
 export type PackageJSON = {
@@ -168,6 +173,17 @@ export type PackageJSON = {
 export const isPackageJSON = (u: unknown): u is PackageJSON =>
   u !== null && typeof u === "object" && ("name" in u || "version" in u);
 
+export const formatUrl = (
+  originalUrl: string,
+  newPath: string,
+  fileName: string
+) => {
+  const url = new URL(originalUrl);
+  const protocol = url.protocol;
+  const newPathWithFileName = newPath ? `${newPath}/${fileName}` : fileName;
+  return `${protocol}//${url.host}/${newPathWithFileName}${url.query}`;
+};
+
 export const createGithubRepositoryClient = ({
   accessToken,
   repoFullName,
@@ -175,7 +191,8 @@ export const createGithubRepositoryClient = ({
   const command = async <T extends object>(
     partialUrl: string,
     body?: T,
-    method = "POST"
+    method = "POST",
+    headers: HeadersInit = {}
   ) => {
     console.log(
       ">>> Before fetch",
@@ -190,6 +207,7 @@ export const createGithubRepositoryClient = ({
           Accept: "application/vnd.github+json",
           Authorization: `Bearer ${accessToken}`,
           "X-GitHub-Api-Version": "2022-11-28",
+          ...headers,
         },
         ...(body ? { body: JSON.stringify(body) } : {}),
       }
@@ -351,11 +369,39 @@ export const createGithubRepositoryClient = ({
     );
   };
 
-  const getFileDetailsByPath = async (path: string, branch?: string) => {
+  const getFileListByPath = async (
+    path: string,
+    branch?: string,
+    headers?: HeadersInit
+  ) => {
     const result = await command(
       `contents/${path}${branch ? `?ref=${branch}` : ""}`,
       undefined,
-      "GET"
+      "GET",
+      headers
+    );
+    console.log("getFileDetailsByPath", result);
+    if (
+      !(
+        typeof result === "object" &&
+        Array.isArray(result) &&
+        result.every(isGithubFileDetails)
+      )
+    )
+      throw new Error(`Could not obtain contents of file ${path}`);
+    return result;
+  };
+
+  const getFileDetailsByPath = async (
+    path: string,
+    branch?: string,
+    headers?: HeadersInit
+  ) => {
+    const result = await command(
+      `contents/${path}${branch ? `?ref=${branch}` : ""}`,
+      undefined,
+      "GET",
+      headers
     );
     console.log("getFileDetailsByPath", result);
     if (!(typeof result === "object" && isGithubFileDetails(result)))
@@ -363,15 +409,8 @@ export const createGithubRepositoryClient = ({
     return result;
   };
 
-  const formatUrl = (
-    originalUrl: string,
-    newPath: string,
-    fileName: string
-  ) => {
-    const url = new URL(originalUrl);
-    const protocol = url.protocol;
-    const newPathWithFileName = newPath ? `${newPath}/${fileName}` : fileName;
-    return `${protocol}//${url.host}/${newPathWithFileName}${url.query}`;
+  const formatPath = (newPath: string, fileName: string) => {
+    return newPath ? `${newPath}/${fileName}` : fileName;
   };
 
   const getFileInPreviousPath = async (
@@ -379,23 +418,19 @@ export const createGithubRepositoryClient = ({
     searchFileName: string
   ) => {
     console.log("getFileInPreviousPath");
-    // obtain the original file or directory
-    const file = await getFileDetailsByPath(path);
-    if (!file)
-      throw new Error(`File or Directory ${file} not found in repository`);
-    const fileUrl = file.url; // using url instead of download_url to avoid CORS issue
-    console.log("file", file);
-    const foundLocation = await findInPreviousPath(fileUrl, async (p) => {
-      const searchPath = formatUrl(fileUrl, p, searchFileName);
+    const fileUrl = path; // using url instead of download_url to avoid CORS issue
+    console.log("file", fileUrl);
+    const foundFileDetails = await findInPreviousPath(fileUrl, async (p) => {
+      const searchPath = formatPath(p, searchFileName);
       console.log("file url >>", searchPath);
-      const response = await fetchRawFile(searchPath, true);
-      return response.ok;
+      const response = await getFileDetailsByPath(searchPath).catch((e) => {
+        console.info("file not found", searchPath);
+        return undefined;
+      });
+      return response;
     });
-    return [
-      file,
-      foundLocation && formatUrl(fileUrl, foundLocation, searchFileName),
-      foundLocation,
-    ] as const;
+    console.log("foundLocation", foundFileDetails);
+    return [fileUrl, foundFileDetails] as const;
   };
 
   const getLastCommitByPath = async (path: string) => {
@@ -419,6 +454,7 @@ export const createGithubRepositoryClient = ({
     createCommit,
     getBaseTree,
     getBranches,
+    getFileListByPath,
     getFileDetailsByPath,
     getLastCommitByPath,
     getFileInPreviousPath,
@@ -434,7 +470,9 @@ export type GithubClient = ReturnType<typeof createGithubRepositoryClient>;
 
 // const options: GithubOptions = {
 //   branch: "main",
-//   tokenFilePath: "output/tokens.json",
+//   tokenFilePath: "output/new-tokens.json",
+//   credentials: { accessToken, repoFullName },
+//   createFile: true,
 // };
 
 // const client = createGithubRepositoryClient({ accessToken, repoFullName });
@@ -450,25 +488,26 @@ export type GithubClient = ReturnType<typeof createGithubRepositoryClient>;
 // ]);
 
 // obtains the details of a file from a path
-
 // client
-//   .getFileByPath("token/test.json")
-//   .then(({ download_url }) => download_url)
-//   .then((url) => fetch(url))
-//   .then(async (response) => {
-//     if (!response.ok) {
-//       console.error(await response.json());
-//       throw new Error(`HTTP returned code ${response.status}`);
-//     }
-//     return response.text();
-//   })
-//   .then((result) => console.log("1", result));
+//   .getFileListByPath(getDirectory(options.tokenFilePath))
+//   .then((files) => files.map((file) => file.name))
+// .then((url) => fetch(url))
+// .then(async (response) => {
+//   if (!response.ok) {
+//     console.error(await response.json());
+//     throw new Error(`HTTP returned code ${response.status}`);
+//   }
+//   return response.text();
+// })
+// .then((result) => console.log("1", result));
 // client.getLastCommitByPath("token/test.json");
 
 // client
 //   .getFileInPreviousPath(options.tokenFilePath, "package.json")
 //   .then(([tokenFile, packagejson]) => {
-//     console.log(tokenFile, packagejson);
+//     console.log(
+//       packagejson?.url.replace(/^.*\/contents\//, "").replace(/\?[^\/]*$/, "")
+//     );
 //   });
 
 // client.createCommit(

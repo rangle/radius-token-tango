@@ -1,5 +1,5 @@
 import { isComposite } from "../common/figma.types.js";
-import { ComponentUsage, TokenUse, isTokenUse } from "../common/token.types.js";
+import { ComponentUsage, TokenUse, isTokenUse } from "radius-toolkit";
 
 // type BoundVariables = SliceNode['boundVariables'];
 type KeysOfBoundVariables = SceneNode["boundVariables"] extends infer BV

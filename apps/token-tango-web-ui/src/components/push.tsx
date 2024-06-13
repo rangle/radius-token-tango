@@ -1,67 +1,85 @@
 import React, { FC } from "react";
-import { useRef } from "react";
 import { emit } from "@create-figma-plugin/utilities";
+import { UiCloseHandler } from "../../../../apps/token-tango-widget/types/state";
 import {
-  CommitMessageConfirmation,
-  UiCloseHandler,
-} from "../../../../apps/token-tango-widget/types/state";
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  PushMessageSchema,
+  PushMessageType,
+  WidgetConfiguration,
+  pushMessageSchema,
+} from "@repo/config";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export type PushConfirmationProps = {
-  state: CommitMessageConfirmation;
-  updateState: (newState: CommitMessageConfirmation) => void;
+  state: PushMessageType & WidgetConfiguration;
+  updateState: (newState: PushMessageType) => void;
 };
 
 export const PushConfirmation: FC<PushConfirmationProps> = ({
   state,
   updateState,
 }) => {
-  const { branchName, commitMessage } = state;
-  const branchRef = useRef<HTMLInputElement>(null);
-  const messageRef = useRef<HTMLTextAreaElement>(null);
+  const onSubmit = ({ branchName, commitMessage }: PushMessageType) => {
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>", branchName, commitMessage);
+    return updateState({
+      branchName,
+      commitMessage,
+    });
+  };
+
+  const { register, handleSubmit } = useForm<PushMessageSchema>({
+    resolver: zodResolver(pushMessageSchema),
+    defaultValues: state,
+    mode: "onBlur",
+  });
+
   return (
-    <div className="container p-4">
-      <h2>Push Confirmation</h2>
-      <div className="form-group">
-        <label htmlFor="branchName">Branch Name:</label>
-        <input
-          type="text"
-          ref={branchRef}
-          id="branchName"
-          name="branchName"
-          placeholder="Enter branch name"
-          value={branchName}
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="commitMessage">Commit Message:</label>
-        <textarea
-          id="commitMessage"
-          ref={messageRef}
-          name="commitMessage"
-          rows={5}
-          placeholder="Enter commit message"
-          value={commitMessage}
-        ></textarea>
-      </div>
-      <div className="btn-group">
-        <button
-          className={"p-4 bg-cyan-300"}
-          onClick={() => emit<UiCloseHandler>("UI_CLOSE")}
-        >
-          Cancel
-        </button>
-        <button
-          className="btn btn-finish"
-          onClick={() =>
-            updateState({
-              branchName: branchRef.current?.value ?? branchName,
-              commitMessage: messageRef.current?.value ?? commitMessage,
-            })
-          }
-        >
-          Finish
-        </button>
-      </div>
-    </div>
+    <Card className="w-full max-w-xl">
+      <CardHeader>
+        <CardTitle>Confirm Branch and Commit</CardTitle>
+        <CardDescription>
+          Review and adjust the branch and commit message before pushing to the
+          repository.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+          <div className="grid gap-1">
+            <Label htmlFor="branch">Branch Name</Label>
+            <Input
+              id="branch"
+              type="text"
+              placeholder="Enter branch name"
+              {...register("branchName")}
+            />
+          </div>
+          <div className="grid gap-1">
+            <Label htmlFor="commit-message">Commit Message</Label>
+            <Textarea
+              id="commit-message"
+              placeholder="Enter commit message"
+              rows={14}
+              {...register("commitMessage")}
+            />
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button variant="outline">Cancel</Button>
+            <Button type="submit">Confirm and Push</Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   );
 };

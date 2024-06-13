@@ -12,7 +12,7 @@ export const Heading: FunctionalWidget<HeadingProps> = ({
       name="Heading"
       fill="#262626"
       lineHeight="140%"
-      fontFamily="Roboto"
+      fontFamily="Inter"
       fontSize={12}
       fontWeight={500}
       {...props}

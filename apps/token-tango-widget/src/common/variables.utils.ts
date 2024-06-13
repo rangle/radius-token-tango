@@ -1,3 +1,4 @@
+import { TokenCollection, VariablesMode } from "radius-toolkit";
 
 // type guard for VariableValue is alias
 function isVariableAlias(value: VariableValue): value is VariableAlias {
@@ -6,59 +7,26 @@ function isVariableAlias(value: VariableValue): value is VariableAlias {
 }
 
 export const getAllLocalVariableTokens = async () => {
-  const variableCollections =
+  const variableCollections: VariableCollection[] =
     await figma.variables.getLocalVariableCollectionsAsync();
   const collections = [] as TokenCollection[];
-
-  // const rest = await figma.variables.getLocalVariablesAsync();
-
-  //   const variablesToDelete = [
-  //     "VariableID:5394:21518",
-  //     "VariableID:5393:21487",
-  //     "VariableID:5388:21427",
-  //     "VariableID:5393:21483",
-  //     "VariableID:5393:21484",
-  //   ];
-
-  //   variablesToDelete.forEach(async (variableId) => {
-  //     const variableToDelete =
-  //       await figma.variables.getVariableCollectionByIdAsync(variableId);
-  //     variableToDelete?.remove();
-  //   });
-
-  //   console.log(
-  //     "====>",
-  //     rest
-  //       .filter(({ name }) => name.indexOf("/") === -1)
-  //       .map((v) => [v.name, v.key, v.id, v.scopes])
-  //   );
 
   // iterate through all the collections
   for (let x = 0; x < variableCollections.length; x++) {
     const collection = variableCollections[x];
-
-    if (collection.name === "03-color modes")
-      console.log(
-        "==> Collection",
-        await Promise.all(
-          collection.variableIds.map((id) =>
-            figma.variables.getVariableByIdAsync(id)
-          )
-        ).then((variables) =>
-          variables.map((v) => [v?.id, v?.name, v?.resolvedType])
-        )
-      );
-    const modes = {} as { [key: string]: VariablesMode };
-    for (let j = 0; j < collection.modes.length; j++) {
-      modes[collection.modes[j].modeId] = {
-        name: collection.modes[j].name,
-        variables: [],
-      };
-    }
+    if (!collection) continue;
+    const modes = collection.modes.map(
+      (mode) =>
+        ({
+          name: mode.name,
+          variables: [],
+        }) as VariablesMode,
+    );
 
     // through all the variables
     for (let i = 0; i < collection.variableIds.length; i++) {
       const variableId = collection.variableIds[i];
+      if (!variableId) continue;
       const variable = await figma.variables.getVariableByIdAsync(variableId);
 
       if (!variable) continue;
@@ -66,6 +34,7 @@ export const getAllLocalVariableTokens = async () => {
       // iterate through all the variables
       for (let j = 0; j < collection.modes.length; j++) {
         const mode = collection.modes[j];
+        if (!mode) continue;
         const value = variable?.valuesByMode[mode.modeId];
 
         if (value === undefined || value === null) continue;
@@ -74,7 +43,7 @@ export const getAllLocalVariableTokens = async () => {
         if (isVariableAlias(value)) {
           const alias = await figma.variables.getVariableByIdAsync(value.id);
           if (!alias) continue;
-          modes[mode.modeId].variables.push({
+          modes[j]?.variables.push({
             name: variable.name,
             alias: alias.name,
             type: alias.resolvedType,
@@ -82,7 +51,7 @@ export const getAllLocalVariableTokens = async () => {
           });
         } else {
           // not a variable alias
-          modes[mode.modeId].variables.push({
+          modes[j]?.variables.push({
             name: variable.name,
             value: value,
             type: variable.resolvedType,
@@ -94,7 +63,7 @@ export const getAllLocalVariableTokens = async () => {
 
     collections.push({
       name: collection.name,
-      modes: Object.values(modes),
+      modes,
     });
   }
   return collections;

@@ -20,7 +20,7 @@ const githubSchema = z.object({
   filePath: z
     .string()
     .regex(
-      /^(?:[\w\-\s]+\/)*[\w\-\s]+\.[\w]+$/,
+      /^(?:[\w\-\s\.]+\/)*[\w\-\.]+\.[\w]+$/,
       "Invalid file path format (path/to/file.json)"
     )
     .min(1, "File path is required"),

@@ -1,13 +1,13 @@
 const { widget } = figma;
 const { Text, AutoLayout, Frame, SVG } = widget;
-import { TokenValidationResult } from "../../common/token.utils.js";
+import { TokenValidationResult } from "radius-toolkit";
 import { Icon16px, IconProps } from "./icon.js";
 import { active, colors as colorTokens, typography } from "@repo/bandoneon";
 
 export type VariableBulletProps = {
   name: string;
   colors?: Array<string>;
-  issues?: TokenValidationResult["errors"];
+  issues?: TokenValidationResult[];
   separator?: string;
   onClick?: () => void;
   icon?: IconProps["icon"];
@@ -25,14 +25,16 @@ export const VariableBullet: FunctionalWidget<VariableBulletProps> = ({
   children,
   ...props
 }) => {
-  const { base } = colorTokens;
+  const { bg } = onClick ? colorTokens.active : colorTokens.base;
   const segments = name.split(".");
   const iconSelection = icon || ("variables" as const);
-  const errorSegments = issues.flatMap(({ segments }) => segments);
+  const errorSegments = issues.flatMap(
+    ({ offendingSegments }) => offendingSegments,
+  );
   return (
     <AutoLayout
       name="FormatBullet"
-      stroke={active.bg}
+      stroke={bg}
       cornerRadius={16}
       height={24}
       verticalAlignItems="center"
@@ -41,7 +43,7 @@ export const VariableBullet: FunctionalWidget<VariableBulletProps> = ({
     >
       <AutoLayout
         name="Spacer"
-        fill={active.bg}
+        fill={bg}
         overflow="visible"
         spacing={10}
         padding={{
@@ -53,7 +55,7 @@ export const VariableBullet: FunctionalWidget<VariableBulletProps> = ({
       />
       <AutoLayout
         name="TokenType"
-        fill={active.bg}
+        fill={bg}
         overflow="visible"
         spacing={4}
         padding={4}

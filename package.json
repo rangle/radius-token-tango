@@ -13,6 +13,7 @@
     "@figma/widget-typings": "^1.9.1",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "husky": "^9.0.11",
     "prettier": "^3.2.5",
     "turbo": "latest",
     "typescript": "^5.4.5"

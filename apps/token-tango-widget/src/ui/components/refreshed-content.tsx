@@ -1,11 +1,12 @@
-import { Button } from "./button.js";
-import { Icon16px } from "./icon.js";
-import { NameFormat } from "./name-format.js";
-import { RoundButton } from "./round-button.js";
+import { TokenNameFormatType } from "radius-toolkit";
+import { Button } from "./button";
+import { Icon16px } from "./icon";
+import { FormatDescription, NameFormat } from "./name-format";
+import { RoundButton } from "./round-button";
 import {
   SmallRepositoryRibbon,
   SmallRepositoryRibbonProps,
-} from "./short-repository-ribbon.js";
+} from "./short-repository-ribbon";
 
 const { widget } = figma;
 const { Text, AutoLayout, Frame } = widget;
@@ -13,11 +14,13 @@ const { Text, AutoLayout, Frame } = widget;
 export type RefreshedContentProps = {
   loadTokens: () => void;
   openConfig: () => void;
+  format: TokenNameFormatType;
 } & SmallRepositoryRibbonProps;
 
 export const RefreshedContent: FunctionalWidget<RefreshedContentProps> = ({
   name,
   status,
+  format,
   loadTokens,
   openConfig,
 }) => {
@@ -40,21 +43,7 @@ export const RefreshedContent: FunctionalWidget<RefreshedContentProps> = ({
         verticalAlignItems="center"
         horizontalAlignItems="center"
       >
-        <Text
-          name="Learn more about our naming convention"
-          fill="#262626"
-          width={348}
-          verticalAlignText="center"
-          horizontalAlignText="center"
-          lineHeight="150%"
-          fontFamily="Roboto"
-          fontSize={14}
-          fontWeight={700}
-          textDecoration="underline"
-          onClick={() => {}}
-        >
-          Learn more about our naming convention
-        </Text>
+        <FormatDescription {...{ format }} />
         <AutoLayout
           name="Frame1000002081"
           overflow="visible"
@@ -108,7 +97,6 @@ export const RefreshedContent: FunctionalWidget<RefreshedContentProps> = ({
               spacing={8}
               verticalAlignItems="center"
               onClick={() => {
-                console.log("yeh");
                 loadTokens();
               }}
             >

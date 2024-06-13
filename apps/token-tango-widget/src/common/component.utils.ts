@@ -1,8 +1,7 @@
 import { getLocalVariable } from "../local-variable/index.js";
 import { getTokenStudioTokens } from "../token-studio/index.js";
 import { isInstance, isComponent, isComponentSet } from "./figma.types.js";
-import { ComponentUsage } from "./token.types.js";
-import { combineComponentUsage } from "./token.utils.js";
+import { ComponentUsage, combineComponentUsage } from "radius-toolkit";
 
 export const getMainComponent = async (
   node: BaseNode,

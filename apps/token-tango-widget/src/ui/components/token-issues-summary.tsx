@@ -41,7 +41,7 @@ export const TokenIssuesSummaryProps: FunctionalWidget<
             name="5"
             fill="#606060"
             lineHeight="100%"
-            fontFamily="Roboto"
+            fontFamily="Inter"
             fontSize={24}
             fontWeight={700}
           >
@@ -53,7 +53,7 @@ export const TokenIssuesSummaryProps: FunctionalWidget<
             width={100}
             horizontalAlignText="center"
             lineHeight="140%"
-            fontFamily="Roboto"
+            fontFamily="Inter"
             fontSize={12}
             letterSpacing={0.24}
           >
@@ -74,7 +74,7 @@ export const TokenIssuesSummaryProps: FunctionalWidget<
             name="31"
             fill="#606060"
             lineHeight="100%"
-            fontFamily="Roboto"
+            fontFamily="Inter"
             fontSize={24}
             fontWeight={700}
           >
@@ -86,7 +86,7 @@ export const TokenIssuesSummaryProps: FunctionalWidget<
             width={100}
             horizontalAlignText="center"
             lineHeight="140%"
-            fontFamily="Roboto"
+            fontFamily="Inter"
             fontSize={12}
             letterSpacing={0.24}
           >
@@ -107,7 +107,7 @@ export const TokenIssuesSummaryProps: FunctionalWidget<
             name="28"
             fill="#606060"
             lineHeight="100%"
-            fontFamily="Roboto"
+            fontFamily="Inter"
             fontSize={24}
             fontWeight={700}
           >
@@ -119,7 +119,7 @@ export const TokenIssuesSummaryProps: FunctionalWidget<
             width={100}
             horizontalAlignText="center"
             lineHeight="140%"
-            fontFamily="Roboto"
+            fontFamily="Inter"
             fontSize={12}
             letterSpacing={0.24}
           >
@@ -133,7 +133,7 @@ export const TokenIssuesSummaryProps: FunctionalWidget<
           name="Last sync"
           fill="#767676"
           lineHeight="140%"
-          fontFamily="Roboto"
+          fontFamily="Inter"
           fontSize={12}
           letterSpacing={0.24}
         >

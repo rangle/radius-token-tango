@@ -1,5 +1,5 @@
 import { isComposite } from "../common/figma.types.js";
-import { ComponentUsage, TokenUse } from "../common/token.types.js";
+import { ComponentUsage, TokenUse } from "radius-toolkit";
 
 export function getTokenStudioTokens(node: SceneNode): ComponentUsage {
   const sharedTokens = node.getSharedPluginDataKeys("tokens");

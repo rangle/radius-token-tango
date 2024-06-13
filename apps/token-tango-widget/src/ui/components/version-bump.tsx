@@ -25,7 +25,7 @@ export const VersionBump: FunctionalWidget<VersionBumpProps> = ({
         name="Versioning from:"
         fill="#767676"
         lineHeight="140%"
-        fontFamily="Roboto"
+        fontFamily="Inter"
         fontSize={12}
         letterSpacing={0.24}
       >

@@ -1,14 +1,14 @@
 const { widget } = figma;
 const { AutoLayout, Text, Frame, SVG } = widget;
 
-import { URL_ACCESS_TOKEN_DOCS, URL_TOKEN_FORMAT_DOCS } from "../../constants";
+import { URL_ACCESS_TOKEN_DOCS } from "../../constants";
 import { NameFormat } from "../components/name-format";
 import { MessageRibbon } from "../components/message-ribbon";
 import { RefreshedContent } from "../components/refreshed-content";
 import { WidgetConfiguration } from "@repo/config";
 
 import { FormatName, formats, getFormat } from "radius-toolkit";
-import { typography } from "@repo/bandoneon";
+import { FormatDescription } from "../components/name-format";
 
 type EmptyPageProps = {
   synchConfig: WidgetConfiguration | null;
@@ -41,6 +41,7 @@ export const EmptyPage: FunctionalWidget<EmptyPageProps> = ({
         <RefreshedContent
           name={synchConfig.name}
           status={synchConfig.status || "disconnected"}
+          format={format}
           loadTokens={loadTokens}
           openConfig={openConfig}
         />
@@ -53,22 +54,7 @@ export const EmptyPage: FunctionalWidget<EmptyPageProps> = ({
           verticalAlignItems="center"
           horizontalAlignItems="center"
         >
-          <Text
-            name="Learn more about our naming convention"
-            fill="#262626"
-            width={348}
-            verticalAlignText="center"
-            horizontalAlignText="center"
-            {...typography.small}
-            textDecoration="underline"
-            onClick={() =>
-              figma.openExternal(
-                `${URL_TOKEN_FORMAT_DOCS}${format.name}/README.md`,
-              )
-            }
-          >
-            About the {format.description} naming convention
-          </Text>
+          <FormatDescription {...{ format }} />
           <AutoLayout
             name="Frame 1000002080"
             overflow="visible"

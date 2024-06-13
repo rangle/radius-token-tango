@@ -1,17 +1,17 @@
-import { semVerBump } from "../../common/layer-diff.utils.js";
-import { TokenError, TokenValidationResult } from "../../common/token.utils.js";
-import { Icon16px, IconProps } from "./icon.js";
-import { RoundButton } from "./round-button.js";
-import { TokenChangeBar } from "./token-change-bar.js";
-import { VersionBump } from "./version-bump.js";
-import { WarningBadge } from "./warning-badge.js";
+import { semVerBump } from "../../common/layer-diff.utils";
+import { FormatValidationResult } from "radius-toolkit";
+import { Icon16px, IconProps } from "./icon";
+import { RoundButton } from "./round-button";
+import { TokenChangeBar } from "./token-change-bar";
+import { VersionBump } from "./version-bump";
+import { WarningBadge } from "./warning-badge";
 
 const { widget } = figma;
 const { Frame, Text, AutoLayout, useSyncedState } = widget;
 
 export type PushPanelProps = {
   diff: [string[], string[], string[]];
-  errors: [TokenValidationResult[], TokenValidationResult[]];
+  errors: [FormatValidationResult[], FormatValidationResult[]];
   previousVersion: string;
   reloadTokens: () => void;
   pushTokens: (branch: string, message: string, version: string) => void;
@@ -65,7 +65,7 @@ export const PushPanel: FunctionalWidget<PushPanelProps> = ({
           name="Tokens to publish:"
           fill="#000"
           lineHeight="100%"
-          fontFamily="Roboto"
+          fontFamily="Inter"
           fontWeight={500}
         >
           Tokens to publish:
@@ -132,7 +132,7 @@ export const PushPanel: FunctionalWidget<PushPanelProps> = ({
           name="Ignore issues and publish anyway"
           fill="#767676"
           lineHeight="140%"
-          fontFamily="Roboto"
+          fontFamily="Inter"
           fontSize={12}
           letterSpacing={0.24}
         >
@@ -167,7 +167,7 @@ export const PushPanel: FunctionalWidget<PushPanelProps> = ({
             name="Manually bumb version"
             fill="#767676"
             lineHeight="140%"
-            fontFamily="Roboto"
+            fontFamily="Inter"
             fontSize={12}
             letterSpacing={0.24}
           >

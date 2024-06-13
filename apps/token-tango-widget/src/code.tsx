@@ -1,31 +1,31 @@
-import { EmptyPage } from "./ui/pages/empty-page.js";
+import { EmptyPage } from "./ui/pages/empty-page";
 import { emit, on } from "@create-figma-plugin/utilities";
 import {
-  CommitMessageConfirmation,
   ConfirmPushHandler,
   UiCloseHandler,
   UiCommitHandler,
   UiStateHandler,
   WidgetStateHandler,
-} from "../types/state.js";
+} from "../types/state";
 import {
   RepositoryTokenLayers,
   fetchRepositoryTokenLayers,
   saveRepositoryTokenLayers,
-} from "./services/load-github.services.js";
-import { getTokenLayers } from "./services/load-tokens.services.js";
-import { TokenLayers } from "./common/token-parser.types.js";
-import { TokenValidationResult } from "./common/token.utils.js";
-import { LoadedPage } from "./ui/pages/loaded-page.js";
-import { PageLayout } from "./ui/pages/layout.js";
+} from "./services/load-github.services";
+import { getTokenLayers } from "./services/load-tokens.services";
+import { LoadedPage } from "./ui/pages/loaded-page";
+import { PageLayout } from "./ui/pages/layout";
 
 import { version } from "../package.json";
 
-import { WidgetConfiguration } from "@repo/config";
+import { PushMessageType, WidgetConfiguration } from "@repo/config";
 import {
   FormatName,
+  FormatValidationResult,
   TokenCollection,
+  TokenLayers,
   TokenNameFormatType,
+  formats,
 } from "radius-toolkit";
 
 const { widget } = figma;
@@ -35,7 +35,6 @@ export type LoadedTokens = {
   inspectedAt: string;
   collections: TokenCollection[];
   tokenLayers?: TokenLayers;
-  errors: TokenValidationResult[];
 };
 
 export const isValidConfiguration = (
@@ -55,10 +54,23 @@ export function Widget() {
     useSyncedState<FormatName | null>("tokenNameFormat", null);
   const [synchDetails, setSynchDetails] =
     useSyncedState<RepositoryTokenLayers | null>("synchDetails", null);
-  const [allTokens, setAllTokens] = useSyncedState<LoadedTokens | null>(
-    "allGlobalTokens",
+
+  // const [allTokens, setAllTokens] = useSyncedState<LoadedTokens | null>(
+  //   "allGlobalTokenLayers",
+  //   null,
+  // );
+  const [persistedTokens, setPersistedTokens] = useSyncedState<string | null>(
+    "persistedTokens",
     null,
   );
+  const [allErrors, setAllErrors] = useSyncedState<FormatValidationResult[]>(
+    "allErrors",
+    [],
+  );
+
+  const format = tokenNameFormat
+    ? formats.find((f) => f.name === tokenNameFormat) ?? formats[0]
+    : formats[0];
 
   const doSynchronize = synchRepository(
     synchConfiguration,
@@ -86,6 +98,16 @@ export function Widget() {
           })
       : {};
 
+  const doLoadTokensAndSynch = async () => {
+    console.log(">>> LOADING YOUR TOKENS");
+    waitForTask(
+      Promise.all([
+        loadVariables(format, setPersistedTokens, setAllErrors),
+        doSynchronize(updateStatus),
+      ]),
+    );
+  };
+
   return (
     <PageLayout
       synched={synchConfiguration !== null}
@@ -96,19 +118,14 @@ export function Widget() {
       openConfig={openConfiguration(synchConfiguration, setSynchConfiguration)}
       synchronize={() => doSynchronize(updateStatus)}
     >
-      {allTokens === null || synchDetails === null ? (
+      {persistedTokens === null || synchDetails === null ? (
         <EmptyPage
           selectedFormat={tokenNameFormat}
           selectFormat={(newFormat) => setTokenNameFormat(newFormat)}
           synchConfig={synchConfiguration}
           loadTokens={async () => {
             console.log("Loading your tokens!");
-            waitForTask(
-              Promise.all([
-                doSynchronize(updateStatus),
-                loadVariables(setAllTokens),
-              ]),
-            );
+            waitForTask(doLoadTokensAndSynch());
           }}
           openConfig={openConfiguration(
             synchConfiguration,
@@ -117,16 +134,13 @@ export function Widget() {
         />
       ) : (
         <LoadedPage
-          allTokens={allTokens}
+          format={format ?? formats[0]}
+          allTokens={JSON.parse(persistedTokens)}
+          errors={allErrors}
           synchDetails={synchDetails}
           reloadTokens={async () => {
             console.log(">>> RELOADING ALL VARIABLES");
-            waitForTask(
-              Promise.all([
-                doSynchronize(updateStatus),
-                loadVariables(setAllTokens),
-              ]),
-            );
+            waitForTask(doLoadTokensAndSynch());
           }}
           pushTokens={pushTokens((edits) => {
             console.log("PUSHING TO THE REPOSITORY", edits);
@@ -147,18 +161,27 @@ export function Widget() {
 widget.register(Widget);
 
 async function loadVariables(
-  setAllTokens: (newValue: LoadedTokens | null) => void,
+  format: TokenNameFormatType,
+  // setAllTokens: (newValue: LoadedTokens | null) => void,
+  setPersistedTokens: (newValue: string | null) => void,
+  setAllErrors: (newValue: FormatValidationResult[]) => void,
 ) {
   console.log(">>> LOADING VARIABLES");
-  const [collections, tokenLayers, errors] = await getTokenLayers(true);
+  const [collections, tokenLayers, errors] = await getTokenLayers(format, true);
   console.log(tokenLayers);
   console.log(errors);
-  setAllTokens({
-    collections,
-    tokenLayers,
-    errors,
-    inspectedAt: strNow(),
-  });
+  console.log(">>> SETTING STATE VARIABLES");
+  // setAllTokens({
+  //   collections,
+  //   tokenLayers,
+  //   inspectedAt: strNow(),
+  // });
+  setPersistedTokens(
+    JSON.stringify({ collections, tokenLayers, inspectedAt: strNow() }),
+  );
+  console.log(">>> LOADED VARIABLES");
+  setAllErrors(errors);
+  console.log(">>> LOADED ERRORS");
 }
 
 function saveTokensToRepository(
@@ -167,7 +190,7 @@ function saveTokensToRepository(
 ) {
   return async (
     synchDetails: RepositoryTokenLayers | null,
-    { branchName, commitMessage, version }: CommitMessageConfirmation,
+    { branchName, commitMessage, version }: PushMessageType,
     done: () => void,
   ) => {
     console.log("saving tokens...");
@@ -191,6 +214,7 @@ function saveTokensToRepository(
         },
         branch: synchConfiguration.branch,
         tokenFilePath: synchConfiguration.filePath,
+        createFile: synchConfiguration.createNewFile,
       },
       synchDetails,
       commitMessage,
@@ -210,6 +234,7 @@ function synchRepository(
   setErrorMessage: (newValue: string | null) => void,
   setSynchDetails: (newValue: RepositoryTokenLayers | null) => void,
 ): (updateConfiguration: (err?: string) => void) => Promise<void> {
+  console.log(">>>>>> Update Configuration", synchConfiguration);
   return async (updateConfiguration) => {
     console.log("synchronizing...");
     if (!isValidConfiguration(synchConfiguration)) {
@@ -226,6 +251,7 @@ function synchRepository(
       },
       branch: synchConfiguration.branch,
       tokenFilePath: synchConfiguration.filePath,
+      createFile: synchConfiguration.createNewFile,
     })
       .then((details) => {
         console.log("synchronizing...DONE!");
@@ -269,14 +295,14 @@ function openConfiguration(
 }
 
 function pushTokens(
-  setConfirmPushDialogData: (newValue: CommitMessageConfirmation) => void,
+  setConfirmPushDialogData: (newValue: PushMessageType) => void,
 ): (branch: string, message: string, version: string) => void {
   return (branchName, commitMessage, version) =>
     new Promise((resolve) => {
       figma.showUI(__html__, {
         title: "Confirm Push to Github",
-        width: 320,
-        height: 300,
+        width: 575,
+        height: 600,
       });
       emit<ConfirmPushHandler>("PLUGIN_CONFIRM_PUSH", {
         branchName,

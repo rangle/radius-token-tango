@@ -51,7 +51,7 @@ export const RoundButton: FunctionalWidget<RoundButtonProps> = ({
           verticalAlignText="center"
           horizontalAlignText="center"
           lineHeight="150%"
-          fontFamily="Roboto"
+          fontFamily="Inter"
           fontSize={14}
           fontWeight={700}
         >

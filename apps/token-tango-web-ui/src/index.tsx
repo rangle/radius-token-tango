@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { emit, on } from "@create-figma-plugin/utilities";
 
 import {
-  CommitMessageConfirmation,
   ConfirmPushHandler,
   UiCommitHandler,
   UiStateHandler,
@@ -13,11 +12,11 @@ import {
 } from "../../../apps/token-tango-widget/types/state";
 
 import { PushConfirmation } from "./components/push";
-import { ConfigForm } from "./components/config";
 import { RepositoryConfig } from "./components/repository";
-import { WidgetConfiguration } from "@repo/config";
+import { PushMessageType, WidgetConfiguration } from "@repo/config";
 
 import "./index.css";
+import { ValidationResult } from "./components/validation";
 
 const initialState: WidgetConfiguration = {
   tool: "GitHub",
@@ -29,18 +28,22 @@ const initialState: WidgetConfiguration = {
   createNewFile: false,
 };
 
-const initialCommitState: CommitMessageConfirmation = {
+const initialCommitState: PushMessageType = {
   branchName: "",
   commitMessage: "",
 };
 
-export type AppRoute = "loading" | "config" | "push" | "repository";
+export type AppRoute =
+  | "loading"
+  | "config"
+  | "push"
+  | "repository"
+  | "validation";
 
 export const App: FC = () => {
   const [route, setRoute] = useState<AppRoute>("loading");
   const [config, setConfig] = useState<WidgetConfiguration>(initialState);
-  const [commit, setCommit] =
-    useState<CommitMessageConfirmation>(initialCommitState);
+  const [commit, setCommit] = useState<PushMessageType>(initialCommitState);
 
   // establish the initial handers for routing and updates
   useEffect(() => {
@@ -63,6 +66,8 @@ export const App: FC = () => {
       setRoute("push");
     } else if (hash === "repository") {
       setRoute("repository");
+    } else if (hash === "validation") {
+      setRoute("validation");
     }
   }, []);
 
@@ -71,10 +76,12 @@ export const App: FC = () => {
     emit<UiStateHandler>("UI_STATE_CHANGE", newState);
   };
 
-  const updateCommitState = (newState: CommitMessageConfirmation) => {
+  const updateCommitState = (newState: PushMessageType) => {
     console.log("SENDING UI_STATE_CHANGE");
     emit<UiCommitHandler>("UI_COMMIT_CHANGE", newState);
   };
+
+  console.log("ROUTE", route);
 
   return (
     <Fragment>
@@ -84,6 +91,8 @@ export const App: FC = () => {
         <PushConfirmation state={commit} updateState={updateCommitState} />
       ) : route === "repository" ? (
         <RepositoryConfig state={config} updateState={updateState} />
+      ) : route === "validation" ? (
+        <ValidationResult />
       ) : (
         <div>Loading</div>
       )}

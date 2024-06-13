@@ -30,7 +30,7 @@ export const BulletLabel: FunctionalWidget<BulletLabelProps> = ({
       verticalAlignItems="center"
     >
       <Ellipse name="Icon" fill={colors[color]} width={8} height={8} />
-      <Text name="Label" fill="#232323" lineHeight="100%" fontFamily="Roboto">
+      <Text name="Label" fill="#232323" lineHeight="100%" fontFamily="Inter">
         {children}
       </Text>
     </AutoLayout>

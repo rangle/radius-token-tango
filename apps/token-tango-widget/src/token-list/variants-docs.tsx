@@ -32,7 +32,7 @@ export const EmptyComponentDocs = () => (
       <Text
         name="empty"
         fill="#030303"
-        fontFamily="Roboto"
+        fontFamily="Inter"
         fontSize={18}
         fontWeight={700}
       >
@@ -41,7 +41,7 @@ export const EmptyComponentDocs = () => (
       <Text
         name="empty-description"
         fill="#333333"
-        fontFamily="Roboto"
+        fontFamily="Inter"
         fontSize={12}
         fontWeight={700}
       >

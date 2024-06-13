@@ -1,5 +1,6 @@
 import semver from "semver";
-import { TokenLayers } from "./token-parser.types.js";
+import { TokenLayers } from "radius-toolkit";
+import { n } from "vitest/dist/reporters-P7C2ytIv.js";
 
 export const listLayers = ({ order }: TokenLayers) => order;
 
@@ -22,7 +23,8 @@ export const diffTokenLayers = (
   newLayers: TokenLayers,
   oldLayers: TokenLayers,
 ) => {
-  const [left, right] = [newLayers, oldLayers].map(indexAllVariables);
+  const left = indexAllVariables(newLayers);
+  const right = indexAllVariables(oldLayers);
   const onlyLeft = Object.keys(left).filter((n) => !right[n]);
   const leftValues = Object.keys(left).filter(
     (n) => right[n] && left[n] !== right[n],
@@ -32,7 +34,7 @@ export const diffTokenLayers = (
 };
 
 export type BumpType = "minor" | "patch" | "major";
-export type BumpStrategy = (version: string) => (idx: number) => BumpType;
+export type BumpStrategy = (version: string) => (idx: 0 | 1 | 2) => BumpType;
 
 const bumpStrategies: BumpStrategy = (version) =>
   semver.lt(version, "1.0.0")
@@ -46,11 +48,11 @@ export const semVerBump = (
   const [additions, modifications, breaking] = changes;
 
   const bump = bumpStrategies(version);
-  return [breaking, additions, modifications].reduce(
+  return ([breaking, additions, modifications] as const).reduce(
     (acc, change, idx) =>
       !change || acc !== version
         ? acc
-        : semver.inc(version, bump(idx)) ?? version,
+        : semver.inc(version, bump(idx as 0 | 1 | 2)) ?? version,
     version,
   );
 };

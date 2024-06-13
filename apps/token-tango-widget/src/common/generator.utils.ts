@@ -1,15 +1,16 @@
-import { TokenLayer, TokenLayers, TokenOutput } from "./token-parser.types.js";
-import { formatKey, toKebabCase } from "./token-parser.utils.js";
 import {
+  formatKey,
+  toKebabCase,
+  TokenLayer,
+  TokenLayers,
+  TokenOutput,
   TokeTypeName,
   inferVariableType,
   tokenTypeNames,
-} from "./token.utils.js";
-import {
   TokenCollection,
   TokenVariable,
   VariablesMode,
-} from "./variables.utils.js";
+} from "radius-toolkit";
 
 const DEFAULT_MODE_NAME = "Mode 1";
 export const PARAM_SECTION_NAME = "section-name";

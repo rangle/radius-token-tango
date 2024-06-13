@@ -35,6 +35,48 @@ export type TokenGlobalRuleValidationResult =
       ][],
     ];
 
+/** Token Validation Result
+ * A result of a token name validation
+ * */
+export type TokenValidationResult = {
+  collection: string;
+  token: TokenName;
+  isWarning: boolean;
+  message: string;
+  offendingSegments: string[];
+};
+
+export const isTokenValidationResult = (
+  result: TokenValidationResult | GlobalValidationResult
+): result is TokenValidationResult =>
+  (result as TokenValidationResult).collection !== undefined &&
+  (result as TokenValidationResult).token !== undefined;
+
+/** Global Validation Result
+ * A result of a token name validation
+ * */
+export type GlobalValidationResult = {
+  isWarning: boolean;
+  message: string;
+  offendingSegments: [
+    collectopnName: string,
+    tokenName?: string,
+    segmentName?: string,
+  ][];
+};
+
+export const isGlobalValidationResult = (
+  result: TokenValidationResult | GlobalValidationResult
+): result is GlobalValidationResult =>
+  (result as TokenValidationResult).collection === undefined &&
+  (result as TokenValidationResult).token === undefined;
+
+/** FormatValidationResult
+ */
+export type FormatValidationResult =
+  | TokenValidationResult
+  | GlobalValidationResult;
+
 /** Token Rule Validation Function
  * A function that validates a token name
  * @param name The token name to validate

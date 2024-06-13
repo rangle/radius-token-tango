@@ -1,8 +1,11 @@
-import { TokenValidationResult } from "../../common/token.utils.js";
-import { BulletLabel, BulletLabelProps } from "./bullet-label.js";
-import { ErrorPill } from "./error-pill.js";
-import { Icon16px, IconProps } from "./icon.js";
-import { VariableBullet } from "./variable-bullet.js";
+import {
+  FormatValidationResult,
+  isTokenValidationResult,
+} from "radius-toolkit";
+import { BulletLabel, BulletLabelProps } from "./bullet-label";
+import { ErrorPill } from "./error-pill";
+import { Icon16px, IconProps } from "./icon";
+import { VariableBullet } from "./variable-bullet";
 
 const { widget } = figma;
 const { Text, AutoLayout, useSyncedState } = widget;
@@ -13,7 +16,7 @@ export type TokenChangeBarProps = {
   changeType: TokenChangeType;
   variant: "default" | "start" | "end";
   tokensChanged: string[];
-  issues: TokenValidationResult[];
+  issues: FormatValidationResult[];
 } & BaseProps &
   TextChildren;
 
@@ -125,11 +128,8 @@ export const TokenChangeBar: FunctionalWidget<TokenChangeBarProps> = ({
               name={token}
               width={"fill-parent"}
               issues={issues
-                .filter(
-                  ({ variable }) =>
-                    variable.name.replaceAll("/", ".") === token,
-                )
-                .flatMap(({ errors }) => errors)}
+                .filter(isTokenValidationResult)
+                .filter(({ token: { name } }) => name === token)}
             />
           ))}
         </AutoLayout>

@@ -18,7 +18,7 @@ export const WarningBadge: FunctionalWidget<WarningProps> = ({ children }) => {
       <Text
         name="WarningsLabel"
         fill="#696969"
-        fontFamily="Roboto"
+        fontFamily="Inter"
         fontSize={12}
         fontWeight={500}
       >

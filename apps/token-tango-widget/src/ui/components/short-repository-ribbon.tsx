@@ -1,3 +1,4 @@
+import { colors } from "@repo/bandoneon";
 import { Icon16px, IconProps } from "./icon.js";
 
 const { widget } = figma;
@@ -15,7 +16,7 @@ export const statusChoices: Record<
   Pick<IconProps, "icon" | "color">
 > = {
   online: { color: "#00B012", icon: "check" },
-  disconnected: { color: "#7A7A7A", icon: "gear" },
+  disconnected: { color: "#7A7A7A", icon: "refresh" },
   error: { color: "#b00000", icon: "warning" },
 };
 
@@ -24,18 +25,12 @@ export const StatusButton: FunctionalWidget<
 > = ({ color, icon, children }) => (
   <AutoLayout
     name="Button"
-    fill="#00B012"
-    cornerRadius={9233.1904296875}
-    strokeWidth={0.923}
+    fill={color}
+    cornerRadius={9999}
     overflow="visible"
-    spacing={4}
-    padding={{
-      top: 3.694,
-      right: 12,
-      bottom: 3.694,
-      left: 6,
-    }}
-    height={22}
+    padding={3.7}
+    width={"hug-contents"}
+    height={"hug-contents"}
     horizontalAlignItems="end"
     verticalAlignItems="center"
   >
@@ -57,12 +52,12 @@ export const SmallRepositoryRibbon: FunctionalWidget<
   return (
     <AutoLayout
       name="SmallRepositoryRibbon"
-      fill="#333"
+      fill={colors.library.bg}
       stroke="#484848"
-      cornerRadius={8}
+      cornerRadius={9999}
       direction="vertical"
       spacing={"auto"}
-      padding={8}
+      padding={6}
       horizontalAlignItems="center"
       {...props}
     >
@@ -77,13 +72,13 @@ export const SmallRepositoryRibbon: FunctionalWidget<
         <AutoLayout
           name="RepositoryHeader"
           overflow="visible"
-          width={"fill-parent"}
-          spacing={"auto"}
+          spacing={8}
           verticalAlignItems="center"
         >
           <AutoLayout
             name="RepositoryTitle"
             overflow="visible"
+            width={"hug-contents"}
             spacing={8}
             verticalAlignItems="center"
           >
@@ -99,6 +94,8 @@ export const SmallRepositoryRibbon: FunctionalWidget<
             <AutoLayout
               name="TextHeader"
               overflow="visible"
+              width={"hug-contents"}
+              maxWidth={350}
               spacing={8}
               verticalAlignItems="center"
             >
@@ -107,7 +104,7 @@ export const SmallRepositoryRibbon: FunctionalWidget<
                 fill="#DADADA"
                 verticalAlignText="center"
                 fontFamily="Roboto Mono"
-                fontSize={12}
+                fontSize={14}
               >
                 Repository:
               </Text>
@@ -116,7 +113,8 @@ export const SmallRepositoryRibbon: FunctionalWidget<
                 fill="#DADADA"
                 verticalAlignText="center"
                 fontFamily="Roboto Mono"
-                fontSize={12}
+                fontSize={14}
+                truncate={true}
               >
                 {name}
               </Text>

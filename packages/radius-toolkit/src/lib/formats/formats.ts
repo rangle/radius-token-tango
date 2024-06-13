@@ -8,8 +8,8 @@ import {
 } from "./format.types";
 
 export const formats = [
-  radiusSimpleFormat,
   radiusLayerSubjectTypeFormat,
+  radiusSimpleFormat,
 ] as const;
 
 export type FormatName = (typeof formats)[number]["name"];
@@ -50,12 +50,12 @@ export const splitBy =
 const splityGlobalRules = splitBy(isTokenGlobalNameRule, isTokenNameRule);
 
 export type TokenNameIssue = {
-  messsage?: string;
+  message?: string;
   offendingSegments?: string[];
 };
 
 export type TokenGlobalIssue = {
-  messsage?: string;
+  message?: string;
   offendingSegments?: [
     collectionName: string,
     tokenName?: string | undefined,
@@ -88,13 +88,21 @@ export const createValidatorFunctions = (format: TokenNameFormatType) => {
       return [errors, warnings];
     },
     function validateTokenCollections(tokenCollections: TokenNameCollection[]) {
+      console.log("validating token collections", tokenCollections.length);
       const [errors, warnings] = globalRules.reduce<
         [TokenGlobalIssue[], TokenGlobalIssue[]]
       >(
         (acc, rule) => {
+          console.log("validating global rule", rule);
           const [errors, warnings] = acc;
           const [message, isWarning, offendingSegments] =
             rule.validate(tokenCollections);
+          console.log(
+            "global rule result",
+            message,
+            isWarning,
+            offendingSegments
+          );
           if (message && !isWarning) {
             return [[...errors, { message, offendingSegments }], warnings];
           } else if (message) {

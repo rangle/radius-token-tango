@@ -1,11 +1,5 @@
 import { EventHandler } from "@create-figma-plugin/utilities";
-import { WidgetConfiguration } from "@repo/config";
-
-export type CommitMessageConfirmation = {
-  branchName: string;
-  commitMessage: string;
-  version?: string;
-};
+import { PushMessageType, WidgetConfiguration } from "@repo/config";
 
 export interface WidgetStateHandler extends EventHandler {
   name: "PLUGIN_STATE_CHANGE";
@@ -19,12 +13,12 @@ export interface UiStateHandler extends EventHandler {
 
 export interface ConfirmPushHandler extends EventHandler {
   name: "PLUGIN_CONFIRM_PUSH";
-  handler: (state: CommitMessageConfirmation | null) => void;
+  handler: (state: PushMessageType | null) => void;
 }
 
 export interface UiCommitHandler extends EventHandler {
   name: "UI_COMMIT_CHANGE";
-  handler: (state: CommitMessageConfirmation) => void;
+  handler: (state: PushMessageType) => void;
 }
 
 export interface UiCloseHandler extends EventHandler {
