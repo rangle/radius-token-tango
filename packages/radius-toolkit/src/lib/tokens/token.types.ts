@@ -18,6 +18,13 @@ export type TokenCollection = {
   modes: VariablesMode[];
 };
 
+export const isTokenCollection = (o: unknown): o is TokenCollection =>
+  !!o &&
+  typeof o === "object" &&
+  "name" in o &&
+  "modes" in o &&
+  Array.isArray(o.modes);
+
 export type TokenUse = {
   name: string;
   value: string;

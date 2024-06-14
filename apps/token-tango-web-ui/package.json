@@ -30,6 +30,7 @@
     "vite-plugin-singlefile": "^2.0.1"
   },
   "dependencies": {
+    "radius-toolkit": "workspace:*",
     "@create-figma-plugin/ui": "^3.1.0",
     "@create-figma-plugin/utilities": "^3.2.0",
     "@hookform/resolvers": "^3.6.0",

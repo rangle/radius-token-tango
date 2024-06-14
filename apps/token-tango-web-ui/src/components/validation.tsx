@@ -32,8 +32,18 @@ import {
   CollapsibleContent,
 } from "@/components/ui/collapsible";
 import { MessageSquare } from "lucide-react";
+import {
+  TokenNameFormatType,
+  FormatValidationResult,
+  TokenNameCollection,
+  isTokenValidationResult,
+} from "radius-toolkit";
 
-export type ValidationResultProps = {};
+export type ValidationResultProps = {
+  collections: TokenNameCollection[];
+  format: TokenNameFormatType | null;
+  issues: FormatValidationResult[];
+};
 
 const results = [
   {
@@ -142,20 +152,44 @@ const results = [
   },
 ];
 
-const format = {
-  separator: ".",
-  segments: ["category", "type", "name"],
-  rules: {},
-};
-
-export const ValidationResult: FC<ValidationResultProps> = () => {
+export const ValidationResult: FC<ValidationResultProps> = ({
+  collections,
+  format,
+  issues,
+}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showOnlyErrors, setShowOnlyErrors] = useState(false);
 
+  const allEntries = useMemo(() => {
+    const tokenIssues = issues.filter(isTokenValidationResult);
+    const tokens = collections.flatMap((collection) =>
+      collection.tokens.map((token) => ({
+        ...token,
+        collection: collection.name,
+      }))
+    );
+    return tokens.map((token) => {
+      const thisTokenIssues = tokenIssues.filter(
+        ({ token: { name }, collection }) =>
+          name === token.name && token.collection === collection
+      );
+      return {
+        ...token,
+        messages: thisTokenIssues.map(
+          ({ message, offendingSegments, isWarning }) => ({
+            message,
+            segments: offendingSegments ?? [],
+            type: isWarning ? "warning" : "error",
+          })
+        ),
+      };
+    });
+  }, [collections, format, issues]);
+
   const filteredEntries = useMemo(() => {
     const entries = showOnlyErrors
-      ? results.filter(({ messages }) => messages.length > 0)
-      : results;
+      ? allEntries.filter(({ messages }) => messages.length > 0)
+      : allEntries;
     if (!searchTerm) return entries;
     return entries.filter((entry) => {
       const filteredMessages = entry.messages
@@ -165,22 +199,24 @@ export const ValidationResult: FC<ValidationResultProps> = () => {
         });
       return (
         filteredMessages.length > 0 ||
-        `${entry.category} ${entry.token}`
+        `${entry.collection} ${entry.name}`
           .toLowerCase()
           .includes(searchTerm.toLowerCase())
       );
     });
-  }, [results, searchTerm, showOnlyErrors]);
+  }, [allEntries, searchTerm, showOnlyErrors]);
 
-  const groupedByCategory = useMemo(() => {
+  const groupedByCollection = useMemo(() => {
     return filteredEntries.reduce(
       (acc, entry) => ({
         ...acc,
-        [entry.category]: [...(acc[entry.category] ?? []), entry],
+        [entry.collection]: [...(acc[entry.collection] ?? []), entry],
       }),
       {} as Record<string, typeof filteredEntries>
     );
   }, [filteredEntries]);
+
+  if (!format) return null;
 
   return (
     <Card>
@@ -211,7 +247,7 @@ export const ValidationResult: FC<ValidationResultProps> = () => {
             </Label>
           </div>
           <div className="space-y-4">
-            {Object.entries(groupedByCategory).map(([category, entries]) => {
+            {Object.entries(groupedByCollection).map(([category, entries]) => {
               const errors = entries.filter(
                 ({ messages }) =>
                   messages.filter(({ type }) => type === "error").length > 0
@@ -241,8 +277,8 @@ export const ValidationResult: FC<ValidationResultProps> = () => {
                     </CollapsibleTrigger>
                   </div>
                   <CollapsibleContent className="p-4 space-y-2">
-                    {entries.map(({ token, messages }, index) => {
-                      if (!token) return;
+                    {entries.map(({ name, messages }, index) => {
+                      if (!name) return;
                       const tokenErrors = messages.filter(
                         ({ type }) => type === "error"
                       );
@@ -256,7 +292,7 @@ export const ValidationResult: FC<ValidationResultProps> = () => {
                               key={index}
                               className="font-mono text-sm p-2 px-4 border border-1 border-stone-200 rounded-full"
                             >
-                              {token.split(format.separator).map((word, i) => (
+                              {name.split(format.separator).map((word, i) => (
                                 <span
                                   key={i}
                                   className={
@@ -269,8 +305,7 @@ export const ValidationResult: FC<ValidationResultProps> = () => {
                                 >
                                   {word}
                                   {i <
-                                    token.split(format.separator).length -
-                                      1 && (
+                                    name.split(format.separator).length - 1 && (
                                     <span className="text-stone-400">
                                       {format.separator}
                                     </span>

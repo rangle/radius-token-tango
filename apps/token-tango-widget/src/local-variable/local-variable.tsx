@@ -1,6 +1,10 @@
 import { isComposite } from "../common/figma.types.js";
 import { ComponentUsage, TokenUse, isTokenUse } from "radius-toolkit";
 
+import { createLogger } from "@repo/utils";
+
+const log = createLogger("utils:local-variables");
+
 // type BoundVariables = SliceNode['boundVariables'];
 type KeysOfBoundVariables = SceneNode["boundVariables"] extends infer BV
   ? BV extends Record<string, object>
@@ -13,7 +17,7 @@ export async function getLocalVariables(
 ): Promise<ComponentUsage> {
   const variables = node?.boundVariables;
   if (!variables) {
-    console.log("no boundVariables: returning empty");
+    log('debug', "no boundVariables: returning empty");
     return {
       id: node.id,
       name: node.name,
@@ -22,13 +26,13 @@ export async function getLocalVariables(
     };
   }
 
-  console.log(`'${node.name}'`, "variables:", variables);
+  log('debug', `'${node.name}'`, "variables:", variables);
 
   const children = isComposite(node)
     ? node.children.map(getLocalVariables)
     : [];
 
-  if (!isComposite(node)) console.log("WEIRD CHILDREN", node.type);
+  if (!isComposite(node)) log('debug', "WEIRD CHILDREN", node.type);
 
   // for each key in variables we need to make a async query to get the current value of the variable
   const props = await Promise.all(

@@ -4,7 +4,8 @@
   "private": true,
   "files": [
     "index.ts",
-    "github.utils.ts"
+    "github.utils.ts",
+    "logging.utils.ts"
   ],
   "scripts": {
     "build": "tsc",

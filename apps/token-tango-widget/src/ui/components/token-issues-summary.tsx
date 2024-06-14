@@ -1,18 +1,28 @@
 const { widget } = figma;
 const { Line, AutoLayout, Text, useSyncedState, Fragment } = widget;
 
-import { TokenValidationResult } from "../../common/token.utils.js";
+import { colors } from "@repo/bandoneon";
+import { FormatValidationResult, TokenValidationResult } from "radius-toolkit";
+import { Icon16px } from "./icon";
 
 export type TokenIssuesSummaryProps = {
   collections: number;
   totalTokens: number;
-  issues: TokenValidationResult[];
+  issues: FormatValidationResult[];
   lastUpdated: string;
+  openIssues: () => void;
 };
 
 export const TokenIssuesSummaryProps: FunctionalWidget<
   TokenIssuesSummaryProps & HasChildrenProps
-> = ({ collections, issues, totalTokens, lastUpdated, children }) => {
+> = ({
+  collections,
+  issues,
+  totalTokens,
+  lastUpdated,
+  openIssues,
+  children,
+}) => {
   return (
     <AutoLayout
       name="Summary"
@@ -102,10 +112,11 @@ export const TokenIssuesSummaryProps: FunctionalWidget<
           spacing={8}
           padding={8}
           horizontalAlignItems="center"
+          onClick={openIssues}
         >
           <Text
             name="28"
-            fill="#606060"
+            fill={colors.status.error}
             lineHeight="100%"
             fontFamily="Inter"
             fontSize={24}
@@ -113,22 +124,24 @@ export const TokenIssuesSummaryProps: FunctionalWidget<
           >
             {issues.length}
           </Text>
-          <Text
-            name="Issues"
-            fill="#262626"
-            width={100}
-            horizontalAlignText="center"
-            lineHeight="140%"
-            fontFamily="Inter"
-            fontSize={12}
-            letterSpacing={0.24}
-          >
-            Issues
-          </Text>
+          <AutoLayout width={100} horizontalAlignItems={"center"} spacing={8}>
+            <Text
+              name="Issues"
+              fill={colors.status.error}
+              width={"hug-contents"}
+              horizontalAlignText="center"
+              lineHeight="140%"
+              fontFamily="Inter"
+              fontSize={12}
+              letterSpacing={0.24}
+            >
+              Issues
+            </Text>
+            {children}
+          </AutoLayout>
         </AutoLayout>
       </AutoLayout>
       <AutoLayout name="LastSync" spacing={8} verticalAlignItems="center">
-        {children}
         <Text
           name="Last sync"
           fill="#767676"

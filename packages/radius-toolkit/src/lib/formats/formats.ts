@@ -64,7 +64,7 @@ export type TokenGlobalIssue = {
 };
 
 export const createValidatorFunctions = (format: TokenNameFormatType) => {
-  const allRules = Object.values(format.rules);
+  const allRules = Object.values(format.rules ?? []);
   const [globalRules, rules] = splityGlobalRules(allRules);
 
   return [

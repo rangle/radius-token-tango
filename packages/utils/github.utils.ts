@@ -1,4 +1,9 @@
 import URL from "url-parse";
+
+import { createLogger } from "./logging.utils";
+
+const log = createLogger("utils:github");
+
 export type GithubFile = {
   path: string;
   content: string;
@@ -194,7 +199,8 @@ export const createGithubRepositoryClient = ({
     method = "POST",
     headers: HeadersInit = {}
   ) => {
-    console.log(
+    log(
+      "debug",
       ">>> Before fetch",
       method,
       `https://api.github.com/repos/${repoFullName}/${partialUrl}`
@@ -212,22 +218,22 @@ export const createGithubRepositoryClient = ({
         ...(body ? { body: JSON.stringify(body) } : {}),
       }
     ).catch((e) => {
-      console.log(">>>", e);
+      log("debug", ">>>", e);
       console.error("ERROR WHILE FETCHING", e);
       return e;
     });
-    console.log("<<<<<<<<<< After fetch", response.status);
+    log("debug", "<<<<<<<<<< After fetch", response.status);
     if (!response.ok) {
       console.error(await response.json());
       throw new Error(`HTTP returned code ${response.status}`);
     }
     const res = await response.json();
-    console.log(">>> RES", res);
+    log("debug", ">>> RES", res);
     return res;
   };
 
   const fetchRawFile = async (url: string, head = false) => {
-    console.log(">>>>> before raw fetch", url);
+    log("debug", ">>>>> before raw fetch", url);
     const response = await fetch(url, {
       method: head ? "HEAD" : "GET",
       headers: {
@@ -235,8 +241,8 @@ export const createGithubRepositoryClient = ({
         "X-GitHub-Api-Version": "2022-11-28",
       },
     });
-    console.log(">>>>> after raw fetch", response.status);
-    // console.log(JSON.stringify(await response.json()));
+    log("debug", ">>>>> after raw fetch", response.status);
+    // log('debug', JSON.stringify(await response.json()));
     return response;
   };
 
@@ -256,7 +262,7 @@ export const createGithubRepositoryClient = ({
       throw new Error(
         `Could not obtain SHA for base tree on branch ${branchName}`
       );
-    console.log(">>>>>>>", result);
+    log("debug", ">>>>>>>", result);
     return result;
   };
 
@@ -266,21 +272,21 @@ export const createGithubRepositoryClient = ({
   };
 
   const getParentSha = async (branchName: string) => {
-    console.log("getParentSha", branchName);
+    log("debug", "getParentSha", branchName);
     const result = await command(
       `git/refs/heads/${branchName}`,
       undefined,
       "GET"
     )
       .then((res) => {
-        console.log("getParentSha yeah!");
+        log("debug", "getParentSha yeah!");
         return res;
       })
       .catch((e) => {
-        console.log("getParentSha ERROR!", e);
+        log("debug", "getParentSha ERROR!", e);
         throw new Error(e);
       });
-    console.log(">> getParentSha fetched!");
+    log("debug", ">> getParentSha fetched!");
 
     if (
       !(
@@ -328,7 +334,7 @@ export const createGithubRepositoryClient = ({
     files: GithubFile[],
     newBranchName?: string
   ) => {
-    console.log("Create Commit from", branchName);
+    log("debug", "Create Commit from", branchName);
     const parentSha = await getParentSha(branchName);
     let branch = branchName;
     if (newBranchName) {
@@ -337,13 +343,13 @@ export const createGithubRepositoryClient = ({
         sha: parentSha,
       };
       branch = newBranchName;
-      console.log("Create Commit on", branch);
+      log("debug", "Create Commit on", branch);
       await command("git/refs", payload, "POST");
-      console.log("Branch", branch, "created");
+      log("debug", "Branch", branch, "created");
     }
-    console.log("creating tree");
+    log("debug", "creating tree");
     const tree = await createGithubRepoTree(branch, files);
-    console.log("tree created");
+    log("debug", "tree created");
 
     const payload = {
       message,
@@ -351,7 +357,7 @@ export const createGithubRepositoryClient = ({
       parents: [parentSha],
     };
 
-    console.log("pushing commit");
+    log("debug", "pushing commit");
     const commitResult = await command("git/commits", payload, "POST");
     if (!isObjectWithSHA(commitResult))
       throw new Error(`Could not obtain SHA of the commit`);
@@ -380,7 +386,7 @@ export const createGithubRepositoryClient = ({
       "GET",
       headers
     );
-    console.log("getFileDetailsByPath", result);
+    log("debug", "getFileDetailsByPath", result);
     if (
       !(
         typeof result === "object" &&
@@ -403,7 +409,7 @@ export const createGithubRepositoryClient = ({
       "GET",
       headers
     );
-    console.log("getFileDetailsByPath", result);
+    log("debug", "getFileDetailsByPath", result);
     if (!(typeof result === "object" && isGithubFileDetails(result)))
       throw new Error(`Could not obtain contents of file ${path}`);
     return result;
@@ -417,25 +423,25 @@ export const createGithubRepositoryClient = ({
     path: string,
     searchFileName: string
   ) => {
-    console.log("getFileInPreviousPath");
+    log("debug", "getFileInPreviousPath");
     const fileUrl = path; // using url instead of download_url to avoid CORS issue
-    console.log("file", fileUrl);
+    log("debug", "file", fileUrl);
     const foundFileDetails = await findInPreviousPath(fileUrl, async (p) => {
       const searchPath = formatPath(p, searchFileName);
-      console.log("file url >>", searchPath);
-      const response = await getFileDetailsByPath(searchPath).catch((e) => {
+      log("debug", "file url >>", searchPath);
+      const response = await getFileDetailsByPath(searchPath).catch((_e) => {
         console.info("file not found", searchPath);
         return undefined;
       });
       return response;
     });
-    console.log("foundLocation", foundFileDetails);
+    log("debug", "foundLocation", foundFileDetails);
     return [fileUrl, foundFileDetails] as const;
   };
 
   const getLastCommitByPath = async (path: string) => {
     const result = await command(`commits?path=${path}`, undefined, "GET");
-    console.log(">>>", result, isCommitDetailsArray(result));
+    log("debug", ">>>", result, isCommitDetailsArray(result));
     if (!isCommitDetailsArray(result))
       throw new Error(`Could not obtain last commits for file ${path}`);
     return result;
@@ -443,7 +449,7 @@ export const createGithubRepositoryClient = ({
 
   const getBranches = async () => {
     const result = await command(`branches`, undefined, "GET");
-    console.log(">>>", result, isCommitList(result));
+    log("debug", ">>>", result, isCommitList(result));
     if (!isCommitList(result))
       throw new Error(`Could not obtain branches for the repository`);
     return result;
@@ -499,13 +505,13 @@ export type GithubClient = ReturnType<typeof createGithubRepositoryClient>;
 //   }
 //   return response.text();
 // })
-// .then((result) => console.log("1", result));
+// .then((result) => log('debug', "1", result));
 // client.getLastCommitByPath("token/test.json");
 
 // client
 //   .getFileInPreviousPath(options.tokenFilePath, "package.json")
 //   .then(([tokenFile, packagejson]) => {
-//     console.log(
+//     log('debug',
 //       packagejson?.url.replace(/^.*\/contents\//, "").replace(/\?[^\/]*$/, "")
 //     );
 //   });

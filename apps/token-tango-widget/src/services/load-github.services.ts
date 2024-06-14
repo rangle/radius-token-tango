@@ -9,7 +9,10 @@ import {
   githubUrlToPath,
 } from "@repo/utils";
 import { TokenLayers } from "radius-toolkit";
-import { satisfies } from "semver";
+
+import { createLogger } from "@repo/utils";
+
+const log = createLogger("Services:load-github");
 
 /**
  * Formats the relative path of a package.json file based on the provided options and packageJson
@@ -40,15 +43,15 @@ export const formatPackageJsonRelativePath = (
  * @throws An error if the package.json file cannot be found or if there is a problem reading it.
  */
 const getPackageJson = async (client: GithubClient, options: GithubOptions) => {
-  console.log(">>", "getPackageJson 1");
+  log("debug", ">>", "getPackageJson 1");
   const [tokenFilePath, packageFileDetails] =
     await client.getFileInPreviousPath(options.tokenFilePath, "package.json");
-  console.log(">>", "getPackageJson 2", tokenFilePath);
+  log("debug", ">>", "getPackageJson 2", tokenFilePath);
   if (!packageFileDetails)
     throw new Error("Cannot find package.json in the repository");
 
   if (!isGithubFileDetails(packageFileDetails)) {
-    console.log("PACKAGE.JSON UNKNOWN FORMAT:", packageFileDetails);
+    log("debug", "PACKAGE.JSON UNKNOWN FORMAT:", packageFileDetails);
     return [undefined, tokenFilePath] as const;
   }
 
@@ -60,10 +63,10 @@ const getPackageJson = async (client: GithubClient, options: GithubOptions) => {
   const packagejson = JSON.parse(packagejsonStr);
 
   if (!isPackageJSON(packagejson)) {
-    console.log("PACKAGE.JSON NOT THE RIGHT FORMAT");
+    log("debug", "PACKAGE.JSON NOT THE RIGHT FORMAT");
     return [undefined, tokenFilePath] as const;
   }
-  console.log("SUCCESSFULLY", packagejson.version);
+  log("debug", "SUCCESSFULLY", packagejson.version);
   return [packagejson, tokenFilePath, packageFileDetails] as const;
 };
 
@@ -73,9 +76,9 @@ const getPackageJson = async (client: GithubClient, options: GithubOptions) => {
  * @returns A tuple containing the token layers, package.json, and metadata.
  */
 export const fetchRepositoryTokenLayers = async (options: GithubOptions) => {
-  console.log("fetchRepositoryTokenLayers 1");
+  log("debug", "fetchRepositoryTokenLayers 1");
   const client = createGithubRepositoryClient(options.credentials);
-  console.log("fetchRepositoryTokenLayers 2");
+  log("debug", "fetchRepositoryTokenLayers 2");
   const [packagejson, tokenFilePath, packageFileDetails] = await getPackageJson(
     client,
     options,
@@ -91,7 +94,7 @@ export const fetchRepositoryTokenLayers = async (options: GithubOptions) => {
       throw e;
     });
 
-  console.log("fetchRepositoryTokenLayers 3", tokenFileDetails);
+  log("debug", "fetchRepositoryTokenLayers 3", tokenFileDetails);
 
   if (!tokenFileDetails && !options.createFile) {
     throw new Error(
@@ -105,7 +108,7 @@ export const fetchRepositoryTokenLayers = async (options: GithubOptions) => {
     fileToGetCommitsFrom?.path ?? "/",
   );
 
-  console.log("fetchRepositoryTokenLayers 4");
+  log("debug", "fetchRepositoryTokenLayers 4");
   const lastCommits = lastCommitsFromRepo.map(
     ({
       commit: { author, committer, message },
@@ -121,7 +124,7 @@ export const fetchRepositoryTokenLayers = async (options: GithubOptions) => {
       commiter_avatar_url: committerDetails?.avatar_url,
     }),
   );
-  console.log("fetchRepositoryTokenLayers 5");
+  log("debug", "fetchRepositoryTokenLayers 5");
 
   // retry obtaining token file content if the original one is empty (ISSUE WITH GITHUB API)
   const tokenFileContent =
@@ -147,8 +150,8 @@ export const fetchRepositoryTokenLayers = async (options: GithubOptions) => {
           })
           .then((res) => JSON.stringify(res));
 
-  console.log("fetchRepositoryTokenLayers 6");
-  console.log(tokenFileContent);
+  log("debug", "fetchRepositoryTokenLayers 6");
+  log("debug", tokenFileContent);
 
   const [name, version] = [
     packagejson?.name ?? "---",
@@ -170,8 +173,8 @@ export const fetchRepositoryTokenLayers = async (options: GithubOptions) => {
           order: [],
         } satisfies TokenLayers)
       : JSON.parse(tokenFileContent);
-  console.log("fetchRepositoryTokenLayers 7");
-  console.log(tokenLayers);
+  log("debug", "fetchRepositoryTokenLayers 7");
+  log("debug", tokenLayers);
   return [tokenLayers, packagejson, meta] as const;
 };
 
@@ -200,7 +203,7 @@ export const saveRepositoryTokenLayers = async (
   const [tokenLayers, packagejson, { packageFileDetails }] = synchData;
 
   const packageVersion = packagejson?.version ?? "0.0.0";
-  console.log("Saving version", packageVersion, "->", version);
+  log("debug", "Saving version", packageVersion, "->", version);
   return await client.createCommit(
     options.branch,
     message,

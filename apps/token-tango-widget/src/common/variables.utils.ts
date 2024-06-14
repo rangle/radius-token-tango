@@ -1,4 +1,20 @@
-import { TokenCollection, VariablesMode } from "radius-toolkit";
+import {
+  FormatValidationResult,
+  GlobalValidationResult,
+  TokenCollection,
+  TokenName,
+  TokenNameCollection,
+  TokenNameFormatType,
+  TokenValidationResult,
+  TokenVariable,
+  VariablesMode,
+  createValidatorFunctions,
+} from "radius-toolkit";
+import { isNotNil } from "radius-toolkit";
+
+import { createLogger } from "@repo/utils";
+
+const log = createLogger("utils:variables");
 
 // type guard for VariableValue is alias
 function isVariableAlias(value: VariableValue): value is VariableAlias {
@@ -67,4 +83,101 @@ export const getAllLocalVariableTokens = async () => {
     });
   }
   return collections;
+};
+export const validateTokenCollection = (
+  format: TokenNameFormatType,
+  [validateTokens, validateTokenCollections]: ReturnType<
+    typeof createValidatorFunctions
+  >,
+  collections: TokenCollection[],
+): FormatValidationResult[] => {
+  log("debug", "validateTokenCollection 1");
+
+  const allTokens = collections.flatMap((c) =>
+    c.modes.flatMap(({ variables }) =>
+      variables.map((v) => ({ ...v, collection: c.name })),
+    ),
+  );
+
+  log("debug", "validateTokenCollection 2", allTokens.length);
+
+  const tokenResults = allTokens.reduce<TokenValidationResult[]>(
+    (issues, token) => {
+      const tokenName: TokenName = {
+        name: token.name.replaceAll("/", format.separator) ?? "",
+        alias: token.alias?.replaceAll("/", format.separator),
+      };
+      const [errors, warnings] = validateTokens(tokenName.name);
+
+      return [
+        ...issues,
+        ...(errors ?? []).map(({ message, offendingSegments }) => ({
+          type: "token",
+          collection: token.collection,
+          token: tokenName,
+          isWarning: false,
+          message: message ?? "",
+          offendingSegments: offendingSegments ?? [],
+        })),
+        ...(warnings ?? []).map(({ message, offendingSegments }) => ({
+          type: "token",
+          collection: token.collection,
+          token: tokenName,
+          isWarning: true,
+          message: message ?? "",
+          offendingSegments: offendingSegments ?? [],
+        })),
+      ];
+    },
+    [] as TokenValidationResult[],
+  );
+
+  log("debug", "validateTokenCollection 3", tokenResults.length);
+
+  const tokenNameCollections: TokenNameCollection[] = collections
+    .map(
+      ({ name, modes: [mode] }) =>
+        mode && {
+          name: name,
+          tokens: mode.variables.map((v) => ({
+            name: v.name.replaceAll("/", format.separator) ?? "",
+            alias: (v as TokenVariable).alias?.replaceAll(
+              "/",
+              format.separator,
+            ),
+          })),
+        },
+    )
+    .filter(isNotNil);
+
+  log("debug", "validateTokenCollection 4", tokenNameCollections.length);
+
+  const [collectionErrors, collectionWarnings] =
+    validateTokenCollections(tokenNameCollections);
+
+  log(
+    "debug",
+    "validateTokenCollection 5",
+    collectionErrors?.length,
+    collectionWarnings?.length,
+  );
+
+  const collectionResults: GlobalValidationResult[] = [
+    ...(collectionErrors ?? []).map(({ message, offendingSegments }) => ({
+      type: "collection",
+      isWarning: false,
+      message: message ?? "",
+      offendingSegments: offendingSegments ?? [],
+    })),
+    ...(collectionWarnings ?? []).map(({ message, offendingSegments }) => ({
+      type: "collection",
+      isWarning: true,
+      message: message ?? "",
+      offendingSegments: offendingSegments ?? [],
+    })),
+  ];
+
+  log("debug", "validateTokenCollection 6", collectionResults.length);
+
+  return [...tokenResults, ...collectionResults];
 };

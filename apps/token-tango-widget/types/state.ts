@@ -1,5 +1,10 @@
 import { EventHandler } from "@create-figma-plugin/utilities";
 import { PushMessageType, WidgetConfiguration } from "@repo/config";
+import {
+  FormatValidationResult,
+  TokenNameCollection,
+  TokenNameFormatType,
+} from "radius-toolkit";
 
 export interface WidgetStateHandler extends EventHandler {
   name: "PLUGIN_STATE_CHANGE";
@@ -19,6 +24,11 @@ export interface ConfirmPushHandler extends EventHandler {
 export interface UiCommitHandler extends EventHandler {
   name: "UI_COMMIT_CHANGE";
   handler: (state: PushMessageType) => void;
+}
+
+export interface IssueVisualizerHandler extends EventHandler {
+  name: "PLUGIN_VIEW_ISSUE";
+  handler: (serializedState: string) => void;
 }
 
 export interface UiCloseHandler extends EventHandler {

@@ -16,15 +16,25 @@ import {
   TokenCollection,
   isTokenValidationResult,
 } from "radius-toolkit";
-import { isNotNil } from "../../common/component.utils";
+import { isNotNil } from "radius-toolkit";
 import { colors } from "@repo/bandoneon";
+import {
+  SuccessPanel,
+  SuccessfullyPushedDetails,
+} from "../components/success-panel";
+
+import { createLogger } from "@repo/utils";
+
+const log = createLogger("pages:loaded");
 
 type LoadedPageProps = {
   format: TokenNameFormatType;
   allTokens: LoadedTokens;
   errors: FormatValidationResult[];
   synchDetails: RepositoryTokenLayers;
+  successfullyPushed: SuccessfullyPushedDetails | null;
   reloadTokens: () => void;
+  openIssues: () => void;
   pushTokens: (branch: string, message: string, version: string) => void;
 };
 
@@ -38,29 +48,32 @@ export const LoadedPage: FunctionalWidget<LoadedPageProps> = ({
   allTokens: { collections, inspectedAt, tokenLayers },
   errors,
   synchDetails: [previousTokenLayers, packageJson, meta],
+  successfullyPushed,
+  openIssues,
   reloadTokens,
   pushTokens,
 }) => {
-  console.log("BEGIN RENDERING LOADED PAGE 1");
+  log("debug", "BEGIN RENDERING LOADED PAGE 1", successfullyPushed);
+
   const summary = getSummaryOfCollections(collections, errors);
 
-  console.log("BEGIN RENDERING LOADED PAGE 2");
+  log("debug", "BEGIN RENDERING LOADED PAGE 2");
 
   const collectionList = renderCollectionList(collections, format, errors);
 
-  console.log("RENDERING LOADED PAGE");
+  log("debug", "RENDERING LOADED PAGE");
 
   if (!isTokenLayers(tokenLayers) || !isTokenLayers(previousTokenLayers))
     return invalidLayersFile(format, reloadTokens);
 
-  console.log("DIFF TOKEN LAYERS");
+  log("debug", "DIFF TOKEN LAYERS");
   const [added, modified, deleted] = diffTokenLayers(
     tokenLayers,
     previousTokenLayers,
   );
-  console.log("ADDED", added);
-  console.log("MODIFIED", modified);
-  console.log("DELETED", deleted);
+  log("debug", "ADDED", added);
+  log("debug", "MODIFIED", modified);
+  log("debug", "DELETED", deleted);
 
   // we only want to detail errors related to tokens
   const tokenErrors = errors.filter(isTokenValidationResult);
@@ -93,16 +106,31 @@ export const LoadedPage: FunctionalWidget<LoadedPageProps> = ({
         spacing={"auto"}
       >
         <AutoLayout direction="vertical" spacing={6}>
-          <TokenIssuesSummaryProps {...summary} lastUpdated={inspectedAt}>
-            <Icon16px icon="refresh" onClick={reloadTokens} />
+          <TokenIssuesSummaryProps
+            {...summary}
+            lastUpdated={inspectedAt}
+            openIssues={openIssues}
+          >
+            <Icon16px
+              icon="open"
+              onClick={openIssues}
+              color={colors.status.error}
+            />
           </TokenIssuesSummaryProps>
-          <PushPanel
-            previousVersion={meta.version}
-            diff={[added, modified, deleted]}
-            errors={[addedErrs, modifiedErrs]}
-            reloadTokens={reloadTokens}
-            pushTokens={pushTokens}
-          />
+          {successfullyPushed ? (
+            <SuccessPanel
+              details={successfullyPushed}
+              reloadTokens={reloadTokens}
+            />
+          ) : (
+            <PushPanel
+              previousVersion={meta.version}
+              diff={[added, modified, deleted]}
+              errors={[addedErrs, modifiedErrs]}
+              reloadTokens={reloadTokens}
+              pushTokens={pushTokens}
+            />
+          )}
         </AutoLayout>
       </AutoLayout>
     </AutoLayout>

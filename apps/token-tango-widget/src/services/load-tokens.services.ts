@@ -1,6 +1,6 @@
 // reads current version of tokens and variables of current document
 
-import { isNotNil } from "../common/component.utils";
+import { isNotNil, toTokenNameCollection } from "radius-toolkit";
 import { generateLayerFile } from "../common/generator.utils";
 import {
   TokenCollection,
@@ -15,22 +15,26 @@ import {
 } from "radius-toolkit";
 import { getAllLocalVariableTokens } from "../common/variables.utils";
 
+import { createLogger } from "@repo/utils";
+
+const log = createLogger("services:load-tokens");
+
 export const getTokenLayers = async (
   format: TokenNameFormatType,
   ignoreErrors: boolean,
 ) => {
-  console.log("getTokenLayers 1");
+  log("debug", "getTokenLayers 1");
   const validators = createValidatorFunctions(format);
-  console.log("getTokenLayers 2");
+  log("debug", "getTokenLayers 2");
   const tokenCollections = await getAllLocalVariableTokens();
-  console.log("getTokenLayers 3", tokenCollections.length);
+  log("debug", "getTokenLayers 3", tokenCollections.length);
   const errors = validateTokenCollection(format, validators, tokenCollections);
-  console.log("getTokenLayers 4", errors.length);
+  log("debug", "getTokenLayers 4", errors.length);
   if (errors.length && !ignoreErrors)
     return [tokenCollections, undefined, errors] as const;
-  console.log("getTokenLayers 5");
+  log("debug", "getTokenLayers 5");
   const layers = generateLayerFile(tokenCollections);
-  console.log("getTokenLayers 6", layers);
+  log("debug", "getTokenLayers 6", layers);
   return [tokenCollections, layers, errors] as const;
 };
 
@@ -41,7 +45,7 @@ export const validateTokenCollection = (
   >,
   collections: TokenCollection[],
 ): FormatValidationResult[] => {
-  console.log("validateTokenCollection 1");
+  log("debug", "validateTokenCollection 1");
 
   const allTokens = collections.flatMap((c) =>
     c.modes.flatMap(({ variables }) =>
@@ -49,7 +53,7 @@ export const validateTokenCollection = (
     ),
   );
 
-  console.log("validateTokenCollection 2", allTokens.length);
+  log("debug", "validateTokenCollection 2", allTokens.length);
 
   const tokenResults = allTokens.reduce<TokenValidationResult[]>(
     (issues, token) => {
@@ -82,30 +86,20 @@ export const validateTokenCollection = (
     [] as TokenValidationResult[],
   );
 
-  console.log("validateTokenCollection 3", tokenResults.length);
+  log("debug", "validateTokenCollection 3", tokenResults.length);
 
-  const tokenNameCollections: TokenNameCollection[] = collections
-    .map(
-      ({ name, modes: [mode] }) =>
-        mode && {
-          name: name,
-          tokens: mode.variables.map((v) => ({
-            name: v.name.replaceAll("/", format.separator) ?? "",
-            alias: (v as TokenVariable).alias?.replaceAll(
-              "/",
-              format.separator,
-            ),
-          })),
-        },
-    )
-    .filter(isNotNil);
+  const tokenNameCollections: TokenNameCollection[] = toTokenNameCollection(
+    collections,
+    format,
+  );
 
-  console.log("validateTokenCollection 4", tokenNameCollections.length);
+  log("debug", "validateTokenCollection 4", tokenNameCollections.length);
 
   const [collectionErrors, collectionWarnings] =
     validateTokenCollections(tokenNameCollections);
 
-  console.log(
+  log(
+    "debug",
     "validateTokenCollection 5",
     collectionErrors?.length,
     collectionWarnings?.length,
@@ -126,7 +120,7 @@ export const validateTokenCollection = (
     })),
   ];
 
-  console.log("validateTokenCollection 6", collectionResults.length);
+  log("debug", "validateTokenCollection 6", collectionResults.length);
 
   return [...tokenResults, ...collectionResults];
 };

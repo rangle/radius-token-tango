@@ -134,18 +134,20 @@ export const PageLayout = ({
           </Text>
         </AutoLayout>
       )}
-      {synchMetadata && (
-        <RepositoryRibbon
-          name={synchMetadata.name}
-          avatarUrl={synchMetadata.lastCommits?.[0].autor_avatar_url}
-          commitMessage={synchMetadata.lastCommits?.[0].message}
-          dateTime={synchMetadata.lastCommits?.[0].author.date}
-          userName={synchMetadata.lastCommits?.[0].author.name}
-          version={synchMetadata.version}
-          openConfig={openConfig}
-          status={synched ? "online" : "disconnected"}
-        />
-      )}
+      {synchMetadata &&
+        synchMetadata.lastCommits &&
+        synchMetadata.lastCommits[0] && (
+          <RepositoryRibbon
+            name={synchMetadata.name}
+            avatarUrl={synchMetadata.lastCommits[0].autor_avatar_url || ""}
+            commitMessage={synchMetadata.lastCommits[0].message}
+            dateTime={synchMetadata.lastCommits[0].author.date}
+            userName={synchMetadata.lastCommits[0].author.name}
+            version={synchMetadata.version}
+            openConfig={openConfig}
+            status={synched ? "online" : "disconnected"}
+          />
+        )}
       <AutoLayout
         cornerRadius={12}
         padding={16}

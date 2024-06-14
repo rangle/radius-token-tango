@@ -17,6 +17,13 @@ export type TokenNameCollection = {
   tokens: TokenName[];
 };
 
+export const isTokenNameCollection = (o: unknown): o is TokenNameCollection =>
+  !!o &&
+  typeof o === "object" &&
+  "name" in o &&
+  "tokens" in o &&
+  Array.isArray((o as TokenNameCollection).tokens);
+
 export type TokenNameValidationResult =
   | readonly [isValid: true] // ok
   | readonly [isValid: boolean, message: string] // error or warning
@@ -76,6 +83,15 @@ export const isGlobalValidationResult = (
 export type FormatValidationResult =
   | TokenValidationResult
   | GlobalValidationResult;
+
+export const isFormatValidationResult = (
+  result: unknown
+): result is FormatValidationResult =>
+  typeof result === "object" &&
+  result !== null &&
+  "isWarning" in result &&
+  "message" in result &&
+  "offendingSegments" in result;
 
 /** Token Rule Validation Function
  * A function that validates a token name
@@ -152,6 +168,17 @@ export type TokenNameFormatType<FormatName = string> = {
   version: string;
   segments: string[];
   separator: string;
-  decomposeTokenName: DecomposedTokenName;
-  rules: TokenRuleSet;
+  decomposeTokenName?: DecomposedTokenName;
+  rules?: TokenRuleSet;
 };
+
+export const isTokenNameFormatType = (
+  format: unknown
+): format is TokenNameFormatType =>
+  typeof format === "object" &&
+  format !== null &&
+  "name" in format &&
+  "description" in format &&
+  "version" in format &&
+  "segments" in format &&
+  "separator" in format;

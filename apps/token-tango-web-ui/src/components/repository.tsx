@@ -49,6 +49,10 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 
+import { createLogger } from "@repo/utils";
+
+const log = createLogger("WEB:repository");
+
 export type RepositoryConfigProps = {
   state: WidgetConfiguration;
   updateState: (newState: WidgetConfiguration) => void;
@@ -81,7 +85,7 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
   });
 
   const onSubmit = (values: FormSchema) => {
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", values);
+    log("debug", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", values);
     updateState(values);
   };
 
@@ -291,7 +295,7 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
                   disabled={!isConnected}
                   defaultValue={getValues("branch")}
                   onValueChange={(value) => {
-                    console.log("CHANGE", value);
+                    log("debug", "CHANGE", value);
                     setValue("branch", value);
                   }}
                 >

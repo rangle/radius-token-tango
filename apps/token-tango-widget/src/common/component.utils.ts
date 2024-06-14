@@ -1,7 +1,15 @@
 import { getLocalVariable } from "../local-variable/index.js";
 import { getTokenStudioTokens } from "../token-studio/index.js";
 import { isInstance, isComponent, isComponentSet } from "./figma.types.js";
-import { ComponentUsage, combineComponentUsage } from "radius-toolkit";
+import {
+  ComponentUsage,
+  combineComponentUsage,
+  isNotNil,
+} from "radius-toolkit";
+
+import { createLogger } from "@repo/utils";
+
+const log = createLogger("utils:components");
 
 export const getMainComponent = async (
   node: BaseNode,
@@ -10,7 +18,7 @@ export const getMainComponent = async (
 
 export const getComponentSet = async (node: BaseNode) => {
   if (!node) {
-    console.log("No node selected");
+    log("warn", "No node selected");
     throw new Error("no node selected");
   }
 
@@ -77,8 +85,6 @@ export const getTokensFromNode = async (node: ComponentNode | InstanceNode) => {
   );
   return componentUsage;
 };
-
-export const isNotNil = <T>(o: T | null | undefined): o is T => !!o;
 
 export const diffRecordValues = <T extends Record<string, string>>(
   a: T,

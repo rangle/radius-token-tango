@@ -204,7 +204,7 @@ export const PushPanel: FunctionalWidget<PushPanelProps> = ({
             Check again
           </RoundButton>
           <RoundButton
-            name="CheckAgainButton"
+            name="PushToGithubButton"
             icon="git"
             variant={canPush ? "default" : "disabled"}
             onClick={

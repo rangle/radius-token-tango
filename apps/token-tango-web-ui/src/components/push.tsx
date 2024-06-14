@@ -22,6 +22,10 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { createLogger } from "@repo/utils";
+
+const log = createLogger("WEB:push");
+
 export type PushConfirmationProps = {
   state: PushMessageType & WidgetConfiguration;
   updateState: (newState: PushMessageType) => void;
@@ -32,7 +36,7 @@ export const PushConfirmation: FC<PushConfirmationProps> = ({
   updateState,
 }) => {
   const onSubmit = ({ branchName, commitMessage }: PushMessageType) => {
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>", branchName, commitMessage);
+    log("debug", ">>>>>>>>>>>>>>>>>>>>>>>>>", branchName, commitMessage);
     return updateState({
       branchName,
       commitMessage,

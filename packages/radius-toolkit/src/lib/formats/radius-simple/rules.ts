@@ -47,9 +47,10 @@ export const rules = ruleSet({
       const [firstSegment] = name.split(".");
       return isTokenType(firstSegment)
         ? validationResult(true)
-        : validationError(`Segment ${firstSegment} is not a valid token type`, [
-            firstSegment,
-          ]);
+        : validationError(
+            `Segment '${firstSegment}' is not a valid token type`,
+            [firstSegment]
+          );
     },
   },
   "lowercase-or-camelcase": {
