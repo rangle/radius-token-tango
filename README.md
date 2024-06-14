@@ -1,8 +1,6 @@
-Here's a README file for your repository:
-
----
-
 # Radius Token Tango
+
+![Banner](docs/tango-banner.png)
 
 This repository contains the codebase for the Radius Token Tango project, which includes a Figma Widget and a web UI. The project is structured as a monorepo, containing multiple applications and packages.
 
