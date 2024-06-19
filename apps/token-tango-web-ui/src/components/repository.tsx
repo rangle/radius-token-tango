@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useState } from "react";
+import { emit } from "@create-figma-plugin/utilities";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription,
   CardFooter,
 } from "@/components/ui/card";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
@@ -32,7 +32,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { createLogger } from "@repo/utils";
@@ -81,7 +80,6 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
   });
 
   const onSubmit = (values: FormSchema) => {
-    log("debug", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", values);
     updateState(values);
   };
 
@@ -117,16 +115,6 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
         console.error(response.error);
       }
     });
-  };
-  const handleSave = () => {
-    try {
-      if (Math.random() > 0.5) {
-        throw new Error();
-      }
-      setError(null);
-    } catch (err) {
-      setError("Failed to save configuration. Please try again later.");
-    }
   };
 
   const handleCheckFile = async () => {
@@ -390,7 +378,13 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
             )}
 
             <div className="inline-flex items-center p-4">
-              <Button variant="ghost" onClick={() => setError(null)}>
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  setError(null);
+                  emit<UiCloseHandler>("UI_CLOSE");
+                }}
+              >
                 Cancel
               </Button>
               <Button

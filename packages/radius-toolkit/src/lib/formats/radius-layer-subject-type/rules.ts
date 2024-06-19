@@ -134,7 +134,7 @@ export const rules = ruleSet({
   },
   "lowercase-or-camelcase": {
     description:
-      "Each segment can be in lowercase or camelCase unless it's the last segment, that can be either a camelCase value or a numeric value",
+      "Each segment can be in lowercase or camelCase unless it's the last segment, that can be either a camelCase value or or an expression",
     validate: (name: string) => {
       const segments = name.split(".");
       const allButLast = segments.slice(0, segments.length - 1);

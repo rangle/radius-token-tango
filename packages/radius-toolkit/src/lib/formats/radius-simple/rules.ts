@@ -67,7 +67,7 @@ export const rules = ruleSet({
         (isCamelCase(lastSegment) || isNumberOrFraction(lastSegment))
         ? validationResult(true)
         : validationError(
-            "Segments should be in lowercase or camelCase",
+            "Segments should be in lowercase or camelCase, or an expression if it's the last segment. It should also have no special characters",
             segments.filter((s) => !isCamelCase(s))
           );
     },
