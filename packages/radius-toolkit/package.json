@@ -18,7 +18,10 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && vite build --config vite.config.cli.ts",
+    "build": "tsc && pnpm build:lib && pnpm build:cli",
+    "type-check": "tsc",
+    "build:lib": "vite build",
+    "build:cli": "vite build --config vite.config.cli.ts",
     "test": "vitest",
     "prepublishOnly": "pnpm run build"
   },

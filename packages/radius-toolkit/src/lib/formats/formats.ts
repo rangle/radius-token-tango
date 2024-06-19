@@ -68,14 +68,16 @@ export const createValidatorFunctions = (format: TokenNameFormatType) => {
   const [globalRules, rules] = splityGlobalRules(allRules);
 
   return [
-    function validateTokenName(tokenName: string) {
+    function validateTokenName(tokenName: string, tokenType: string) {
       const [errors, warnings] = rules.reduce<
         [TokenNameIssue[], TokenNameIssue[]]
       >(
         (acc, rule) => {
           const [errors, warnings] = acc;
-          const [isValid, message, offendingSegments] =
-            rule.validate(tokenName);
+          const [isValid, message, offendingSegments] = rule.validate(
+            tokenName,
+            tokenType
+          );
           if (!isValid && message) {
             return [[...errors, { message, offendingSegments }], warnings];
           } else if (message) {

@@ -20,7 +20,7 @@ export const ruleTestValues = <T extends string>(
       tokenNameTests.forEach((tokenNameTest) => {
         const { input, errors, warnings } = tokenNameTest;
         test(`Rule ${ruleName} should validate ${input}`, () => {
-          const [ok, msg] = rule.validate(input);
+          const [ok, msg] = rule.validate(input, "");
           if (!ok) {
             expect(errors, "to expect errors").toBeTruthy();
             expect(

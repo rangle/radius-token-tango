@@ -165,22 +165,35 @@ export function Widget() {
             log("debug", ">>> RELOADING ALL VARIABLES");
             waitForTask(doLoadTokensAndSynch());
           }}
-          pushTokens={createPushTokensDialogCallback((edits) => {
-            log("debug", "PUSHING TO THE REPOSITORY", edits);
-            log("debug", synchDetails);
-            waitForTask(
-              doSaveTokens(synchDetails ?? null, edits, () => {
-                log("debug", "FINISHED!!");
-                setSuccessfullyPushed({
-                  branch: edits.branchName,
-                  ref: synchConfiguration?.branch ?? "",
-                  repository: synchConfiguration?.repository ?? "",
-                  version: edits.version ?? "",
-                });
-              }),
-            );
-            log("debug", "FINISHED PUSHING TO THE REPOSITORY");
-          })}
+          pushTokens={createPushTokensDialogCallback(
+            synchConfiguration,
+            (edits) => {
+              log("debug", "PUSHING TO THE REPOSITORY", edits);
+
+              // get the new token layers
+              const { tokenLayers } = JSON.parse(persistedTokens);
+              const [_oldTokenLayers, packagejson, meta] = synchDetails;
+              // merge them with the existing data from Github
+              const newSyncDetails: RepositoryTokenLayers = [
+                tokenLayers,
+                packagejson,
+                meta,
+              ];
+              log("debug", newSyncDetails);
+              waitForTask(
+                doSaveTokens(newSyncDetails ?? null, edits, () => {
+                  log("debug", "FINISHED!!");
+                  setSuccessfullyPushed({
+                    branch: edits.branchName,
+                    ref: synchConfiguration?.branch ?? "",
+                    repository: synchConfiguration?.repository ?? "",
+                    version: edits.version ?? "",
+                  });
+                }),
+              );
+              log("debug", "FINISHED PUSHING TO THE REPOSITORY");
+            },
+          )}
         />
       )}
     </PageLayout>
@@ -350,6 +363,7 @@ function createIssueDialogCallback(
 }
 
 function createPushTokensDialogCallback(
+  synchConfiguration: WidgetConfiguration | null,
   setConfirmPushDialogData: (newValue: PushMessageType) => void,
 ): (branch: string, message: string, version: string) => void {
   return (branchName, commitMessage, version) =>
@@ -357,9 +371,14 @@ function createPushTokensDialogCallback(
       figma.showUI(__html__, {
         title: "Confirm Push to Github",
         width: 575,
-        height: 600,
+        height: 630,
       });
+      if (!synchConfiguration || synchConfiguration.error) {
+        log("error", "Invalid Github configuration", synchConfiguration?.error);
+        throw new Error("Invalid Github configuration");
+      }
       emit<ConfirmPushHandler>("PLUGIN_CONFIRM_PUSH", {
+        ...synchConfiguration,
         branchName,
         commitMessage,
       });

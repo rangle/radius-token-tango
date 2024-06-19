@@ -1,4 +1,4 @@
-import { DecomposedTokenName } from "../format.types";
+import { DecomposeTokenName } from "../format.types";
 import {
   isCamelCase,
   isNumberOrFraction,
@@ -6,11 +6,12 @@ import {
   validationError,
   validationResult,
 } from "../format.utils";
-import { TokenNameDescription, isTokenType } from "../token-name-format.types";
+import { TokenNameDescription, getTokenType } from "../token-name-format.types";
 
-export const decomposeTokenName: DecomposedTokenName = (name) => {
-  const [type, ...attributes] = name.split(".");
-  if (!isTokenType(type)) return null;
+export const decomposeTokenName: DecomposeTokenName = (name) => {
+  const [typeSegment, ...attributes] = name.split(".");
+  const type = getTokenType(typeSegment);
+  if (!type) return null;
   return {
     type,
     attributes,
@@ -42,10 +43,12 @@ export const rules = ruleSet({
   },
   "type-as-first-segment": {
     description:
-      "The first segment of the token name must indicate the token type",
-    validate: (name: string) => {
+      "The first segment of the token name must indicate the token type unless the token is a color",
+    validate: (name: string, tokenType: string) => {
+      if (tokenType === "COLOR") return validationResult(true);
       const [firstSegment] = name.split(".");
-      return isTokenType(firstSegment)
+      const type = getTokenType(firstSegment);
+      return type
         ? validationResult(true)
         : validationError(
             `Segment '${firstSegment}' is not a valid token type`,

@@ -4,13 +4,18 @@ import {
   TokenLayer,
   TokenLayers,
   TokenOutput,
-  TokeTypeName,
+  getTokenType,
   inferVariableType,
   tokenTypeNames,
   TokenCollection,
   TokenVariable,
   VariablesMode,
+  TokenNameFormatType,
 } from "radius-toolkit";
+
+import { createLogger } from "@repo/utils";
+
+const log = createLogger("utils:generator");
 
 const DEFAULT_MODE_NAME = "Mode 1";
 export const PARAM_SECTION_NAME = "section-name";
@@ -27,9 +32,12 @@ const formatLayerName = (modeName: string, description: string) => {
 const renderKey = (name: string) => `--${formatKey(name)}`;
 const formatReference = (alias: string) => `{${renderKey(alias)}}`;
 
-const variableToTokenOutput = (variable: TokenVariable): TokenOutput => {
+const variableToTokenOutput = (
+  variable: TokenVariable,
+  givenType: string,
+): TokenOutput => {
   const { name, description } = variable;
-  const type = inferVariableType(variable);
+  const type = getTokenType(givenType) ?? givenType;
   return {
     name: name.replaceAll("/", "."),
     key: renderKey(name),
@@ -49,7 +57,7 @@ export const isRGB = (s: VariableValue): s is RGB =>
 export const isRGBA = (s: VariableValue): s is RGBA =>
   !!s && typeof s === "object" && ["r", "g", "b", "a"].every((n) => n in s);
 
-export const renderPrimitiveValue = (s: unknown) => String(s);
+export const renderPrimitiveValue = (s: unknown) => JSON.stringify(s);
 export const renderNumericValue = (n: number, unit: string) => `${n}${unit}`;
 export const color = (c: number) => Math.round(c * 255);
 export const renderRGB = ({ r, g, b }: RGB): string =>
@@ -57,10 +65,10 @@ export const renderRGB = ({ r, g, b }: RGB): string =>
 export const renderRGBA = ({ r, g, b, a }: RGBA): string =>
   `rgba(${color(r)}, ${color(g)}, ${color(b)}, ${a.toFixed(2)})`;
 
-export const renderValue = (typeName: string, v: VariableValue): string => {
-  const type = tokenTypeNames.find((t) => t === (typeName as TokeTypeName));
+export const renderValue = (type: string, v: VariableValue): string => {
   switch (type) {
-    case "color":
+    case "COLOR":
+    case "colors":
     case "textColor":
     case "backgroundColor":
       // TODO: convert to HSL colors
@@ -72,8 +80,7 @@ export const renderValue = (typeName: string, v: VariableValue): string => {
     case "height":
     case "margin":
     case "padding":
-    case "grid":
-    case "size":
+    case "screens":
     case "borderRadius":
     case "borderWidth":
       if (Array.isArray(v))
@@ -82,6 +89,8 @@ export const renderValue = (typeName: string, v: VariableValue): string => {
       break;
     case "opacity":
       if (isNumber(v)) return renderNumericValue(v, "%");
+    case "STRING":
+      if (v) return `${v}`;
   }
   return renderPrimitiveValue(v);
 };
@@ -94,7 +103,7 @@ const hasScreenSizes = <T extends TokenVariable>(v: T) =>
 
 const renderScreenSizes = <T extends TokenVariable>({ name, value }: T) => {
   const [_, __, param] = name.match(SCREEN_SIZE_VARIABLES) ?? [];
-  return { [`screen-${formatKey(param)}`]: value };
+  return param ? { [`screen-${formatKey(param)}`]: value } : {};
 };
 
 const generateParameters = ({ name, variables }: VariablesMode) => {
@@ -109,7 +118,9 @@ const generateParameters = ({ name, variables }: VariablesMode) => {
 
 export const generateLayerFile = (
   collections: TokenCollection[],
+  format: TokenNameFormatType,
 ): TokenLayers => {
+  const getType = inferVariableType(format);
   const layers = collections.flatMap(
     ({ name: layerName, modes }): TokenLayer[] => {
       const isStatic = modes.length === 1;
@@ -124,7 +135,9 @@ export const generateLayerFile = (
                 : generateParameters({ name: modeName, variables })),
             },
             isStatic,
-            variables: variables.map(variableToTokenOutput),
+            variables: variables.map((v) =>
+              variableToTokenOutput(v, getType(v)),
+            ),
           }) satisfies TokenLayer,
       );
     },

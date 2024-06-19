@@ -16,9 +16,13 @@ export const calculateSubjectsFromProps =
 export const inferVariableType =
   (format: TokenNameFormatType) =>
   (variable: TokenVariable): string => {
+    if (!format) {
+      console.warn("no format selected");
+      return variable.type;
+    }
     // from type and name
-    const name = variable.name.replace("/", ".");
-    const { type } = format?.decomposeTokenName?.(name) || variable;
+    const name = variable.name.replaceAll("/", format.separator);
+    const { type } = format.decomposeTokenName(name) || variable;
     return type;
   };
 
@@ -47,6 +51,7 @@ export function toTokenNameCollection(
           name: name,
           tokens: mode.variables.map((v) => ({
             name: v.name.replaceAll("/", format.separator) ?? "",
+            type: v.type,
             alias: (v as TokenVariable).alias?.replaceAll(
               "/",
               format.separator

@@ -1,5 +1,5 @@
 import {
-  DecomposedTokenName,
+  DecomposeTokenName,
   TokenGlobalRuleValidationResult,
   TokenNameCollection,
 } from "../format.types";
@@ -15,28 +15,33 @@ import {
   validationResult,
   validationWarning,
 } from "../format.utils";
-import { TokenNameDescription, isTokenType } from "../token-name-format.types";
+import { TokenNameDescription, getTokenType } from "../token-name-format.types";
+
+export const decomposePrimitiveToken = (name: string) => {
+  const segments = name.split(".");
+  if (segments.length > 4 || segments.length < 2) return null;
+  const [layer, typeSegment, ...attributes] = segments;
+  const type = getTokenType(typeSegment);
+  return { type, attributes, otherSegments: { layer } } as TokenNameDescription;
+};
 
 export const isPrimitiveToken = (name: string) => {
-  return name.split(".").length === 3;
+  const decomposed = decomposePrimitiveToken(name);
+  return !!decomposed;
 };
 
 export const getSubject = (name: string) => {
   return name.split(".")[1];
 };
 
-export const decomposeTokenName: DecomposedTokenName = (name) => {
-  if (!isPrimitiveToken(name)) {
-    const [layer, type, ...attributes] = name.split(".");
-    if (!isTokenType(type)) return null;
-    return {
-      type,
-      attributes,
-      otherSegments: { layer },
-    } satisfies TokenNameDescription;
+export const decomposeTokenName: DecomposeTokenName = (name) => {
+  const primitiveDescription = decomposePrimitiveToken(name);
+  if (primitiveDescription && primitiveDescription.type) {
+    return primitiveDescription;
   }
-  const [layer, subject, type, ...attributes] = name.split(".");
-  if (!isTokenType(type)) return null;
+  const [layer, subject, typeSegment, ...attributes] = name.split(".");
+  const type = getTokenType(typeSegment);
+  if (!type) return null;
   return {
     type,
     attributes,
@@ -63,7 +68,7 @@ export const groupByFirstNSegments = (
     (acc, token) => {
       const firstFourSegments = token.name.split(".").slice(0, n).join(".");
       const nextSegment = token.name.split(".")[n];
-      const count = acc[firstFourSegments].count || 0;
+      const count = acc[firstFourSegments]?.count || 0;
       return {
         ...acc,
         [firstFourSegments]: { count: count + 1, nextSegment },
@@ -92,7 +97,7 @@ export const rules = ruleSet({
       "The first segment of the token name must indicate the layer and not the type. Common layer names include `primitive`, `semantic`, or `component`, but can vary by the design team's preferences.",
     validate: (name: string) => {
       const [firstSegment] = name.split(".");
-      return !firstSegment || isTokenType(firstSegment)
+      return !firstSegment || getTokenType(firstSegment)
         ? validationError(
             `Segment ${firstSegment} is not a valid token layer`,
             [firstSegment]
@@ -105,9 +110,9 @@ export const rules = ruleSet({
       "The subject segment is mandatory for semantic or component tokens but absent in primitive tokens. Subjects should be the second segment, that can be any name, but not a type.",
     validate: (name: string) => {
       const segments = name.split(".");
-      const isPrimitive = segments.length === 3;
+      const isPrimitive = segments.length <= 4;
       const [_layer, subject] = segments;
-      return isPrimitive || (!!subject && !isTokenType(subject))
+      return isPrimitive || (!!subject && !getTokenType(subject))
         ? validationResult(true)
         : validationError(
             `Token ${name} is missing a subject segment. ${subject} is not a valid subject name`,
@@ -120,7 +125,7 @@ export const rules = ruleSet({
       "The fourth segment and subsequent segments can be anything the designers want to use to distinguish tokens.",
     validate: (name: string) => {
       const segments = name.split(".");
-      const isPrimitive = segments.length === 3;
+      const isPrimitive = segments.length <= 4;
       const hasAttributes = segments.length > 3;
       return isPrimitive || hasAttributes
         ? validationResult(true)
@@ -138,7 +143,7 @@ export const rules = ruleSet({
         (isCamelCase(lastSegment) || isNumberOrFraction(lastSegment))
         ? validationResult(true)
         : validationError(
-            "Segments should be in lowercase or camelCase, or an expression if it's the last segment",
+            "Segments should be in lowercase or camelCase, or an expression if it's the last segment. It should also have no special characters.",
             segments.filter((s) => !isCamelCase(s))
           );
     },
@@ -184,15 +189,18 @@ export const rules = ruleSet({
   },
   "consistent-type-naming": {
     description:
-      "The third segment of the token name (or the second in the case of primitive tokens) must indicate the token type. Types should be drawn from a predefined list.",
-    validate: (name: string) => {
-      const segments = name.split(".");
-      const tokenType = segments.length === 3 ? "primitive" : "semantic";
-      const segment = tokenType === "primitive" ? segments[1] : segments[2];
-      return isTokenType(segment)
+      "The third segment of the token name (or the second in the case of primitive tokens) must indicate the token type, unless it's a color token. Types should be drawn from a predefined list.",
+    validate: (name: string, tokenType: string) => {
+      if (tokenType === "COLOR") return validationResult(true);
+      const { type: primitiveType } = decomposePrimitiveToken(name) ?? {};
+      const { type: semanticType } = decomposeTokenName(name) ?? {};
+
+      const type = primitiveType || semanticType;
+
+      return type
         ? validationResult(true)
         : validationError(
-            `The ${tokenType} token ${name} has an invalid type '${segment}'. Valid types can be found in the Widget documentation`
+            `The token ${name} has an invalid (type), or has its type in the wrong position. Types should be the second segment for primary tokens, or the third value for semantic tokens`
           );
     },
   },
@@ -368,8 +376,8 @@ export const rules = ruleSet({
       if (attributeSegments.length === 0) return validationResult(true);
       const genericTypes = ["color", "spacing"];
       const tokenType = segments[2];
-      const moreSpecificName = attributeSegments.find((segment) =>
-        isTokenType(segment)
+      const moreSpecificName = attributeSegments.find(
+        (segment) => !!getTokenType(segment)
       );
       return genericTypes.includes(tokenType) && moreSpecificName
         ? validationWarning(

@@ -18,7 +18,7 @@ export interface UiStateHandler extends EventHandler {
 
 export interface ConfirmPushHandler extends EventHandler {
   name: "PLUGIN_CONFIRM_PUSH";
-  handler: (state: PushMessageType | null) => void;
+  handler: (state: (PushMessageType & WidgetConfiguration) | null) => void;
 }
 
 export interface UiCommitHandler extends EventHandler {

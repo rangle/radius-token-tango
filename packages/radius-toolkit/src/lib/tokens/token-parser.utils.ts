@@ -18,7 +18,7 @@ export const renderKey = <T extends Pick<TokenOutput, "name" | "type">>(
   if (type !== "other") {
     const cleanName = name
       .replace(type, "")
-      .replace("..", ".")
+      .replaceAll("..", ".")
       .replace(/^[.]/, "");
     return `--${type}-${formatKey(cleanName)}${
       subtoken ? `-${toKebabCase(subtoken)}` : ""

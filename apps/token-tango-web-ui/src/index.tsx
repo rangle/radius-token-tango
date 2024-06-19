@@ -23,10 +23,8 @@ import {
   TokenNameCollection,
   TokenNameFormatType,
   isFormatValidationResult,
-  isGlobalValidationResult,
   isTokenNameCollection,
-  isTokenNameFormatType,
-  isTokenValidationResult,
+  isTokenNamePortableFormatType,
 } from "radius-toolkit";
 import { createLogger } from "@repo/utils";
 
@@ -65,32 +63,43 @@ export const App: FC = () => {
   // establish the initial handers for routing and updates
   useEffect(() => {
     on<WidgetStateHandler>("PLUGIN_STATE_CHANGE", (state) => {
-      log("debug", "PLUGIN_STATE_CHANGE", state);
+      log("warn", "PLUGIN_STATE_CHANGE", state);
       setConfig(state ?? initialState);
       setRoute("repository");
     });
 
     on<ConfirmPushHandler>("PLUGIN_CONFIRM_PUSH", (state) => {
-      log("debug", "PLUGIN_CONFIRM_PUSH", state);
-      setCommit(state ?? initialCommitState);
+      log("warn", "PLUGIN_CONFIRM_PUSH", state);
+      const { branchName, commitMessage, ...configState } = state ?? {
+        ...initialCommitState,
+        ...initialState,
+      };
+
+      setCommit({ branchName, commitMessage });
+      setConfig(configState);
       setRoute("push");
     });
 
     on<IssueVisualizerHandler>("PLUGIN_VIEW_ISSUE", (serializedState) => {
+      log("warn", "PLUGIN_VIEW_ISSUE");
       const state = JSON.parse(serializedState);
+      log("warn", "PLUGIN_VIEW_ISSUE 1");
       const issues =
         Array.isArray(state.issues) &&
         state.issues.every(isFormatValidationResult)
           ? state.issues
           : [];
-      const format = isTokenNameFormatType(state.format) && state.format;
+      log("warn", "PLUGIN_VIEW_ISSUE 2");
+      const format =
+        isTokenNamePortableFormatType(state.format) && state.format;
+      log("warn", "PLUGIN_VIEW_ISSUE 3");
       const collections =
         Array.isArray(state.collections) &&
         state.collections.every(isTokenNameCollection)
           ? state.collections
           : [];
 
-      log("debug", "PLUGIN_VIEW_ISSUE", issues, format, collections);
+      log("warn", "PLUGIN_VIEW_ISSUE", issues, format, collections);
       setRoute("validation");
       setIssues(issues);
       setFormat(format);
@@ -110,16 +119,16 @@ export const App: FC = () => {
   }, []);
 
   const updateState = (newState: WidgetConfiguration) => {
-    log("debug", "SENDING UI_STATE_CHANGE");
+    log("warn", "SENDING UI_STATE_CHANGE");
     emit<UiStateHandler>("UI_STATE_CHANGE", newState);
   };
 
   const updateCommitState = (newState: PushMessageType) => {
-    log("debug", "SENDING UI_STATE_CHANGE");
+    log("warn", "SENDING UI_STATE_CHANGE");
     emit<UiCommitHandler>("UI_COMMIT_CHANGE", newState);
   };
 
-  log("debug", "ROUTE", route);
+  log("warn", "ROUTE", route);
 
   return (
     <Fragment>

@@ -39,119 +39,15 @@ import {
   isTokenValidationResult,
 } from "radius-toolkit";
 
+import { createLogger } from "@repo/utils";
+
+const log = createLogger("WEB:validation");
+
 export type ValidationResultProps = {
   collections: TokenNameCollection[];
   format: TokenNameFormatType | null;
   issues: FormatValidationResult[];
 };
-
-const results = [
-  {
-    token: "legacy.test.nothing.attribute",
-    category: "Legacy",
-    messages: [
-      {
-        type: "error",
-        segments: ["nothing"],
-        message: "Unclosed string at line 12, column 24",
-      },
-      {
-        type: "error",
-        segments: ["test"],
-        message: "Unexpected token '}' at line 45, column 8",
-      },
-      {
-        type: "error",
-        segments: [],
-        message: "Missing semicolon at line 78, column 17",
-      },
-      {
-        type: "error",
-        segments: [],
-        message: "Unexpected identifier at line 102, column 3",
-      },
-      {
-        type: "error",
-        segments: ["nothing"],
-        message: "Unexpected end of input at line 137, column 1",
-      },
-    ],
-  },
-  {
-    token: "legacy.old.nothing.attribute",
-    category: "Legacy",
-    messages: [
-      {
-        type: "error",
-        segments: ["nothing"],
-        message: "Cannot read property 'length' of undefined at line 23",
-      },
-      {
-        type: "error",
-        segments: [],
-        message: "Undefined is not a function at line 67",
-      },
-      {
-        type: "error",
-        segments: [],
-        message: "Null is not an object at line 91",
-      },
-      {
-        type: "error",
-        segments: [],
-        message: "Cannot convert undefined to object at line 134",
-      },
-    ],
-  },
-  {
-    token: "marketing.new.nothing.attribute",
-    category: "Marketing",
-    messages: [
-      {
-        type: "error",
-        segments: ["nothing"],
-        message:
-          "Uncaught ReferenceError: someVariable is not defined at line 15",
-      },
-      {
-        type: "error",
-        segments: [],
-        message:
-          "Uncaught ReferenceError: anotherFunction is not defined at line 42",
-      },
-      {
-        type: "error",
-        segments: [],
-        message: "Uncaught ReferenceError: myClass is not defined at line 69",
-      },
-    ],
-  },
-  {
-    token: undefined,
-    category: "Development",
-    messages: [
-      {
-        type: "warning",
-        message: "This category has no tokens",
-      },
-    ],
-  },
-  { token: "marketing.new.color.valid", category: "Marketing", messages: [] },
-  {
-    token: "marketing.new.color.alternate",
-    category: "Marketing",
-    messages: [],
-  },
-  { token: "marketing.new.color.vivid", category: "Marketing", messages: [] },
-  { token: "marketing.new.color.pastel", category: "Marketing", messages: [] },
-  { token: "operations.new.color.valid", category: "Operations", messages: [] },
-  {
-    token: "operations.new.color.alternate",
-    category: "Operations",
-    messages: [],
-  },
-];
-
 export const ValidationResult: FC<ValidationResultProps> = ({
   collections,
   format,
@@ -159,6 +55,18 @@ export const ValidationResult: FC<ValidationResultProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showOnlyErrors, setShowOnlyErrors] = useState(false);
+
+  log("warn", "issues", issues.length);
+  const tokenIssues = issues.filter(isTokenValidationResult).filter((issue) => {
+    return issue.token.name === "semantic.focus.color.innerline";
+  });
+
+  log(
+    "warn",
+    "issues",
+    tokenIssues.length,
+    tokenIssues.map((issue) => issue.message)
+  );
 
   const allEntries = useMemo(() => {
     const tokenIssues = issues.filter(isTokenValidationResult);

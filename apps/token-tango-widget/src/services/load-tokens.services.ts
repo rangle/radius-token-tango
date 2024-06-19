@@ -33,8 +33,17 @@ export const getTokenLayers = async (
   if (errors.length && !ignoreErrors)
     return [tokenCollections, undefined, errors] as const;
   log("debug", "getTokenLayers 5");
-  const layers = generateLayerFile(tokenCollections);
+  const layers = generateLayerFile(tokenCollections, format);
   log("debug", "getTokenLayers 6", layers);
+  log(
+    "debug",
+    "getTokenLayers 7",
+    layers.layers[2]?.variables.map(({ name, type, value }) => [
+      name,
+      type,
+      value,
+    ]),
+  );
   return [tokenCollections, layers, errors] as const;
 };
 
@@ -47,21 +56,30 @@ export const validateTokenCollection = (
 ): FormatValidationResult[] => {
   log("debug", "validateTokenCollection 1");
 
-  const allTokens = collections.flatMap((c) =>
-    c.modes.flatMap(({ variables }) =>
-      variables.map((v) => ({ ...v, collection: c.name })),
-    ),
-  );
+  const allTokens = collections
+    .flatMap((c) =>
+      c?.modes?.[0]?.variables.map((v) => ({ ...v, collection: c.name })),
+    )
+    .filter(isNotNil);
 
   log("debug", "validateTokenCollection 2", allTokens.length);
+
+  log(
+    "debug",
+    "validateTokenCollection 2.5",
+    allTokens
+      .filter(isNotNil)
+      .filter((t) => /semantic.focus.color.innerline/.test(t.name)).length,
+  );
 
   const tokenResults = allTokens.reduce<TokenValidationResult[]>(
     (issues, token) => {
       const tokenName: TokenName = {
         name: token.name.replaceAll("/", format.separator) ?? "",
+        type: token.type,
         alias: token.alias?.replaceAll("/", format.separator),
       };
-      const [errors, warnings] = validateTokens(tokenName.name);
+      const [errors, warnings] = validateTokens(tokenName.name, tokenName.type);
 
       return [
         ...issues,

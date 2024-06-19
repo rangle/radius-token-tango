@@ -40,7 +40,7 @@ program
   .action(async (name: string, options: any) => {
     console.log(name, options);
     const [validateTokenName] = createValidators(options.format);
-    console.log(validateTokenName(name));
+    console.log(validateTokenName(name, ""));
   });
 
 program.parse(process.argv);

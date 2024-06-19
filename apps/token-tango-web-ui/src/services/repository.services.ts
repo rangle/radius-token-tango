@@ -41,3 +41,24 @@ export const testFileExists = async (
     return { status: "error", error: (error as Error).message } as const;
   }
 };
+
+export const getBranchNames = async (
+  credentials: Pick<
+    WidgetConfiguration,
+    "repository" | "accessToken" | "branch"
+  >
+) => {
+  const client = createGithubRepositoryClient({
+    repoFullName: credentials.repository,
+    accessToken: credentials.accessToken,
+  });
+
+  const branches = await client.getBranches();
+  log("debug", "testRepositoryConnection", { branches });
+  return branches.map((b) => b.name);
+};
+
+export const testBranchAlreadyExists = (branches: string[], branch: string) => {
+  const branchExists = branches.includes(branch);
+  return { status: branchExists ? "exists" : "not-exists" } as const;
+};

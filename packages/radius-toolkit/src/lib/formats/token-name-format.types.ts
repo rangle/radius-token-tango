@@ -134,24 +134,27 @@ export const tokenTypeNames = [
   "aria",
 ] as const;
 
-export type TokeTypeName = (typeof tokenTypeNames)[number];
+export type TokenTypeName = (typeof tokenTypeNames)[number];
 
-export const tokenTypeAliases = {
+export const tokenTypeAliases: Record<string, TokenTypeName> = {
   color: "colors",
+  COLOR: "colors",
+  size: "spacing",
+  grid: "screens",
 };
 
 export type TokenNameDescription = {
-  type: TokeTypeName;
+  type: TokenTypeName;
   attributes: string[];
   otherSegments?: Record<string, string | undefined>;
 };
 
-export const isTokenType = (t: unknown): t is TokeTypeName =>
-  tokenTypeNames.indexOf(t as TokeTypeName) !== -1;
+const isTokenType = (t: unknown): t is TokenTypeName =>
+  tokenTypeNames.indexOf(t as TokenTypeName) !== -1;
 
-export const getTokenType = (t: unknown): TokeTypeName | undefined =>
+export const getTokenType = (t: unknown): TokenTypeName | undefined =>
   isTokenType(t)
     ? t
     : (t as keyof typeof tokenTypeAliases) in tokenTypeAliases
-      ? (tokenTypeAliases[t as keyof typeof tokenTypeAliases] as TokeTypeName)
+      ? (tokenTypeAliases[t as keyof typeof tokenTypeAliases] as TokenTypeName)
       : undefined;
