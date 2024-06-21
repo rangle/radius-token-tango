@@ -96,7 +96,7 @@ export const renderValue = (type: string, v: VariableValue): string => {
 };
 
 const SCREEN_SIZE_VARIABLES =
-  /(screen|grid)[.-/ ](minWidth|maxWidth|min[-./ ][Ww]idth|max[-./ ][Ww]idth)/;
+  /(screen|screens|grid)[.-/ ](minWidth|maxWidth|min[-./ ][Ww]idth|max[-./ ][Ww]idth)/;
 
 const hasScreenSizes = <T extends TokenVariable>(v: T) =>
   SCREEN_SIZE_VARIABLES.test(v.name) && v.value !== undefined;

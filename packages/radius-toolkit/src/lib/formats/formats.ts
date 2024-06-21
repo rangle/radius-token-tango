@@ -14,6 +14,8 @@ export const formats = [
 
 export type FormatName = (typeof formats)[number]["name"];
 
+export const formatNames: FormatName[] = formats.map((format) => format.name);
+
 export const getFormat = (
   formatName: FormatName
 ): TokenNameFormatType | undefined => {

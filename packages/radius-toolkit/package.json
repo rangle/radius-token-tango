@@ -1,6 +1,6 @@
 {
   "name": "radius-toolkit",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A toolkit for handling design tokens",
   "main": "dist/lib/radius-toolkit.cjs.js",
   "module": "dist/lib/radius-toolkit.es.js",
@@ -28,6 +28,7 @@
   "devDependencies": {
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
+    "vite-plugin-commonjs": "^0.10.1",
     "vite-plugin-dts": "^3.9.1",
     "vitest": "^1.4.0"
   },
