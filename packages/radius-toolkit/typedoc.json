@@ -1,0 +1,8 @@
+{
+  "entryPoints": ["src/index.ts"],
+  "out": "docs",
+  "plugin": ["typedoc-plugin-markdown"],
+  "exclude": ["**/__tests__/**/*"],
+  "tsconfig": "tsconfig.json",
+  "readme": "README.md"
+}

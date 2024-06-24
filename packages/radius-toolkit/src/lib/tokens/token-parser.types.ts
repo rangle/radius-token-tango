@@ -42,7 +42,7 @@ export type TokenOutput = {
 
 /* REFERENCE TOKEN */
 
-type BasicReference = {
+export type BasicReference = {
   key: string;
   sources: string[];
   isStatic: boolean;
@@ -65,7 +65,7 @@ export const isSingleTokenReference = (
   isObject(u) &&
   (<SingleTokenReference>u).sources !== undefined &&
   (<SingleTokenReference>u).token !== undefined &&
-  !('isReference' in u);
+  !("isReference" in u);
 
 export const isCompositeTokenReference = (
   u: TokenReference
@@ -81,7 +81,7 @@ export type ReferenceMap = Record<string, TokenReference>;
 
 export type BoxShadowDefinition = {
   color: string;
-  type: 'dropShadow'; // there should be a 2nd kind
+  type: "dropShadow"; // there should be a 2nd kind
   x: string;
   y: string;
   blur: string;
@@ -89,7 +89,7 @@ export type BoxShadowDefinition = {
 };
 
 export type CompositeLeafBoxShadow = {
-  type: 'boxShadow';
+  type: "boxShadow";
   value: Array<BoxShadowDefinition> | BoxShadowDefinition;
   description?: string;
 };
@@ -97,10 +97,10 @@ export type CompositeLeafBoxShadow = {
 export const isCompositeLeafBoxShadow = (
   u: JSONCompositeLeaf
 ): u is CompositeLeafBoxShadow =>
-  (<CompositeLeafBoxShadow>u).type === 'boxShadow';
+  (<CompositeLeafBoxShadow>u).type === "boxShadow";
 
 export type CompositeLeafTypography = {
-  type: 'typography';
+  type: "typography";
   description?: string;
   value: {
     fontFamily: string;
@@ -130,8 +130,8 @@ export type TokenLayers = {
 export const isCompositeLeafTypography = (
   u: JSONCompositeLeaf
 ): u is CompositeLeafTypography =>
-  (<CompositeLeafTypography>u).type === 'typography' &&
-  typeof (<CompositeLeafTypography>u).value === 'object' &&
+  (<CompositeLeafTypography>u).type === "typography" &&
+  typeof (<CompositeLeafTypography>u).value === "object" &&
   !!(<CompositeLeafTypography>u).value.fontFamily &&
   !!(<CompositeLeafTypography>u).value.fontSize &&
   !!(<CompositeLeafTypography>u).value.fontWeight &&
@@ -139,24 +139,24 @@ export const isCompositeLeafTypography = (
 
 /* TYPE GUARDS TO HELP IDENTIFY THE TYPE OF NODES */
 
-export const isString = (u: unknown): u is string => typeof u === 'string';
+export const isString = (u: unknown): u is string => typeof u === "string";
 
 export const isArray = <T>(u: T | T[]): u is T[] =>
-  typeof u === 'object' && Array.isArray(u);
+  typeof u === "object" && Array.isArray(u);
 
 export const isJSONLeaf = (u: unknown): u is JSONLeaf =>
-  typeof (<JSONLeaf>u).type === 'string' &&
-  typeof (<JSONLeaf>u).value === 'string';
+  typeof (<JSONLeaf>u).type === "string" &&
+  typeof (<JSONLeaf>u).value === "string";
 
 export const isCompositeLeaf = (u: unknown): u is JSONCompositeLeaf =>
-  typeof (<JSONCompositeLeaf>u).type === 'string' &&
-  typeof (<JSONCompositeLeaf>u).value === 'object';
+  typeof (<JSONCompositeLeaf>u).type === "string" &&
+  typeof (<JSONCompositeLeaf>u).value === "object";
 
 export const isTokenStudioJSON = (u: unknown): u is TokenStructure =>
-  typeof (<TokenStructure>u).$themes === 'object' &&
+  typeof (<TokenStructure>u).$themes === "object" &&
   isArray((<TokenStructure>u).$themes) &&
-  typeof (<TokenStructure>u).$metadata === 'object' &&
-  typeof (<TokenStructure>u).$metadata.tokenSetOrder === 'object' &&
+  typeof (<TokenStructure>u).$metadata === "object" &&
+  typeof (<TokenStructure>u).$metadata.tokenSetOrder === "object" &&
   isArray((<TokenStructure>u).$metadata.tokenSetOrder);
 
 /* GENERATOR MAP TYPES */
@@ -170,12 +170,12 @@ export type GeneratorMappingTo =
 
 export type GeneratorMappingGenericDictionaryItem = readonly [
   from: GeneratorMappingFrom,
-  to: GeneratorMappingTo
+  to: GeneratorMappingTo,
 ];
 
 export type GeneratorMappingSpecificDictionaryItem = readonly [
   tokenPattern: RegExp,
-  item: Array<readonly [from: GeneratorMappingFrom, to: GeneratorMappingTo]>
+  item: Array<readonly [from: GeneratorMappingFrom, to: GeneratorMappingTo]>,
 ];
 
 export type GeneratorMappingDictionaryItem =
@@ -194,7 +194,7 @@ export const isGeneratorMappingGenericDictionaryItem = (
   isArray(u) &&
   u.length === 2 &&
   (isString(u[0]) || u[0] instanceof RegExp) &&
-  (isString(u[1]) || typeof u[1] === 'function');
+  (isString(u[1]) || typeof u[1] === "function");
 
 export const isGeneratorMappingSpecificDictionaryItem = (
   u: unknown
@@ -206,7 +206,7 @@ export const isGeneratorMappingSpecificDictionaryItem = (
   u[1].every(isGeneratorMappingGenericDictionaryItem);
 
 export const isObject = (item: unknown): item is Record<string, unknown> =>
-  typeof item === 'object' && item !== null && !Array.isArray(item);
+  typeof item === "object" && item !== null && !Array.isArray(item);
 
 export const isTokenOutput = (item: unknown): item is TokenOutput =>
-  isObject(item) && 'key' in item && 'value' in item && 'type' in item;
+  isObject(item) && "key" in item && "value" in item && "type" in item;

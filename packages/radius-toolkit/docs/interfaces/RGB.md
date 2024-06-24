@@ -1,0 +1,37 @@
+[**radius-toolkit**](../README.md) • **Docs**
+
+***
+
+[radius-toolkit](../globals.md) / RGB
+
+# Interface: RGB
+
+## Properties
+
+### b
+
+> `readonly` **b**: `number`
+
+#### Defined in
+
+[lib/tokens/variable.types.ts:5](https://github.com/rangle/radius-token-tango/blob/0fa25351e79af51a833bcebadbd83e27a9791a4f/packages/radius-toolkit/src/lib/tokens/variable.types.ts#L5)
+
+***
+
+### g
+
+> `readonly` **g**: `number`
+
+#### Defined in
+
+[lib/tokens/variable.types.ts:4](https://github.com/rangle/radius-token-tango/blob/0fa25351e79af51a833bcebadbd83e27a9791a4f/packages/radius-toolkit/src/lib/tokens/variable.types.ts#L4)
+
+***
+
+### r
+
+> `readonly` **r**: `number`
+
+#### Defined in
+
+[lib/tokens/variable.types.ts:3](https://github.com/rangle/radius-token-tango/blob/0fa25351e79af51a833bcebadbd83e27a9791a4f/packages/radius-toolkit/src/lib/tokens/variable.types.ts#L3)

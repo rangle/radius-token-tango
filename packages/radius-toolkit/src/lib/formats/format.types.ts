@@ -114,7 +114,7 @@ export type TokenRuleValidationFunction = (
  * each error or warning is represented by a tuple with the first element indicating the collection name, the second the token name, the third element indicating the message and the fourth indicating the offending segments
  * */
 export type TokenGlobalRuleValidationFunction = (
-  collection: TokenNameCollection[]
+  collections: TokenNameCollection[]
 ) => TokenGlobalRuleValidationResult;
 
 /** Token Rule
