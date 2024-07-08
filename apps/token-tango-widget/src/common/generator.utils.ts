@@ -6,11 +6,13 @@ import {
   TokenOutput,
   getTokenType,
   inferVariableType,
-  tokenTypeNames,
   TokenCollection,
   TokenVariable,
   VariablesMode,
   TokenNameFormatType,
+  convertVariableToToken,
+  VectorOutput,
+  isNotNil,
 } from "radius-toolkit";
 
 import { createLogger } from "@repo/utils";
@@ -27,72 +29,6 @@ const formatLayerName = (modeName: string, description: string) => {
   return visibleModeName
     ? `${cleanDescription}--${toKebabCase(visibleModeName)}`
     : cleanDescription;
-};
-
-const renderKey = (name: string) => `--${formatKey(name)}`;
-const formatReference = (alias: string) => `{${renderKey(alias)}}`;
-
-const variableToTokenOutput = (
-  variable: TokenVariable,
-  givenType: string,
-): TokenOutput => {
-  const { name, description } = variable;
-  const type = getTokenType(givenType) ?? givenType;
-  return {
-    name: name.replaceAll("/", "."),
-    key: renderKey(name),
-    type,
-    description: description,
-    value: variable.alias
-      ? formatReference(variable.alias)
-      : renderValue(type, variable.value ?? ""),
-  };
-};
-
-export const isArray = <T>(o: T | T[]): o is T[] => Array.isArray(o);
-
-export const isNumber = (s: unknown): s is number => !Number.isNaN(Number(s));
-export const isRGB = (s: VariableValue): s is RGB =>
-  !!s && typeof s === "object" && ["r", "g", "b"].every((n) => n in s);
-export const isRGBA = (s: VariableValue): s is RGBA =>
-  !!s && typeof s === "object" && ["r", "g", "b", "a"].every((n) => n in s);
-
-export const renderPrimitiveValue = (s: unknown) => JSON.stringify(s);
-export const renderNumericValue = (n: number, unit: string) => `${n}${unit}`;
-export const color = (c: number) => Math.round(c * 255);
-export const renderRGB = ({ r, g, b }: RGB): string =>
-  `rgb(${color(r)}, ${color(g)}, ${color(b)})`;
-export const renderRGBA = ({ r, g, b, a }: RGBA): string =>
-  `rgba(${color(r)}, ${color(g)}, ${color(b)}, ${a.toFixed(2)})`;
-
-export const renderValue = (type: string, v: VariableValue): string => {
-  switch (type) {
-    case "COLOR":
-    case "colors":
-    case "textColor":
-    case "backgroundColor":
-      // TODO: convert to HSL colors
-      if (isRGBA(v)) return renderRGBA(v);
-      if (isRGB(v)) return renderRGB(v);
-      break;
-    case "spacing":
-    case "width":
-    case "height":
-    case "margin":
-    case "padding":
-    case "screens":
-    case "borderRadius":
-    case "borderWidth":
-      if (Array.isArray(v))
-        return `${v.map((n) => renderNumericValue(n, "px"))}`;
-      if (isNumber(v)) return renderNumericValue(v, "px");
-      break;
-    case "opacity":
-      if (isNumber(v)) return renderNumericValue(v, "%");
-    case "STRING":
-      if (v) return `${v}`;
-  }
-  return renderPrimitiveValue(v);
 };
 
 const SCREEN_SIZE_VARIABLES =
@@ -136,7 +72,7 @@ export const generateLayerFile = (
             },
             isStatic,
             variables: variables.map((v) =>
-              variableToTokenOutput(v, getType(v)),
+              convertVariableToToken(v, getType(v)),
             ),
           }) satisfies TokenLayer,
       );

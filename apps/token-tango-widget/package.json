@@ -1,6 +1,6 @@
 {
   "name": "@repo/widget",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Radius Token Tango -- a Figma widget to Synchronize Design Tokens between Figma and Code",
   "type": "module",
   "scripts": {
@@ -23,7 +23,7 @@
     "@typescript-eslint/eslint-plugin": "^6.12.0",
     "@typescript-eslint/parser": "^6.12.0",
     "esbuild": "^0.21.4",
-    "eslint": "^8.54.0",
+    "eslint": "^8.57.0",
     "typescript": "^5.3.3",
     "vite": "^5.2.6",
     "vite-plugin-singlefile": "^2.0.1",
@@ -58,6 +58,7 @@
     "@create-figma-plugin/utilities": "^3.2.0",
     "@repo/bandoneon": "workspace:*",
     "@repo/config": "workspace:*",
+    "@repo/eslint-config": "workspace:*",
     "@repo/utils": "workspace:*",
     "buffer": "^6.0.3",
     "expect": "^29.7.0",

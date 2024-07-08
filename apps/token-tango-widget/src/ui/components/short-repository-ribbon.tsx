@@ -1,5 +1,6 @@
 import { colors } from "@repo/bandoneon";
-import { Icon16px, IconProps } from "./icon.js";
+import { IconProps } from "./icon.js";
+import { StatusButton } from "./status-button.js";
 
 const { widget } = figma;
 const { Text, AutoLayout, SVG } = widget;
@@ -20,31 +21,6 @@ export const statusChoices: Record<
   error: { color: "#b00000", icon: "warning" },
 };
 
-export const StatusButton: FunctionalWidget<
-  TextChildren & Pick<IconProps, "icon" | "color">
-> = ({ color, icon, children }) => (
-  <AutoLayout
-    name="Button"
-    fill={color}
-    cornerRadius={9999}
-    overflow="visible"
-    padding={3.7}
-    width={"hug-contents"}
-    height={"hug-contents"}
-    horizontalAlignItems="end"
-    verticalAlignItems="center"
-  >
-    <Icon16px
-      name="StatusIcon"
-      width={14.775}
-      height={14.775}
-      icon={icon}
-      color="#fff"
-    />
-    {children}
-  </AutoLayout>
-);
-
 export const SmallRepositoryRibbon: FunctionalWidget<
   SmallRepositoryRibbonProps
 > = ({ name, status, error, ...props }) => {
@@ -54,7 +30,7 @@ export const SmallRepositoryRibbon: FunctionalWidget<
       name="SmallRepositoryRibbon"
       fill={colors.library.bg}
       stroke="#484848"
-      cornerRadius={9999}
+      cornerRadius={8}
       direction="vertical"
       spacing={"auto"}
       padding={6}
@@ -106,7 +82,7 @@ export const SmallRepositoryRibbon: FunctionalWidget<
                 fontFamily="Roboto Mono"
                 fontSize={14}
               >
-                Repository:
+                Repositoryyyy:
               </Text>
               <Text
                 name="Frontend-monorepo"
@@ -120,7 +96,12 @@ export const SmallRepositoryRibbon: FunctionalWidget<
               </Text>
             </AutoLayout>
           </AutoLayout>
-          <StatusButton icon={icon} color={color} />
+          <StatusButton
+            variant={status === "online" ? "success" : "default"}
+            icon={icon}
+            color={color}
+            label={status}
+          />
         </AutoLayout>
       </AutoLayout>
     </AutoLayout>

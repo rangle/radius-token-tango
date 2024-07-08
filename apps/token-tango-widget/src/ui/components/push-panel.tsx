@@ -5,6 +5,8 @@ import { RoundButton } from "./round-button";
 import { TokenChangeBar } from "./token-change-bar";
 import { VersionBump } from "./version-bump";
 import { WarningBadge } from "./warning-badge";
+import { colors, typography } from "@repo/bandoneon";
+import { LgButton } from "./lg-button";
 
 const { widget } = figma;
 const { Frame, Text, AutoLayout, useSyncedState } = widget;
@@ -51,9 +53,11 @@ export const PushPanel: FunctionalWidget<PushPanelProps> = ({
       name="TokePublishPage"
       overflow="visible"
       direction="vertical"
-      width={"hug-contents"}
+      width={"fill-parent"}
+      horizontalAlignItems={"center"}
+      verticalAlignItems="center"
       spacing={12}
-      padding={10}
+      padding={8}
     >
       <AutoLayout
         name="PublishHeader"
@@ -61,14 +65,8 @@ export const PushPanel: FunctionalWidget<PushPanelProps> = ({
         spacing={"auto"}
         width="fill-parent"
       >
-        <Text
-          name="Tokens to publish:"
-          fill="#000"
-          lineHeight="100%"
-          fontFamily="Inter"
-          fontWeight={500}
-        >
-          Tokens to publish:
+        <Text name="Tokens to publish:" {...typography.buttonLg} fill="#000">
+          Changes to publish:
         </Text>
         {deleted.length ? (
           <WarningBadge name="BreakingChangeBadge">
@@ -83,99 +81,46 @@ export const PushPanel: FunctionalWidget<PushPanelProps> = ({
         overflow="visible"
         direction="vertical"
         width="fill-parent"
+        spacing={16}
       >
-        <TokenChangeBar
-          name="NewTokens"
-          changeType="new"
-          variant="start"
-          tokensChanged={added}
-          issues={addedErrs}
-        />
-        <TokenChangeBar
-          name="ModifiedTokens"
-          changeType="modified"
-          variant="default"
-          tokensChanged={modified}
-          issues={modifiedErrs}
-        />
-        <TokenChangeBar
-          name="DeletedTokens"
-          changeType="deleted"
-          variant="end"
-          tokensChanged={deleted}
-          issues={[]}
-        />
-      </AutoLayout>
-      <AutoLayout
-        name="IgnoreIssuesCheck"
-        overflow="visible"
-        spacing={8}
-        verticalAlignItems="center"
-      >
-        <Frame
-          name="Checkbox"
-          fill="#FFF"
-          stroke="#808080"
-          cornerRadius={4}
-          overflow="visible"
-          width={20}
-          height={20}
-          onClick={() => setIgnoreIssues(!ignoreIssues)}
-        >
-          {ignoreIssues ? (
-            <Icon16px name="check_24px" icon="check" positioning="auto" />
-          ) : (
-            <></>
-          )}
-        </Frame>
-        <Text
-          name="Ignore issues and publish anyway"
-          fill="#767676"
-          lineHeight="140%"
-          fontFamily="Inter"
-          fontSize={12}
-          letterSpacing={0.24}
-        >
-          Ignore issues and publish anyway
-        </Text>
-      </AutoLayout>
-      {deleted.length === 0 && (
-        <AutoLayout
-          name="manuallyBumpCheck"
-          overflow="visible"
-          spacing={8}
-          verticalAlignItems="center"
-        >
-          <Frame
-            name="Checkbox"
-            fill="#FFF"
-            stroke="#808080"
-            cornerRadius={4}
-            overflow="visible"
-            width={18}
-            height={18}
-            onClick={() => setManuallyBump(!manuallyBump)}
-          >
-            {manuallyBump ? (
-              <Icon16px name="check_24px" icon="check" positioning="auto" />
-            ) : (
-              <></>
-            )}
-          </Frame>
-
-          <Text
-            name="Manually bumb version"
-            fill="#767676"
-            lineHeight="140%"
-            fontFamily="Inter"
-            fontSize={12}
-            letterSpacing={0.24}
-          >
-            Manually bump version
-          </Text>
+        <AutoLayout overflow="visible" direction="vertical" width="fill-parent">
+          <TokenChangeBar
+            name="NewTokens"
+            changeType="new"
+            variant="start"
+            tokensChanged={added}
+            issues={addedErrs}
+          />
+          <TokenChangeBar
+            name="ModifiedTokens"
+            changeType="modified"
+            variant="default"
+            tokensChanged={modified}
+            issues={modifiedErrs}
+          />
+          <TokenChangeBar
+            name="DeletedTokens"
+            changeType="deleted"
+            variant="end"
+            tokensChanged={deleted}
+            issues={[]}
+          />
         </AutoLayout>
+        <CheckBox
+          label="Ignore issues and publish anyway"
+          checked={ignoreIssues}
+          setChecked={setIgnoreIssues}
+        />
+      </AutoLayout>
+
+      {deleted.length === 0 && (
+        <CheckBox
+          label="Manually bump version"
+          checked={manuallyBump}
+          setChecked={setManuallyBump}
+        />
       )}
-      <AutoLayout padding={8}>
+      <AutoLayout padding={8} horizontalAlignItems={"center"}>
         <VersionBump from={previousVersion} to={newVersion} />
       </AutoLayout>
       <AutoLayout
@@ -183,7 +128,6 @@ export const PushPanel: FunctionalWidget<PushPanelProps> = ({
         overflow="visible"
         direction="vertical"
         spacing={16}
-        padding={8}
         minWidth={320}
         verticalAlignItems="end"
         horizontalAlignItems="center"
@@ -193,20 +137,20 @@ export const PushPanel: FunctionalWidget<PushPanelProps> = ({
           name="PublishActions"
           overflow="visible"
           spacing={8}
-          minWidth={264}
+          horizontalAlignItems="center"
           verticalAlignItems="end"
         >
-          <RoundButton
+          <LgButton
             name="CheckAgainButton"
             icon="refresh"
+            label="Check again"
             onClick={() => reloadTokens()}
-          >
-            Check again
-          </RoundButton>
-          <RoundButton
+          ></LgButton>
+          <LgButton
+            label="Push to Github"
             name="PushToGithubButton"
-            icon="git"
-            variant={canPush ? "default" : "disabled"}
+            icon="github"
+            variant={canPush ? "success" : "disabled"}
             onClick={
               canPush
                 ? () =>
@@ -221,11 +165,58 @@ export const PushPanel: FunctionalWidget<PushPanelProps> = ({
                     )
                 : undefined
             }
-          >
-            Push to Github
-          </RoundButton>
+          ></LgButton>
         </AutoLayout>
       </AutoLayout>
+    </AutoLayout>
+  );
+};
+
+export type CheckBoxProps = {
+  label: string;
+  checked: boolean;
+  setChecked: (checked: boolean) => void;
+} & BaseProps;
+
+export const CheckBox: FunctionalWidget<CheckBoxProps> = ({
+  label,
+  checked,
+  setChecked,
+  ...props
+}) => {
+  return (
+    <AutoLayout
+      name="CheckBox"
+      overflow="visible"
+      spacing={8}
+      verticalAlignItems="center"
+      onClick={() => setChecked(!checked)}
+      {...props}
+    >
+      <Frame
+        name="Checkbox"
+        fill={checked ? colors.active.bg : colors.white}
+        stroke={colors.black}
+        cornerRadius={4}
+        overflow="visible"
+        width={20}
+        height={20}
+        onClick={() => setChecked(!checked)}
+      >
+        {checked ? (
+          <Icon16px
+            name="check_24px"
+            icon="check"
+            positioning="auto"
+            color={colors.white}
+          />
+        ) : (
+          <></>
+        )}
+      </Frame>
+      <Text name={label} {...typography.small} fill={colors.black}>
+        {label}
+      </Text>
     </AutoLayout>
   );
 };

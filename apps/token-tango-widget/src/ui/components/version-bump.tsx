@@ -1,3 +1,4 @@
+import { colors, typography } from "@repo/bandoneon";
 import { Icon16px, IconProps } from "./icon.js";
 
 const { widget } = figma;
@@ -12,28 +13,22 @@ export type VersionBumpProps = {
 export const VersionBump: FunctionalWidget<VersionBumpProps> = ({
   from,
   to,
-  children,
 }) => {
   return (
     <AutoLayout
-      name="Frame1000002102"
+      name="VersionBump"
       overflow="visible"
       spacing={8}
       verticalAlignItems="center"
     >
-      <Text
-        name="Versioning from:"
-        fill="#767676"
-        lineHeight="140%"
-        fontFamily="Inter"
-        fontSize={12}
-        letterSpacing={0.24}
-      >
+      <Text name="Versioning from:" {...typography.small} fill={colors.black}>
         Versioning from:
       </Text>
       <AutoLayout
-        name="Frame 1000002069"
-        fill="#868686"
+        name="VersionBumpPill"
+        fill={colors.white}
+        stroke={colors.black}
+        strokeWidth={2}
         cornerRadius={999}
         overflow="visible"
         spacing={8}
@@ -43,29 +38,14 @@ export const VersionBump: FunctionalWidget<VersionBumpProps> = ({
         }}
         verticalAlignItems="center"
       >
-        <AutoLayout
-          name="Frame 1000002084"
-          overflow="visible"
-          spacing={4}
-          verticalAlignItems="center"
+        <Text
+          name="previous-version"
+          {...typography.code}
+          fill={colors.black}
+          verticalAlignText="center"
         >
-          <AutoLayout
-            name="Frame 1000002007"
-            overflow="visible"
-            spacing={8}
-            verticalAlignItems="center"
-          >
-            <Text
-              name="previous-version"
-              fill="#FFF"
-              verticalAlignText="center"
-              fontFamily="Roboto Mono"
-              fontSize={12}
-            >
-              {from}
-            </Text>
-          </AutoLayout>
-        </AutoLayout>
+          {from}
+        </Text>
       </AutoLayout>
       <SVG
         name="Arrow 5"

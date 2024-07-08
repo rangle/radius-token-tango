@@ -17,7 +17,7 @@ import {
   isTokenValidationResult,
 } from "radius-toolkit";
 import { isNotNil } from "radius-toolkit";
-import { colors } from "@repo/bandoneon";
+import { borderRadius, colors } from "@repo/bandoneon";
 import {
   SuccessPanel,
   SuccessfullyPushedDetails,
@@ -33,6 +33,7 @@ type LoadedPageProps = {
   errors: FormatValidationResult[];
   synchDetails: RepositoryTokenLayers;
   successfullyPushed: SuccessfullyPushedDetails | null;
+  loadedIcons: number | null;
   reloadTokens: () => void;
   openIssues: () => void;
   pushTokens: (branch: string, message: string, version: string) => void;
@@ -49,6 +50,7 @@ export const LoadedPage: FunctionalWidget<LoadedPageProps> = ({
   errors,
   synchDetails: [previousTokenLayers, packageJson, meta],
   successfullyPushed,
+  loadedIcons,
   openIssues,
   reloadTokens,
   pushTokens,
@@ -90,14 +92,19 @@ export const LoadedPage: FunctionalWidget<LoadedPageProps> = ({
     <AutoLayout
       name="loadedPage"
       cornerRadius={12}
-      padding={16}
+      padding={8}
       spacing={16}
       direction="vertical"
       width={"fill-parent"}
       fill="#fff"
     >
-      <AutoLayout direction="horizontal" width={"fill-parent"} spacing={"auto"}>
-        <NameFormat formats={formats} format={format} />
+      <AutoLayout
+        direction="horizontal"
+        horizontalAlignItems={"center"}
+        width={"fill-parent"}
+        spacing={"auto"}
+      >
+        <NameFormat formats={formats} format={format} variant="compact" />
       </AutoLayout>
       <AutoLayout
         name="HorizontalPanel"
@@ -105,32 +112,42 @@ export const LoadedPage: FunctionalWidget<LoadedPageProps> = ({
         width="fill-parent"
         spacing={"auto"}
       >
-        <AutoLayout direction="vertical" spacing={6}>
+        <AutoLayout
+          direction="vertical"
+          width={"fill-parent"}
+          spacing={6}
+          horizontalAlignItems={"center"}
+        >
           <TokenIssuesSummaryProps
             {...summary}
             lastUpdated={inspectedAt}
+            loadedIcons={loadedIcons}
             openIssues={openIssues}
+          />
+          <AutoLayout
+            name="PublishSummaryPanel"
+            overflow="visible"
+            direction="vertical"
+            width="fill-parent"
+            padding={8}
+            fill={colors.repository.muted}
+            cornerRadius={borderRadius.base}
           >
-            <Icon16px
-              icon="open"
-              onClick={openIssues}
-              color={colors.status.error}
-            />
-          </TokenIssuesSummaryProps>
-          {successfullyPushed ? (
-            <SuccessPanel
-              details={successfullyPushed}
-              reloadTokens={reloadTokens}
-            />
-          ) : (
-            <PushPanel
-              previousVersion={meta.version}
-              diff={[added, modified, deleted]}
-              errors={[addedErrs, modifiedErrs]}
-              reloadTokens={reloadTokens}
-              pushTokens={pushTokens}
-            />
-          )}
+            {successfullyPushed ? (
+              <SuccessPanel
+                details={successfullyPushed}
+                reloadTokens={reloadTokens}
+              />
+            ) : (
+              <PushPanel
+                previousVersion={meta.version}
+                diff={[added, modified, deleted]}
+                errors={[addedErrs, modifiedErrs]}
+                reloadTokens={reloadTokens}
+                pushTokens={pushTokens}
+              />
+            )}
+          </AutoLayout>
         </AutoLayout>
       </AutoLayout>
     </AutoLayout>
@@ -198,7 +215,7 @@ function invalidLayersFile(
         spacing={"auto"}
         horizontalAlignItems={"center"}
       >
-        <NameFormat formats={formats} format={format} />
+        <NameFormat formats={formats} format={format} variant="compact" />
       </AutoLayout>
       <AutoLayout
         width={"fill-parent"}

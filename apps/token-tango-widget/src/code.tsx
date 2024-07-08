@@ -30,15 +30,24 @@ import {
   TokenNameFormatType,
   formats,
   toTokenNameCollection,
+  VectorOutput,
 } from "radius-toolkit";
 import { SuccessfullyPushedDetails } from "./ui/components/success-panel";
 
 import { createLogger } from "@repo/utils";
+import { i } from "vitest/dist/reporters-P7C2ytIv.js";
+import {
+  isComponent,
+  isComposite,
+  isFrame,
+  isInstance,
+  isVector,
+} from "./common/figma.types";
 
 const log = createLogger("WIDGET:code");
 
 const { widget } = figma;
-const { AutoLayout, useSyncedState, Text, waitForTask } = widget;
+const { useSyncedState, waitForTask } = widget;
 
 export type LoadedTokens = {
   inspectedAt: string;
@@ -71,6 +80,14 @@ export function Widget() {
 
   const [persistedTokens, setPersistedTokens] = useSyncedState<string | null>(
     "persistedTokens",
+    null,
+  );
+  const [persistedIcons, setPersistedIcons] = useSyncedState<string | null>(
+    "persistedIcons",
+    null,
+  );
+  const [loadedIcons, setLoadedIcons] = useSyncedState<number | null>(
+    "loadedIcons",
     null,
   );
   const [allErrors, setAllErrors] = useSyncedState<FormatValidationResult[]>(
@@ -122,6 +139,84 @@ export function Widget() {
     );
   };
 
+  type LayerRender = undefined | VectorOutput;
+
+  const removeSuffix = (name: string) => name.split("#")[0] ?? name;
+
+  const renderLayer = async (
+    node: SceneNode,
+    parent: string | undefined = undefined,
+  ): Promise<LayerRender[]> => {
+    const result: LayerRender[] = [];
+    if (!isComposite(node)) {
+      log("debug", "Not a composite node", node.name, parent, node.type);
+      return result;
+    }
+    if (isComponent(node) || isInstance(node)) {
+      const source = await node.exportAsync({ format: "SVG_STRING" });
+
+      const properties = isComponent(node)
+        ? Object.entries(node.componentPropertyDefinitions).reduce(
+            (acc, [name, { defaultValue }]) => {
+              return { ...acc, [removeSuffix(name)]: String(defaultValue) };
+            },
+            {} as Record<string, string>,
+          )
+        : node.variantProperties ?? {};
+
+      const description = isComponent(node) ? node.description : "";
+
+      result.push({
+        name: node.name,
+        description,
+        source,
+        parent,
+        properties,
+      });
+      return result;
+    }
+    if (isFrame(node) && node.children.every(isVector)) {
+      const source = await node.exportAsync({ format: "SVG_STRING" });
+      result.push({
+        name: node.name,
+        description: "",
+        source,
+        parent,
+        properties: {},
+      });
+      return result;
+    }
+    if (node.children) {
+      await Promise.all(
+        node.children.map(async (child) => {
+          const childResult = (await renderLayer(child, node.name)).filter(
+            (r) => (Array.isArray(r) ? r.length > 0 : r),
+          );
+          result.push(...childResult);
+        }),
+      );
+    }
+    return result;
+  };
+
+  const doLoadIcons = async () => {
+    log("debug", ">>> LOADING YOUR ICONS");
+    const selected = figma.currentPage.selection;
+    if (selected.length === 0) {
+      log("debug", "No layers selected");
+      return;
+    }
+    const result = (
+      await Promise.all(selected.map((object) => renderLayer(object)))
+    )
+      .flatMap((r) => r)
+      .filter(Boolean);
+
+    log("debug", "RESULT", result);
+    setLoadedIcons(result.length);
+    setPersistedIcons(JSON.stringify(result));
+  };
+
   return (
     <PageLayout
       synched={synchConfiguration !== null}
@@ -140,6 +235,11 @@ export function Widget() {
           selectedFormat={tokenNameFormat}
           selectFormat={(newFormat) => setTokenNameFormat(newFormat)}
           synchConfig={synchConfiguration}
+          loadedIcons={loadedIcons}
+          loadIcons={() => {
+            log("debug", "Loading your icons!");
+            waitForTask(doLoadIcons());
+          }}
           loadTokens={async () => {
             log("debug", "Loading your tokens!");
             waitForTask(doLoadTokensAndSynch());
@@ -156,6 +256,7 @@ export function Widget() {
           errors={allErrors}
           successfullyPushed={successfullyPushed}
           synchDetails={synchDetails}
+          loadedIcons={loadedIcons}
           openIssues={createIssueDialogCallback(
             JSON.parse(persistedTokens),
             format,
@@ -172,10 +273,13 @@ export function Widget() {
 
               // get the new token layers
               const { tokenLayers } = JSON.parse(persistedTokens);
+              const vectors = persistedIcons
+                ? JSON.parse(persistedIcons)
+                : undefined;
               const [_oldTokenLayers, packagejson, meta] = synchDetails;
               // merge them with the existing data from Github
               const newSyncDetails: RepositoryTokenLayers = [
-                tokenLayers,
+                { ...tokenLayers, vectors },
                 packagejson,
                 meta,
               ];

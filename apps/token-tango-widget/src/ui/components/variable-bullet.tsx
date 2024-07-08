@@ -9,6 +9,7 @@ export type VariableBulletProps = {
   colors?: Array<string>;
   issues?: TokenValidationResult[];
   separator?: string;
+  variant?: "default" | "compact";
   onClick?: () => void;
   icon?: IconProps["icon"];
 } & BaseProps &
@@ -20,6 +21,7 @@ export const VariableBullet: FunctionalWidget<VariableBulletProps> = ({
   colors = [],
   issues = [],
   separator = ".",
+  variant = "default",
   onClick,
   icon,
   children,
@@ -53,21 +55,23 @@ export const VariableBullet: FunctionalWidget<VariableBulletProps> = ({
         width={4}
         verticalAlignItems="center"
       />
-      <AutoLayout
-        name="TokenType"
-        fill={bg}
-        overflow="visible"
-        spacing={4}
-        padding={4}
-        verticalAlignItems="center"
-        onClick={onClick}
-      >
-        <Icon16px
-          icon={iconSelection}
-          size={11}
-          color={issues.length > 0 ? "#F00" : "#FFF"}
-        />
-      </AutoLayout>
+      {variant !== "compact" && (
+        <AutoLayout
+          name="TokenType"
+          fill={bg}
+          overflow="visible"
+          spacing={4}
+          padding={4}
+          verticalAlignItems="center"
+          onClick={onClick}
+        >
+          <Icon16px
+            icon={iconSelection}
+            size={11}
+            color={issues.length > 0 ? "#F00" : "#FFF"}
+          />
+        </AutoLayout>
+      )}
       {segments.map((segment, idx) => (
         <>
           <AutoLayout
@@ -112,17 +116,19 @@ export const VariableBullet: FunctionalWidget<VariableBulletProps> = ({
           )}
         </>
       ))}
-      <AutoLayout
-        name="Spacer"
-        overflow="visible"
-        spacing={4}
-        padding={{
-          vertical: 4,
-          horizontal: 0,
-        }}
-        height={32}
-        verticalAlignItems="center"
-      />
+      {variant !== "compact" && (
+        <AutoLayout
+          name="Spacer"
+          overflow="visible"
+          spacing={4}
+          padding={{
+            vertical: 4,
+            horizontal: 0,
+          }}
+          height={32}
+          verticalAlignItems="center"
+        />
+      )}
     </AutoLayout>
   );
 };

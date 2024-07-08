@@ -77,7 +77,6 @@ export const validateTokenCollection = (
       const tokenName: TokenName = {
         name: token.name.replaceAll("/", format.separator) ?? "",
         type: token.type,
-        alias: token.alias?.replaceAll("/", format.separator),
       };
       const [errors, warnings] = validateTokens(tokenName.name, tokenName.type);
 

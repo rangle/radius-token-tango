@@ -8,6 +8,8 @@ export const isComponentSet = (n: BaseNode | null): n is ComponentSetNode =>
   !!n && n.type === "COMPONENT_SET";
 export const isGroup = (n: BaseNode | null): n is GroupNode =>
   !!n && n.type === "GROUP";
+export const isVector = (n: BaseNode | null): n is GroupNode =>
+  !!n && n.type === "VECTOR";
 
 export type Composite =
   | FrameNode

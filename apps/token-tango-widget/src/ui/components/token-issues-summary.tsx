@@ -4,12 +4,17 @@ const { Line, AutoLayout, Text, useSyncedState, Fragment } = widget;
 import { colors } from "@repo/bandoneon";
 import { FormatValidationResult, TokenValidationResult } from "radius-toolkit";
 import { Icon16px } from "./icon";
+import { Button } from "./button";
+import { RoundButton } from "./round-button";
+import { ErrorPill } from "./error-pill";
+import { LgButton } from "./lg-button";
 
 export type TokenIssuesSummaryProps = {
   collections: number;
   totalTokens: number;
   issues: FormatValidationResult[];
   lastUpdated: string;
+  loadedIcons: number | null;
   openIssues: () => void;
 };
 
@@ -20,9 +25,11 @@ export const TokenIssuesSummaryProps: FunctionalWidget<
   issues,
   totalTokens,
   lastUpdated,
+  loadedIcons,
   openIssues,
-  children,
 }) => {
+  const warnings = issues.filter(({ isWarning }) => isWarning);
+  const errors = issues.filter(({ isWarning }) => !isWarning);
   return (
     <AutoLayout
       name="Summary"
@@ -49,7 +56,7 @@ export const TokenIssuesSummaryProps: FunctionalWidget<
         >
           <Text
             name="5"
-            fill="#606060"
+            fill={colors.data.info}
             lineHeight="100%"
             fontFamily="Inter"
             fontSize={24}
@@ -59,7 +66,7 @@ export const TokenIssuesSummaryProps: FunctionalWidget<
           </Text>
           <Text
             name="Collections"
-            fill="#262626"
+            fill={colors.data.fg}
             width={100}
             horizontalAlignText="center"
             lineHeight="140%"
@@ -82,7 +89,7 @@ export const TokenIssuesSummaryProps: FunctionalWidget<
         >
           <Text
             name="31"
-            fill="#606060"
+            fill={colors.data.info}
             lineHeight="100%"
             fontFamily="Inter"
             fontSize={24}
@@ -92,7 +99,7 @@ export const TokenIssuesSummaryProps: FunctionalWidget<
           </Text>
           <Text
             name="Tokens"
-            fill="#262626"
+            fill={colors.data.fg}
             width={100}
             horizontalAlignText="center"
             lineHeight="140%"
@@ -112,22 +119,21 @@ export const TokenIssuesSummaryProps: FunctionalWidget<
           spacing={8}
           padding={8}
           horizontalAlignItems="center"
-          onClick={openIssues}
         >
           <Text
             name="28"
-            fill={colors.status.error}
+            fill={colors.data.fg}
             lineHeight="100%"
             fontFamily="Inter"
             fontSize={24}
             fontWeight={700}
           >
-            {issues.length}
+            {loadedIcons ?? 0}
           </Text>
           <AutoLayout width={100} horizontalAlignItems={"center"} spacing={8}>
             <Text
               name="Issues"
-              fill={colors.status.error}
+              fill={colors.data.info}
               width={"hug-contents"}
               horizontalAlignText="center"
               lineHeight="140%"
@@ -135,11 +141,29 @@ export const TokenIssuesSummaryProps: FunctionalWidget<
               fontSize={12}
               letterSpacing={0.24}
             >
-              Issues
+              Vectors
             </Text>
-            {children}
           </AutoLayout>
         </AutoLayout>
+      </AutoLayout>
+      <AutoLayout name="ManageTokens" overflow="visible" spacing={8}>
+        <LgButton
+          icon="tune"
+          onClick={openIssues}
+          color={colors.active.bg}
+          label="Manage Libraries"
+        >
+          {errors.length ? (
+            <ErrorPill>{errors.length} Errors</ErrorPill>
+          ) : (
+            <Text></Text>
+          )}
+          {warnings.length ? (
+            <ErrorPill level="warning">{warnings.length} Warnings</ErrorPill>
+          ) : (
+            <Text></Text>
+          )}
+        </LgButton>
       </AutoLayout>
       <AutoLayout name="LastSync" spacing={8} verticalAlignItems="center">
         <Text

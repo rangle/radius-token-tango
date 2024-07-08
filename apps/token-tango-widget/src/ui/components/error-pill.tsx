@@ -1,15 +1,20 @@
+import { colors, typography } from "@repo/bandoneon";
 import { Icon16px, IconProps } from "./icon.js";
 
 const { widget } = figma;
 const { Text, AutoLayout } = widget;
 
-export type WarningProps = BaseProps & TextChildren;
+export type WarningProps = {
+  level?: "error" | "warning" | "success";
+} & BaseProps & TextChildren;
 
-export const ErrorPill: FunctionalWidget<WarningProps> = ({ children }) => {
+export const ErrorPill: FunctionalWidget<WarningProps> = ({ level, children }) => {
+  const fill = colors.status[level || "error"];
+  const fg = colors.status.fg;
   return (
     <AutoLayout
       name="IssueBadge"
-      fill="#DA0000"
+      fill={fill}
       cornerRadius={45}
       overflow="visible"
       spacing={3}
@@ -22,10 +27,8 @@ export const ErrorPill: FunctionalWidget<WarningProps> = ({ children }) => {
     >
       <Text
         name="ErrorText"
-        fill="#FFF"
-        lineHeight={12}
-        fontFamily="Inter"
-        fontSize={12}
+        {...typography.error}
+        fill={fg}
       >
         {children}
       </Text>

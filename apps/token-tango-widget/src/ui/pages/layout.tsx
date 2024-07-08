@@ -8,6 +8,7 @@ import { Icon16px } from "../components/icon";
 import { RepositoryTokenLayers } from "../../services/load-github.services";
 import { CommitRibbon } from "../components/commit-ribbon";
 import { RepositoryRibbon } from "../components/repository-ribbon";
+import { colors, padding } from "@repo/bandoneon";
 
 type PageLayoutProps = {
   synched: boolean;
@@ -39,17 +40,17 @@ export const PageLayout = ({
         color: "#00000040",
         offset: {
           x: 0,
-          y: 4,
+          y: 13,
         },
-        blur: 4,
+        blur: 29.6,
         showShadowBehindNode: false,
       }}
-      fill="#F6F6F6"
-      stroke="#858585"
-      cornerRadius={6}
+      fill={colors.base.bg}
+      stroke={colors.base.fg}
+      cornerRadius={16}
       direction="vertical"
       spacing={16}
-      padding={24}
+      padding={padding.base}
     >
       <WidgetHeader>
         <AutoLayout
@@ -108,7 +109,7 @@ export const PageLayout = ({
           <Text
             name="Want to export your Figma Variables as Tokens? No problem! Validate naming conventions and export directly to Github."
             fill="#696969"
-            width={421}
+            width={512}
             verticalAlignText="center"
             horizontalAlignText="center"
             lineHeight="130%"

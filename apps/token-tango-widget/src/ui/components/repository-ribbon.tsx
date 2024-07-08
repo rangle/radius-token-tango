@@ -1,7 +1,8 @@
 import { Button } from "./button.js";
 import { CommitRibbon } from "./commit-ribbon.js";
 import { Icon16px } from "./icon.js";
-import { StatusButton, statusChoices } from "./short-repository-ribbon.js";
+import { statusChoices } from "./short-repository-ribbon.js";
+import { StatusButton } from "./status-button.js";
 const { widget } = figma;
 const { Text, AutoLayout, Image, useSyncedState } = widget;
 
@@ -36,6 +37,7 @@ export const RepositoryRibbon: FunctionalWidget<RepositoryRibbonProps> = ({
   ...props
 }) => {
   const { icon, color } = statusChoices[status];
+  const text = statusText[status];
 
   return (
     <AutoLayout
@@ -67,7 +69,7 @@ export const RepositoryRibbon: FunctionalWidget<RepositoryRibbonProps> = ({
           <Icon16px icon="github" size={22} color="#fff" />
           <Text
             name="RepoName"
-            fill="#DADADA"
+            fill="#ffffff"
             verticalAlignText="center"
             fontFamily="Roboto Mono"
             fontSize={12}
@@ -81,10 +83,13 @@ export const RepositoryRibbon: FunctionalWidget<RepositoryRibbonProps> = ({
           spacing={4}
           verticalAlignItems="center"
         >
-          <Button icon="gear" onClick={() => openConfig()}>
-            Settings
-          </Button>
-          <StatusButton icon={icon} color={color}>
+          <StatusButton
+            icon="gear"
+            color="#434343"
+            onClick={() => openConfig()}
+            label="Settings"
+          />
+          <StatusButton variant="success" icon={icon} color={color}>
             <Text
               name="date"
               fill="#FFF"
@@ -95,7 +100,7 @@ export const RepositoryRibbon: FunctionalWidget<RepositoryRibbonProps> = ({
               letterSpacing={0.24}
               fontWeight={500}
             >
-              {statusText[status]}
+              {text}
             </Text>
           </StatusButton>
         </AutoLayout>
@@ -127,7 +132,7 @@ export const RepositoryRibbon: FunctionalWidget<RepositoryRibbonProps> = ({
           >
             <Text
               name="package"
-              fill="#DADADA"
+              fill="#ffffff"
               width="fill-parent"
               verticalAlignText="center"
               fontFamily="Roboto Mono"
@@ -137,7 +142,7 @@ export const RepositoryRibbon: FunctionalWidget<RepositoryRibbonProps> = ({
             </Text>
             <Text
               name="version"
-              fill="#FFF"
+              fill="#ffffff"
               verticalAlignText="center"
               fontFamily="Roboto Mono"
               fontSize={13}

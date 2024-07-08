@@ -7,12 +7,15 @@ import {
   SmallRepositoryRibbon,
   SmallRepositoryRibbonProps,
 } from "./short-repository-ribbon";
+import { colors } from "@repo/bandoneon";
 
 const { widget } = figma;
 const { Text, AutoLayout, Frame } = widget;
 
 export type RefreshedContentProps = {
+  loadedIcons: number | null;
   loadTokens: () => void;
+  loadIcons: () => void;
   openConfig: () => void;
   format: TokenNameFormatType;
 } & SmallRepositoryRibbonProps;
@@ -22,6 +25,8 @@ export const RefreshedContent: FunctionalWidget<RefreshedContentProps> = ({
   status,
   format,
   loadTokens,
+  loadedIcons,
+  loadIcons,
   openConfig,
 }) => {
   return (
@@ -77,43 +82,36 @@ export const RefreshedContent: FunctionalWidget<RefreshedContentProps> = ({
               Change repository settings
             </Text>
           </AutoLayout>
-          <AutoLayout
-            name="Frame 1000002007"
-            fill="#000"
-            cornerRadius={69}
-            overflow="visible"
-            spacing={8}
-            padding={{
-              vertical: 8,
-              horizontal: 24,
-            }}
-            height={37}
-            horizontalAlignItems="center"
-            verticalAlignItems="center"
-          >
-            <AutoLayout
-              name="Frame 1000002032"
-              overflow="visible"
-              spacing={8}
-              verticalAlignItems="center"
-              onClick={() => {
-                loadTokens();
-              }}
+        </AutoLayout>
+        <AutoLayout spacing={8}>
+          {loadedIcons ? (
+            <RoundButton
+              icon="image"
+              fill={colors.active.bg}
+              color={colors.active.fg}
+              onClick={loadIcons}
             >
-              <Text
-                name="Button Label"
-                fill="#FFF"
-                verticalAlignText="center"
-                horizontalAlignText="center"
-                lineHeight="150%"
-                fontFamily="Inter"
-                fontSize={14}
-                fontWeight={700}
-              >
-                Let's load your tokens
-              </Text>
-            </AutoLayout>
-          </AutoLayout>
+              {String(loadedIcons)} Icons Loaded
+            </RoundButton>
+          ) : (
+            <RoundButton
+              icon="select"
+              fill={colors.active.bg}
+              color={colors.active.fg}
+              onClick={loadIcons}
+            >
+              Select your Icons
+            </RoundButton>
+          )}
+
+          <RoundButton
+            icon="variables"
+            fill={colors.active.bg}
+            color={colors.active.fg}
+            onClick={loadTokens}
+          >
+            Let's load your tokens
+          </RoundButton>
         </AutoLayout>
       </AutoLayout>
     </AutoLayout>

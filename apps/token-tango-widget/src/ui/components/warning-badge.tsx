@@ -1,3 +1,4 @@
+import { colors } from "@repo/bandoneon";
 import { Icon16px, IconProps } from "./icon.js";
 
 const { widget } = figma;
@@ -17,7 +18,7 @@ export const WarningBadge: FunctionalWidget<WarningProps> = ({ children }) => {
       <Icon16px name="icon" icon="warning" />
       <Text
         name="WarningsLabel"
-        fill="#696969"
+        fill={colors.status.info}
         fontFamily="Inter"
         fontSize={12}
         fontWeight={500}

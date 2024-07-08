@@ -5,6 +5,7 @@ const { Text, AutoLayout } = widget;
 
 export type RoundButtonProps = {
   variant?: "default" | "disabled";
+  label?: string;
 } & BaseProps &
   TextChildren &
   IconProps;
@@ -17,6 +18,7 @@ const colorScheme = {
 export const RoundButton: FunctionalWidget<RoundButtonProps> = ({
   children,
   variant = "default",
+  label,
   icon,
   ...props
 }) => {
@@ -55,7 +57,7 @@ export const RoundButton: FunctionalWidget<RoundButtonProps> = ({
           fontSize={14}
           fontWeight={700}
         >
-          {children}
+          {label ?? children}
         </Text>
       </AutoLayout>
     </AutoLayout>
