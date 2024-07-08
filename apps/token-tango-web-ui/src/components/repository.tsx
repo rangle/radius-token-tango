@@ -80,7 +80,11 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
   });
 
   const onSubmit = (values: FormSchema) => {
-    updateState(values);
+    updateState({
+      ...values,
+      status: isConnected ? "online" : "disconnected",
+      ...(error ? { error } : {}),
+    });
   };
 
   const handleTestConnection = () => {
