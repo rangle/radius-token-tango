@@ -6,10 +6,8 @@ import {
 } from "../exporting";
 import { createReplaceFunction } from "../tokens/token-parser.utils";
 import { GeneratorMappingDictionary } from "../tokens/token-parser.types";
-import {
-  isBuiltInTemplate,
-  templateRenderFunctions,
-} from "../../templates/exporting";
+import { builtInTemplates } from "../../templates/exporting";
+import { loadTemplateModule } from "./service.utils";
 
 /**
  * reads the tokens from a source
@@ -90,34 +88,6 @@ export const loadGeneratorMappings = (templateName: string) => {
   return mapping;
 };
 
-/**
- * Loads either a built-in template or a custom template dynamically loaded by name
- * @param templateName name of the template renderer to load
- * @returns a promise that resolves to a template render function
- */
-
-export const loadRenderFunction = async (
-  templateName: string
-): Promise<TemplateRenderFunction> => {
-  let template = isBuiltInTemplate(templateName)
-    ? templateRenderFunctions[templateName]
-    : null;
-
-  if (!template) {
-    try {
-      const templateModule = await import(templateName);
-      template = templateModule["render"] as TemplateRenderFunction;
-    } catch (e) {
-      console.error(e);
-      throw new Error(`Template ${templateName} not found`);
-    }
-  }
-  if (!template) {
-    throw new Error(`Template ${templateName} not found or is invalid`);
-  }
-  return template;
-};
-
 /** 
   # Export Tokens Service
   - reads layers from standard input
@@ -136,11 +106,11 @@ export const generateFileService = async (
       Promise.all([
         parseData(input),
         loadGeneratorMappings(templateName),
-        loadRenderFunction(templateName),
+        loadTemplateModule(templateName, { path: ["./templates"] }),
       ])
     )
-    .then(([data, mappings, renderTemplate]) =>
-      renderTemplate(data, {
+    .then(([data, mappings, { render }]) =>
+      render(data, {
         processValue: createReplaceFunction(mappings[templateName]),
         ...renderOptions,
       })

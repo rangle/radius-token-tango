@@ -1,4 +1,16 @@
+import { TokenVariable } from "../tokens/token.types";
 import { TokenNameDescription } from "./token-name-format.types";
+
+/**
+ * Token Value or Alias
+ */
+export type TokenValue =
+  | {
+      value: TokenVariable["value"];
+    }
+  | {
+      alias: string;
+    };
 
 /**
  * Token Name
@@ -6,7 +18,7 @@ import { TokenNameDescription } from "./token-name-format.types";
 export type TokenName = {
   name: string;
   type: string;
-  alias?: string;
+  values?: Record<string, TokenValue>;
 };
 
 /**
@@ -14,7 +26,7 @@ export type TokenName = {
  */
 export type TokenNameCollection = {
   name: string;
-  modes?: string[];
+  modes: string[];
   tokens: TokenName[];
 };
 

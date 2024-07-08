@@ -2,6 +2,8 @@
 /* GENERIC JSON STRUCTURES TO DESCRIBE THE DATA FILE */
 /** Leaf node containing a string value */
 
+import { VectorOutput } from "./vector.types";
+
 export type JSONLeaf = {
   value: string;
   type: string;
@@ -125,6 +127,11 @@ export type TokenLayer = {
 export type TokenLayers = {
   layers: TokenLayer[];
   order: string[];
+  vectors?: VectorOutput[];
+};
+
+export type VectorFile = {
+  vectors: VectorOutput[];
 };
 
 export const isCompositeLeafTypography = (

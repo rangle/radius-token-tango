@@ -1,7 +1,7 @@
 export const status = {
   error: "#da0000",
-  success: "#00B212",
-  warning: "#B28100",
+  success: "#00B012",
+  warning: "#854D0F",
   neutral: "#0077B2",
   fg: "#ffffff",
   info: "#696969",
@@ -9,7 +9,7 @@ export const status = {
 
 export const base = {
   bg: "#fafafa",
-  fg: "#696969",
+  fg: "#e3e3e3",
   info: "#d3d3d3",
   muted: "#d3d3d3",
 } as const;
@@ -42,9 +42,24 @@ export const active = {
   muted: "#dadada",
 } as const;
 
+export const disabled = {
+  bg: "#e7e7e7",
+  fg: "#808080",
+  info: "#696969",
+  muted: "#dadada",
+} as const;
+
+export const success = {
+  bg: "#00b012",
+  fg: "#ffffff",
+  info: "#696969",
+  muted: "#dadada",
+} as const;
+
 export const colors = {
   white: "#ffffff",
   black: "#000000",
+  disabled,
   status,
   base,
   data,

@@ -8,7 +8,14 @@ import {
   TemplateRenderFunction,
   defaultOptions,
   isNotNil,
+  toKebabCase,
 } from "../../lib";
+
+export const formatFileName = (
+  name: string,
+  options: { kebabCase: boolean }
+) =>
+  options.kebabCase ? `${toKebabCase(name)}.config.ts` : `${name}.config.ts`;
 
 type TokenValue = {
   key: string;

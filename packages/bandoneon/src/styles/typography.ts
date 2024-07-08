@@ -62,6 +62,22 @@ export const buttonLabel: BaseTypographyProps = {
   fill: colors.active.fg,
 } as const;
 
+export const buttonLg: BaseTypographyProps = {
+  fontFamily: "Inter",
+  fontSize: 18,
+  fontWeight: 700,
+  lineHeight: "140%",
+  fill: colors.active.fg,
+} as const;
+
+export const buttonSm: BaseTypographyProps = {
+  fontFamily: "Inter",
+  fontSize: 12,
+  fontWeight: 500,
+  lineHeight: "140%",
+  fill: colors.active.fg,
+} as const;
+
 export const error: BaseTypographyProps = {
   fontFamily: "Inter",
   fontSize: 12,
@@ -114,6 +130,8 @@ export const typography = {
   small,
   body,
   label,
+  buttonLg,
+  buttonSm,
   buttonLabel,
   error,
   warning,

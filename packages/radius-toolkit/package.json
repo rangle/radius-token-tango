@@ -27,6 +27,7 @@
     "prepublishOnly": "pnpm run build"
   },
   "devDependencies": {
+    "eslint": "^9.6.0",
     "typedoc": "^0.26.2",
     "typedoc-plugin-markdown": "^4.1.0",
     "typescript": "^5.2.2",

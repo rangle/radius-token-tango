@@ -9,14 +9,20 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "vitest"
+    "test": "vitest",
+    "lint": "eslint --ignore-pattern node_modules .",
+    "lint:fix": "eslint --ext .ts,.tsx --ignore-pattern node_modules --fix ."
   },
   "dependencies": {
     "url-parse": "^1.5.10"
   },
   "devDependencies": {
+    "@eslint/js": "^9.6.0",
     "@types/url-parse": "^1.4.11",
+    "eslint": "^9.6.0",
+    "globals": "^15.8.0",
     "typescript": "^5.3.3",
+    "typescript-eslint": "^7.15.0",
     "vitest": "^1.4.0"
   }
 }

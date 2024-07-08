@@ -1,1 +1,1 @@
-export * from "./default-templates";
+export * from "./built-in-templates";

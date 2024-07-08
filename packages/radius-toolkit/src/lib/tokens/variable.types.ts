@@ -25,6 +25,10 @@ export interface VariableAlias {
   type: "VARIABLE_ALIAS";
   id: string;
 }
+
+export const isVariableAlias = (value: any): value is VariableAlias =>
+  value && value.type === "VARIABLE_ALIAS" && typeof value.id === "string";
+
 export type VariableValue =
   | boolean
   | string

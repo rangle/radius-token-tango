@@ -19,6 +19,11 @@ import {
   TokenLayer,
 } from "../../lib/tokens";
 
+export const formatFileName = (
+  name: string,
+  options: { kebabCase: boolean }
+) => (options.kebabCase ? `${toKebabCase(name)}.css` : `${name}.css`);
+
 /** Wraps the template for either `:root` or the different `dependencies` */
 const forEachDependency = (
   dependencies: string[] | ":root" = ":root",

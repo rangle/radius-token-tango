@@ -1,6 +1,12 @@
-import { TokenNameCollection, TokenNameFormatType } from "../formats";
-import { ComponentUsage, TokenCollection } from "./token.types";
+import {
+  TokenName,
+  TokenNameCollection,
+  TokenNameFormatType,
+  TokenValue,
+} from "../formats";
+import { ComponentUsage, TokenCollection, VariablesMode } from "./token.types";
 import { TokenVariable } from "./token.types";
+import { isVariableAlias } from "./variable.types";
 
 export const isNotNil = <T>(o: T | null | undefined): o is T => !!o;
 
@@ -10,6 +16,8 @@ export const calculateSubjectsFromProps =
       const nameDescription = format?.decomposeTokenName?.(prop);
       if (!nameDescription) return subjects;
       if (!nameDescription.otherSegments?.subject) return subjects;
+      if (subjects.includes(nameDescription.otherSegments?.subject))
+        return subjects;
       else return [...subjects, nameDescription.otherSegments?.subject];
     }, [] as string[]);
 
@@ -40,24 +48,55 @@ export const combineComponentUsage = (
   };
 };
 
-export function toTokenNameCollection(
+export const toTokenNameCollection = (
   collections: TokenCollection[],
   format: TokenNameFormatType
-): TokenNameCollection[] {
+): TokenNameCollection[] => {
+  let references: Record<string, TokenName> = {};
   return collections
-    .map(
-      ({ name, modes: [mode] }) =>
-        mode && {
-          name: name,
-          tokens: mode.variables.map((v) => ({
-            name: v.name.replaceAll("/", format.separator) ?? "",
-            type: v.type,
-            alias: (v as TokenVariable).alias?.replaceAll(
-              "/",
-              format.separator
-            ),
-          })),
-        }
-    )
+    .map(({ name, modes }) => {
+      const mode = modes[0];
+      if (!mode) return null;
+      const tokens = mode.variables.map(toTokenName(format, modes));
+      tokens.forEach((t) => {
+        references[t.name] = t;
+      });
+      return {
+        name: name,
+        modes: modes.map((m) => m.name),
+        tokens,
+      };
+    })
     .filter(isNotNil);
-}
+};
+
+export const toTokenName = (
+  format: TokenNameFormatType,
+  modes: VariablesMode[]
+) => {
+  const getType = inferVariableType(format);
+  return (variable: TokenVariable, idx: number): TokenName => {
+    const variableValues = findVariableValueInAllModes(modes, idx);
+    return {
+      name: variable.name.replaceAll("/", format.separator),
+      type: getType(variable),
+      values: variableValues,
+    };
+  };
+};
+
+const findVariableValueInAllModes = (modes: VariablesMode[], idx: number) => {
+  return modes.reduce(
+    (acc, mode) => {
+      const variable = mode.variables[idx];
+      if (!variable) return acc;
+      return {
+        ...acc,
+        [mode.name]: isVariableAlias(variable.value)
+          ? { alias: variable.value.id.replaceAll("/", ".") }
+          : { value: variable.value },
+      };
+    },
+    {} as Record<string, TokenValue>
+  );
+};

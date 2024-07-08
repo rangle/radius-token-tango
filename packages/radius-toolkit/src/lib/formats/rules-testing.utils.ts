@@ -33,7 +33,7 @@ export const ruleTestValues = <T extends string>(
           } else {
             const err = errors?.find((e) => e === ruleName);
             const warn = warnings?.find((e) => e === ruleName);
-            expect(err, "to expect no errors").toBeUndefined();
+            expect(err, "to expect no errors").toBeFalsy();
             if (warn) {
               expect(warn, "to have the correct warning").toBe(ruleName);
             } else {

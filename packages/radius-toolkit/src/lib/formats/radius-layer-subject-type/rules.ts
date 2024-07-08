@@ -1,3 +1,4 @@
+import { isVariableAlias } from "../../tokens";
 import {
   DecomposeTokenName,
   TokenGlobalRuleValidationResult,
@@ -316,9 +317,12 @@ export const rules = ruleSet({
       );
       console.log("RULE: attributes-used-sparingly 2", flatCollectionOfTokens);
       const maxNumberOfSegments = Math.max(
+        0,
         ...flatCollectionOfTokens.map((token) => token.name.split(".").length)
       );
       console.log("RULE: attributes-used-sparingly 3", maxNumberOfSegments);
+
+      if (maxNumberOfSegments < 4) return [];
 
       const indistinguisedAttributes = new Array(maxNumberOfSegments - 3)
         .fill(0)
@@ -401,7 +405,9 @@ export const rules = ruleSet({
             collection.tokens.every((token) => isPrimitiveToken(token.name))
         )
         .flatMap((collection) => collection.tokens);
-      const aliases = primitiveTokens.filter((token) => token.alias);
+      const aliases = primitiveTokens.filter((token) =>
+        Object.values(token.values ?? {}).some(isVariableAlias)
+      );
       return aliases.length === 0
         ? []
         : globalValidationWarning(
@@ -427,7 +433,9 @@ export const rules = ruleSet({
         )
         .flatMap((collection) => collection.tokens);
       const arbitraryValues = nonPrimitiveTokens.filter(
-        (token) => !isPrimitiveToken(token.name) && !token.alias
+        (token) =>
+          !isPrimitiveToken(token.name) &&
+          Object.values(token.values ?? {}).some(isVariableAlias)
       );
       return arbitraryValues.length === 0
         ? []
