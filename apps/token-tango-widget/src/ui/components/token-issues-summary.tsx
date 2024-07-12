@@ -1,13 +1,14 @@
 const { widget } = figma;
 const { Line, AutoLayout, Text, useSyncedState, Fragment } = widget;
 
-import { colors } from "@repo/bandoneon";
+import { colors, typography } from "@repo/bandoneon";
 import { FormatValidationResult, TokenValidationResult } from "radius-toolkit";
 import { Icon16px } from "./icon";
 import { Button } from "./button";
 import { RoundButton } from "./round-button";
-import { ErrorPill } from "./error-pill";
 import { LgButton } from "./lg-button";
+import { LibraryButton } from "./library-button";
+import { IssuePill } from "./IssuePill";
 
 export type TokenIssuesSummaryProps = {
   collections: number;
@@ -16,9 +17,12 @@ export type TokenIssuesSummaryProps = {
   lastUpdated: string;
   loadedIcons: number | null;
   openIssues: () => void;
+  loadIcons: () => void;
+  clearIcons: () => void;
+  refreshTokens: () => void;
 };
 
-export const TokenIssuesSummaryProps: FunctionalWidget<
+export const TokenIssuesSummary: FunctionalWidget<
   TokenIssuesSummaryProps & HasChildrenProps
 > = ({
   collections,
@@ -27,18 +31,84 @@ export const TokenIssuesSummaryProps: FunctionalWidget<
   lastUpdated,
   loadedIcons,
   openIssues,
+  loadIcons,
+  clearIcons,
+  refreshTokens,
 }) => {
   const warnings = issues.filter(({ isWarning }) => isWarning);
   const errors = issues.filter(({ isWarning }) => !isWarning);
   return (
     <AutoLayout
-      name="Summary"
+      name="LocalSummary"
+      fill="#FFF"
+      stroke="#E0E0E0"
+      cornerRadius={16}
       overflow="visible"
       direction="vertical"
       spacing={14}
+      padding={{
+        top: 16,
+        right: 0,
+        bottom: 24,
+        left: 0,
+      }}
+      width={544}
       verticalAlignItems="center"
       horizontalAlignItems="center"
     >
+      <AutoLayout
+        name="LocalSummaryHeader"
+        overflow="visible"
+        spacing="auto"
+        padding={{
+          vertical: 0,
+          horizontal: 16,
+        }}
+        width="fill-parent"
+        verticalAlignItems="center"
+      >
+        <Text
+          name="Tokens to publish:"
+          fill="#000"
+          lineHeight="140%"
+          fontFamily="Inter"
+          fontSize={18}
+          fontWeight={700}
+        >
+          Local:
+        </Text>
+        <AutoLayout name="LastSync" spacing={8} verticalAlignItems="center">
+          <Text
+            name="Last sync"
+            fill="#262626"
+            lineHeight="140%"
+            fontFamily="Inter"
+            fontSize={14}
+            fontWeight={700}
+          >
+            Last sync:
+          </Text>
+          <AutoLayout
+            name="Layer"
+            overflow="visible"
+            spacing={4}
+            padding={{
+              vertical: 8,
+              horizontal: 0,
+            }}
+          >
+            <Text
+              name="11/11/2011- 9:01am"
+              fill="#000"
+              lineHeight="140%"
+              fontFamily="Inter"
+              fontSize={12}
+            >
+              {lastUpdated}
+            </Text>
+          </AutoLayout>
+        </AutoLayout>
+      </AutoLayout>
       <AutoLayout
         name="SummaryContent"
         overflow="visible"
@@ -66,13 +136,10 @@ export const TokenIssuesSummaryProps: FunctionalWidget<
           </Text>
           <Text
             name="Collections"
-            fill={colors.data.fg}
             width={100}
             horizontalAlignText="center"
-            lineHeight="140%"
-            fontFamily="Inter"
-            fontSize={12}
-            letterSpacing={0.24}
+            {...typography.small}
+            fill={colors.data.fg}
           >
             Collections
           </Text>
@@ -99,13 +166,10 @@ export const TokenIssuesSummaryProps: FunctionalWidget<
           </Text>
           <Text
             name="Tokens"
-            fill={colors.data.fg}
             width={100}
             horizontalAlignText="center"
-            lineHeight="140%"
-            fontFamily="Inter"
-            fontSize={12}
-            letterSpacing={0.24}
+            {...typography.small}
+            fill={colors.data.fg}
           >
             Tokens
           </Text>
@@ -133,66 +197,66 @@ export const TokenIssuesSummaryProps: FunctionalWidget<
           <AutoLayout width={100} horizontalAlignItems={"center"} spacing={8}>
             <Text
               name="Issues"
-              fill={colors.data.info}
               width={"hug-contents"}
               horizontalAlignText="center"
-              lineHeight="140%"
-              fontFamily="Inter"
-              fontSize={12}
-              letterSpacing={0.24}
+              {...typography.small}
+              fill={colors.data.info}
             >
               Vectors
             </Text>
           </AutoLayout>
         </AutoLayout>
       </AutoLayout>
-      <AutoLayout name="ManageTokens" overflow="visible" spacing={8}>
+      <AutoLayout
+        name="LocalSummaryActions"
+        overflow="visible"
+        direction="vertical"
+        spacing={16}
+        width={544}
+        horizontalAlignItems="center"
+      >
         <LgButton
           icon="tune"
           onClick={openIssues}
           color={colors.active.bg}
-          label="Manage Libraries"
-        >
-          {errors.length ? (
-            <ErrorPill>{errors.length} Errors</ErrorPill>
-          ) : (
-            <Text></Text>
-          )}
-          {warnings.length ? (
-            <ErrorPill level="warning">{warnings.length} Warnings</ErrorPill>
-          ) : (
-            <Text></Text>
-          )}
-        </LgButton>
-      </AutoLayout>
-      <AutoLayout name="LastSync" spacing={8} verticalAlignItems="center">
-        <Text
-          name="Last sync"
-          fill="#767676"
-          lineHeight="140%"
-          fontFamily="Inter"
-          fontSize={12}
-          letterSpacing={0.24}
-        >
-          Last sync
-        </Text>
-        <AutoLayout
-          name="Layer"
-          overflow="visible"
-          spacing={4}
+          label="Manage Library"
           padding={{
-            vertical: 8,
-            horizontal: 0,
+            vertical: 16,
+            right: 16,
+            left: 32,
           }}
         >
-          <Text
-            name="11/11/2011- 9:01am"
-            fill="#767676"
-            fontFamily="Roboto Mono"
-            fontSize={12}
-          >
-            {lastUpdated}
-          </Text>
+          <IssuePill issues={errors} />
+          <IssuePill issues={warnings} />
+        </LgButton>
+        <AutoLayout
+          name="Frame 1000002140"
+          overflow="visible"
+          spacing={8}
+          width="fill-parent"
+          horizontalAlignItems="center"
+        >
+          {loadedIcons ? (
+            <LibraryButton
+              icon="star"
+              onClick={clearIcons}
+              label={`Loaded vectors`}
+              count={loadedIcons}
+              state="loaded"
+            ></LibraryButton>
+          ) : (
+            <LibraryButton
+              icon="star"
+              onClick={loadIcons}
+              label="Select your Vectors"
+            ></LibraryButton>
+          )}
+          <LibraryButton
+            name="CheckAgainButton"
+            icon="refresh"
+            label="Refresh tokens"
+            onClick={() => refreshTokens()}
+          ></LibraryButton>
         </AutoLayout>
       </AutoLayout>
     </AutoLayout>

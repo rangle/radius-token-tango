@@ -4,10 +4,11 @@ const { AutoLayout, Text, useSyncedState } = widget;
 import { NameFormat } from "../components/name-format";
 import { LoadedTokens } from "../../code";
 import { Icon16px } from "../components/icon";
-import { TokenIssuesSummaryProps } from "../components/token-issues-summary";
+import {
+  TokenIssuesSummary,
+  TokenIssuesSummaryProps,
+} from "../components/token-issues-summary";
 import { PushPanel } from "../components/push-panel";
-import { RepositoryTokenLayers } from "../../services/load-github.services";
-import { diffTokenLayers } from "../../common/layer-diff.utils";
 import { isTokenLayers } from "../../common/generator.utils";
 import {
   TokenNameFormatType,
@@ -15,6 +16,7 @@ import {
   FormatValidationResult,
   TokenCollection,
   isTokenValidationResult,
+  diffTokenLayers,
 } from "radius-toolkit";
 import { isNotNil } from "radius-toolkit";
 import { borderRadius, colors } from "@repo/bandoneon";
@@ -24,16 +26,20 @@ import {
 } from "../components/success-panel";
 
 import { createLogger } from "@repo/utils";
+import { RepositoryTokenLayers } from "../../../types/state";
+import { Fragment } from "preact";
 
 const log = createLogger("pages:loaded");
 
 type LoadedPageProps = {
   format: TokenNameFormatType;
   allTokens: LoadedTokens;
-  errors: FormatValidationResult[];
+  issues: FormatValidationResult[];
   synchDetails: RepositoryTokenLayers;
   successfullyPushed: SuccessfullyPushedDetails | null;
   loadedIcons: number | null;
+  loadIcons: () => void;
+  clearIcons: () => void;
   reloadTokens: () => void;
   openIssues: () => void;
   pushTokens: (branch: string, message: string, version: string) => void;
@@ -47,21 +53,23 @@ const sum =
 export const LoadedPage: FunctionalWidget<LoadedPageProps> = ({
   format,
   allTokens: { collections, inspectedAt, tokenLayers },
-  errors,
+  issues,
   synchDetails: [previousTokenLayers, packageJson, meta],
   successfullyPushed,
   loadedIcons,
+  loadIcons,
+  clearIcons,
   openIssues,
   reloadTokens,
   pushTokens,
 }) => {
   log("debug", "BEGIN RENDERING LOADED PAGE 1", successfullyPushed);
 
-  const summary = getSummaryOfCollections(collections, errors);
+  const summary = getSummaryOfCollections(collections, issues);
 
   log("debug", "BEGIN RENDERING LOADED PAGE 2");
 
-  const collectionList = renderCollectionList(collections, format, errors);
+  const collectionList = renderCollectionList(collections, format, issues);
 
   log("debug", "RENDERING LOADED PAGE");
 
@@ -78,79 +86,52 @@ export const LoadedPage: FunctionalWidget<LoadedPageProps> = ({
   log("debug", "DELETED", deleted);
 
   // we only want to detail errors related to tokens
-  const tokenErrors = errors.filter(isTokenValidationResult);
+  const tokenIssues = issues.filter(isTokenValidationResult);
 
   // separate errors in added tokens and modified tokens
-  const addedErrs = tokenErrors.filter(
+  const addedErrs = tokenIssues.filter(
     (e) => added.indexOf(e.token.name) !== -1,
   );
-  const modifiedErrs = tokenErrors.filter(
+  const modifiedErrs = tokenIssues.filter(
     (e) => modified.indexOf(e.token.name) !== -1,
   );
 
   return (
-    <AutoLayout
-      name="loadedPage"
-      cornerRadius={12}
-      padding={8}
-      spacing={16}
-      direction="vertical"
-      width={"fill-parent"}
-      fill="#fff"
-    >
+    <Fragment>
+      <TokenIssuesSummary
+        {...summary}
+        lastUpdated={inspectedAt}
+        loadedIcons={loadedIcons}
+        openIssues={openIssues}
+        loadIcons={loadIcons}
+        clearIcons={clearIcons}
+        refreshTokens={reloadTokens}
+      />
       <AutoLayout
-        direction="horizontal"
-        horizontalAlignItems={"center"}
-        width={"fill-parent"}
-        spacing={"auto"}
-      >
-        <NameFormat formats={formats} format={format} variant="compact" />
-      </AutoLayout>
-      <AutoLayout
-        name="HorizontalPanel"
-        direction="horizontal"
+        name="PublishSummaryPanel"
+        overflow="visible"
+        direction="vertical"
         width="fill-parent"
-        spacing={"auto"}
+        padding={8}
+        fill={
+          successfullyPushed ? colors.success.muted : colors.repository.muted
+        }
+        cornerRadius={borderRadius.base}
       >
-        <AutoLayout
-          direction="vertical"
-          width={"fill-parent"}
-          spacing={6}
-          horizontalAlignItems={"center"}
-        >
-          <TokenIssuesSummaryProps
-            {...summary}
-            lastUpdated={inspectedAt}
-            loadedIcons={loadedIcons}
+        {successfullyPushed ? (
+          <SuccessPanel details={successfullyPushed} />
+        ) : (
+          <PushPanel
+            previousVersion={meta.version}
+            diff={[added, modified, deleted]}
+            issues={[addedErrs, modifiedErrs]}
+            reloadTokens={reloadTokens}
+            pushTokens={pushTokens}
             openIssues={openIssues}
           />
-          <AutoLayout
-            name="PublishSummaryPanel"
-            overflow="visible"
-            direction="vertical"
-            width="fill-parent"
-            padding={8}
-            fill={colors.repository.muted}
-            cornerRadius={borderRadius.base}
-          >
-            {successfullyPushed ? (
-              <SuccessPanel
-                details={successfullyPushed}
-                reloadTokens={reloadTokens}
-              />
-            ) : (
-              <PushPanel
-                previousVersion={meta.version}
-                diff={[added, modified, deleted]}
-                errors={[addedErrs, modifiedErrs]}
-                reloadTokens={reloadTokens}
-                pushTokens={pushTokens}
-              />
-            )}
-          </AutoLayout>
-        </AutoLayout>
+        )}
       </AutoLayout>
-    </AutoLayout>
+    </Fragment>
   );
 };
 
@@ -199,24 +180,7 @@ function invalidLayersFile(
   reloadTokens: () => void,
 ): FigmaDeclarativeNode {
   return (
-    <AutoLayout
-      name="loadedPage"
-      cornerRadius={12}
-      padding={8}
-      spacing={16}
-      direction="vertical"
-      width={"fill-parent"}
-      fill="#fff"
-      horizontalAlignItems={"center"}
-    >
-      <AutoLayout
-        direction="horizontal"
-        width={"fill-parent"}
-        spacing={"auto"}
-        horizontalAlignItems={"center"}
-      >
-        <NameFormat formats={formats} format={format} variant="compact" />
-      </AutoLayout>
+    <Fragment>
       <AutoLayout
         width={"fill-parent"}
         overflow="visible"
@@ -263,7 +227,7 @@ function invalidLayersFile(
           </Text>
         </AutoLayout>
       </AutoLayout>
-    </AutoLayout>
+    </Fragment>
   );
 }
 

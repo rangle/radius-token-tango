@@ -9,7 +9,8 @@ export type LgButtonProps = {
   variant?: keyof typeof colorScheme;
 } & BaseProps &
   TextChildren &
-  IconProps;
+  IconProps &
+  AutoLayoutProps;
 
 const colorScheme = {
   success: [colors.status.success, colors.status.fg],
@@ -25,7 +26,6 @@ export const LgButton: FunctionalWidget<LgButtonProps> = ({
   ...props
 }) => {
   const [bg, fg] = colorScheme[variant];
-  console.log("YOUI KNOW WHAT I AM SAYING?", children);
   return (
     <AutoLayout
       name="LgButton"

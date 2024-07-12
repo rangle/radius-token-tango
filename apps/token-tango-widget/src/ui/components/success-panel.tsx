@@ -5,9 +5,10 @@ import { TokenChangeBar } from "./token-change-bar";
 import { VersionBump } from "./version-bump";
 import { WarningBadge } from "./warning-badge";
 import { colors } from "@repo/bandoneon";
+import { LgButton } from "./lg-button";
 
 const { widget } = figma;
-const { SVG, Text, AutoLayout } = widget;
+const { SVG, Text, AutoLayout, Frame } = widget;
 
 export type SuccessfullyPushedDetails = {
   branch: string;
@@ -18,7 +19,6 @@ export type SuccessfullyPushedDetails = {
 
 export type SuccessPanelProps = {
   details: SuccessfullyPushedDetails;
-  reloadTokens: () => void;
 } & BaseProps &
   TextChildren;
 
@@ -27,171 +27,178 @@ export const createNewPRUrl = (repository: string, branch: string) =>
 
 export const SuccessPanel: FunctionalWidget<SuccessPanelProps> = ({
   details: { branch, ref, repository },
-  reloadTokens,
 }) => {
   return (
     <AutoLayout
-      name="Frame 1000002080"
+      name="SuccessPanel"
       overflow="visible"
       direction="vertical"
       spacing={16}
+      padding={24}
+      width={530}
       verticalAlignItems="end"
       horizontalAlignItems="center"
     >
       <AutoLayout
-        name="Frame 1000002080"
+        name="PushSuccess"
+        fill="#FFF9"
+        cornerRadius={69}
+        overflow="visible"
+        spacing={8}
+        padding={{
+          vertical: 0,
+          horizontal: 16,
+        }}
+        height={36}
+        horizontalAlignItems="center"
+        verticalAlignItems="center"
+      >
+        <AutoLayout
+          name="LabelGroup"
+          overflow="visible"
+          spacing={8}
+          verticalAlignItems="center"
+        >
+          <Frame name="circle-check" width={16} height={16}>
+            <SVG
+              name="Primary"
+              x={{
+                type: "center",
+                offset: 0,
+              }}
+              y={{
+                type: "center",
+                offset: 0,
+              }}
+              height={16}
+              width={16}
+              src="<svg width='16' height='17' viewBox='0 0 16 17' fill='none' xmlns='http://www.w3.org/2000/svg'>
+<path d='M8 16.6951C10.1217 16.6951 12.1566 15.8522 13.6569 14.3519C15.1571 12.8516 16 10.8168 16 8.69507C16 6.57334 15.1571 4.53851 13.6569 3.03821C12.1566 1.53792 10.1217 0.695068 8 0.695068C5.87827 0.695068 3.84344 1.53792 2.34315 3.03821C0.842855 4.53851 0 6.57334 0 8.69507C0 10.8168 0.842855 12.8516 2.34315 14.3519C3.84344 15.8522 5.87827 16.6951 8 16.6951ZM11.5312 7.22632L7.53125 11.2263C7.2375 11.5201 6.7625 11.5201 6.47188 11.2263L4.47188 9.22632C4.17813 8.93257 4.17813 8.45757 4.47188 8.16694C4.76563 7.87632 5.24062 7.87319 5.53125 8.16694L7 9.63569L10.4688 6.16382C10.7625 5.87007 11.2375 5.87007 11.5281 6.16382C11.8187 6.45757 11.8219 6.93257 11.5281 7.22319L11.5312 7.22632Z' fill='#00B012'/>
+</svg>
+"
+            />
+          </Frame>
+          <Text
+            name="Button Label"
+            fill="#00B012"
+            verticalAlignText="center"
+            horizontalAlignText="center"
+            lineHeight="150%"
+            fontFamily="Inter"
+            fontSize={14}
+            fontWeight={700}
+          >
+            Pushed
+          </Text>
+        </AutoLayout>
+      </AutoLayout>
+      <AutoLayout
+        name="SuccessfullyPushed"
         overflow="visible"
         direction="vertical"
         spacing={16}
-        verticalAlignItems="center"
+        width={528}
         horizontalAlignItems="center"
       >
         <AutoLayout
-          name="Frame 1000002083"
-          strokeWidth={1.474}
+          name="BranchNameMessage"
           overflow="visible"
-          spacing={14.735}
+          direction="vertical"
+          spacing={4}
           horizontalAlignItems="center"
-          verticalAlignItems="center"
         >
           <AutoLayout
-            name="Frame 1000002105"
-            fill="#00B012"
-            cornerRadius={9233.1904296875}
-            strokeWidth={0.923}
+            name="BranchName"
             overflow="visible"
             spacing={4}
-            padding={{
-              top: 3.694,
-              right: 12,
-              bottom: 3.694,
-              left: 6,
-            }}
-            height={22}
-            horizontalAlignItems="end"
-            verticalAlignItems="center"
+            horizontalAlignItems="center"
           >
-            <Icon16px name="Vector" icon="check" color="#FFF" size={24} />
             <Text
-              name="date"
-              fill="#FFF"
-              horizontalAlignText="center"
+              name="Create a Pull Request"
+              fill="#262626"
               lineHeight="140%"
               fontFamily="Inter"
               fontSize={14}
-              letterSpacing={0.24}
-            >
-              pushed to branch:
-            </Text>
-            <Text
-              name="date"
-              fill="#FFF"
-              horizontalAlignText="center"
-              lineHeight="140%"
-              fontFamily="Roboto Mono"
-              letterSpacing={0.24}
-              fontSize={16}
               fontWeight={700}
+            >
+              New branch:
+            </Text>
+          </AutoLayout>
+          <AutoLayout
+            name="Frame 1000002145"
+            fill="#333"
+            cornerRadius={4}
+            overflow="visible"
+            spacing={10}
+            padding={{
+              vertical: 4,
+              horizontal: 8,
+            }}
+            horizontalAlignItems="center"
+            verticalAlignItems="center"
+          >
+            <Text
+              name="Create a Pull Request"
+              fill="#FFF"
+              verticalAlignText="center"
+              fontFamily="Roboto Mono"
+              fontSize={12}
             >
               {branch}
             </Text>
           </AutoLayout>
         </AutoLayout>
-        <AutoLayout
-          name="Frame 1000002122"
-          overflow="visible"
-          spacing={4}
-          horizontalAlignItems="center"
-          verticalAlignItems="center"
+        <LgButton
+          icon="github"
+          label="Create a Pull Request"
           onClick={() => figma.openExternal(createNewPRUrl(repository, branch))}
-        >
-          <SVG
-            name="Vector"
-            height={22}
-            width={22}
-            src="<svg width='23' height='23' viewBox='0 0 23 23' fill='none' xmlns='http://www.w3.org/2000/svg'>
-  <path d='M11.4999 0.468628C5.39768 0.468628 0.448486 5.54201 0.448486 11.7995C0.448486 16.8058 3.61471 21.0529 8.00674 22.5515C8.55839 22.6564 8.73704 22.3051 8.73704 22.0067V19.8973C5.66292 20.5829 5.02286 18.5603 5.02286 18.5603C4.52 17.2506 3.79522 16.9021 3.79522 16.9021C2.7923 16.1987 3.87166 16.2138 3.87166 16.2138C4.98141 16.2931 5.56529 17.3819 5.56529 17.3819C6.5507 19.1136 8.1504 18.6131 8.78126 18.3233C8.87979 17.5915 9.16621 17.091 9.48301 16.8087C7.02869 16.5207 4.44818 15.549 4.44818 11.2084C4.44818 9.9705 4.88011 8.96016 5.58648 8.167C5.47228 7.8809 5.09377 6.72798 5.69423 5.1681C5.69423 5.1681 6.62255 4.86406 8.73429 6.32952C9.61563 6.07835 10.5605 5.95276 11.4999 5.94803C12.4393 5.95276 13.3851 6.07835 14.2683 6.32952C16.3782 4.86406 17.3047 5.1681 17.3047 5.1681C17.9061 6.72892 17.5275 7.88184 17.4133 8.167C18.1224 8.96016 18.5506 9.97144 18.5506 11.2084C18.5506 15.5604 15.9656 16.5188 13.5048 16.7992C13.9008 17.1505 14.2628 17.8398 14.2628 18.8974V22.0067C14.2628 22.3079 14.4396 22.662 15.0004 22.5505C19.3888 21.0502 22.5514 16.8039 22.5514 11.7995C22.5514 5.54201 17.6031 0.468628 11.4999 0.468628Z' fill='#262626'/>
-  </svg>
-  "
-          />
-          <Text
-            name="Create a Pull Request"
-            fill="#262626"
-            verticalAlignText="center"
-            horizontalAlignText="center"
-            lineHeight="150%"
-            fontFamily="Inter"
-            fontSize={20}
-            fontWeight={700}
-            textDecoration="underline"
-          >
-            Create a Pull Request
-          </Text>
-        </AutoLayout>
+        />
+
         <AutoLayout
-          spacing={6}
-          padding={8}
+          name="Frame 1000002146"
+          overflow="visible"
           direction="vertical"
-          horizontalAlignItems={"center"}
+          spacing={8}
+          width={363}
+          horizontalAlignItems="center"
         >
-          <AutoLayout spacing={4}>
+          <Text
+            name="PRapprovedOne"
+            fill="#262626"
+            width="fill-parent"
+            horizontalAlignText="center"
+            lineHeight="140%"
+            fontFamily="Inter"
+            fontSize={12}
+            letterSpacing={0.24}
+          >
+            Changes will be reflected in your current version once a PR from
+            this branch is merged into:
+          </Text>
+          <AutoLayout
+            name="Frame 1000002145"
+            fill="#333"
+            cornerRadius={4}
+            overflow="visible"
+            spacing={10}
+            padding={{
+              vertical: 4,
+              horizontal: 8,
+            }}
+            horizontalAlignItems="center"
+            verticalAlignItems="center"
+          >
             <Text
-              name="PRapprovedOne"
-              fill="#262626"
-              lineHeight="150%"
-              fontFamily="Inter"
-              fontSize={13}
-            >
-              PR needs to be approved and merged to
-            </Text>
-            <Text
-              name="PRapprovedTwo"
-              fill="#262626"
-              lineHeight="150%"
+              name="Create a Pull Request"
+              fill="#FFF"
+              verticalAlignText="center"
               fontFamily="Roboto Mono"
-              fontWeight={700}
-              fontSize={13}
+              fontSize={12}
             >
               {ref}
             </Text>
           </AutoLayout>
-          <AutoLayout>
-            <Text
-              name="PRapprovedThree"
-              fill="#262626"
-              lineHeight="150%"
-              fontFamily="Inter"
-              fontSize={13}
-            >
-              before its changes can be reflected as your current version
-            </Text>
-          </AutoLayout>
         </AutoLayout>
-      </AutoLayout>
-      <AutoLayout
-        name="Frame 1000002007"
-        fill={colors.active.bg}
-        cornerRadius={69}
-        overflow="visible"
-        spacing={8}
-        padding={{
-          vertical: 8,
-          horizontal: 24,
-        }}
-        height={37}
-        horizontalAlignItems="center"
-        verticalAlignItems="center"
-        onClick={() => {
-          reloadTokens();
-        }}
-      >
-        <RoundButton
-          name="CheckAgainButton"
-          icon="refresh"
-          onClick={() => reloadTokens()}
-        >
-          Reload your tokens
-        </RoundButton>
       </AutoLayout>
     </AutoLayout>
   );

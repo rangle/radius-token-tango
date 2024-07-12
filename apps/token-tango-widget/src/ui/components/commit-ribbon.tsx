@@ -25,6 +25,8 @@ export const CommitRibbon: FunctionalWidget<CommitRibbonProps> = ({
     false,
   );
 
+  const [wasTruncated, messageToShow] = truncateCommitMessage(commitMessage);
+
   return (
     <AutoLayout
       name="CommitDetailsStateDefault"
@@ -96,7 +98,7 @@ export const CommitRibbon: FunctionalWidget<CommitRibbonProps> = ({
             height={"fill-parent"}
             truncate={false}
           >
-            {commitMessage}
+            {messageToShow}
           </Text>
         ) : (
           <Text
@@ -108,7 +110,7 @@ export const CommitRibbon: FunctionalWidget<CommitRibbonProps> = ({
             height={12}
             truncate={true}
           >
-            {commitMessage}
+            {messageToShow}
           </Text>
         )}
         <Icon16px
@@ -119,3 +121,17 @@ export const CommitRibbon: FunctionalWidget<CommitRibbonProps> = ({
     </AutoLayout>
   );
 };
+
+const MAX_MESSAGE_LINES = 35;
+const MAX_MESSAGE_LENGTH = 1000;
+
+function truncateCommitMessage(commitMessage: string) {
+  const lines = commitMessage.split("\n");
+  if (lines.length > MAX_MESSAGE_LINES) {
+    return [true, lines.slice(0, MAX_MESSAGE_LINES).join("\n")] as const;
+  }
+  if (commitMessage.length > MAX_MESSAGE_LENGTH) {
+    return [true, commitMessage.slice(0, MAX_MESSAGE_LENGTH)] as const;
+  }
+  return [false, commitMessage] as const;
+}

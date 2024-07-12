@@ -5,3 +5,4 @@ export * from "./variable.types";
 export * from "./token-parser.utils";
 export * from "./token.utils";
 export * from "./vector.types";
+export * from "./layer-diff.utils";

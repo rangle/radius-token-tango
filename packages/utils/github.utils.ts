@@ -175,6 +175,23 @@ export type PackageJSON = {
   [key: string]: unknown;
 };
 
+export type LastCommit = {
+  sha: string;
+  message: string;
+  author: {
+    name: string;
+    email: string;
+    date: string;
+  };
+  committer: {
+    name: string;
+    email: string;
+    date: string;
+  };
+  autor_avatar_url?: string;
+  commiter_avatar_url?: string;
+};
+
 export const isPackageJSON = (u: unknown): u is PackageJSON =>
   u !== null && typeof u === "object" && ("name" in u || "version" in u);
 

@@ -1,5 +1,4 @@
-import { describe, it } from "vitest";
-import { expect } from "expect";
+import { describe, it, expect } from "vitest";
 import { semVerBump } from "./layer-diff.utils.js";
 
 describe("semVerBump function", () => {

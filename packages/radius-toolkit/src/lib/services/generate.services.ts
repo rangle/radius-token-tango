@@ -8,6 +8,7 @@ import { createReplaceFunction } from "../tokens/token-parser.utils";
 import { GeneratorMappingDictionary } from "../tokens/token-parser.types";
 import { builtInTemplates } from "../../templates/exporting";
 import { loadTemplateModule } from "./service.utils";
+import { TemplateModule } from "../loaders/loader.utils";
 
 /**
  * reads the tokens from a source
@@ -98,20 +99,18 @@ export const loadGeneratorMappings = (templateName: string) => {
 */
 
 export const generateFileService = async (
-  templateName: string,
+  templateModule: TemplateModule,
   { source, target, operations, ...renderOptions }: ServiceOptions
 ) => {
+  const { name, render } = templateModule;
+  if (!name) throw new Error("Template module must have a name");
   return readTokens(operations, source)
     .then((input) =>
-      Promise.all([
-        parseData(input),
-        loadGeneratorMappings(templateName),
-        loadTemplateModule(templateName, { path: ["./templates"] }),
-      ])
+      Promise.all([parseData(input), loadGeneratorMappings(name)])
     )
-    .then(([data, mappings, { render }]) =>
+    .then(([data, mappings]) =>
       render(data, {
-        processValue: createReplaceFunction(mappings[templateName]),
+        processValue: createReplaceFunction(mappings[name]),
         ...renderOptions,
       })
     )

@@ -1,3 +1,4 @@
+import { colors, typography } from "@repo/bandoneon";
 import { Button } from "./button.js";
 import { Icon16px } from "./icon.js";
 import { NameFormat } from "./name-format.js";
@@ -5,9 +6,16 @@ import { NameFormat } from "./name-format.js";
 const { widget } = figma;
 const { Text, AutoLayout, Frame, SVG } = widget;
 
-export type WidgetHeaderProps = BaseProps & HasChildrenProps;
+export type WidgetHeaderProps = BaseProps &
+  HasChildrenProps & {
+    empty: boolean;
+  };
 
-export const WidgetHeader = ({ children, ...props }: WidgetHeaderProps) => {
+export const WidgetHeader = ({
+  children,
+  empty,
+  ...props
+}: WidgetHeaderProps) => {
   return (
     <AutoLayout
       name="WidgetHeader"
@@ -15,6 +23,7 @@ export const WidgetHeader = ({ children, ...props }: WidgetHeaderProps) => {
       direction="vertical"
       spacing="auto"
       width={"fill-parent"}
+      {...props}
     >
       <AutoLayout
         name="Frame"
@@ -141,20 +150,22 @@ export const WidgetHeader = ({ children, ...props }: WidgetHeaderProps) => {
               </Frame>
             </Frame>
           </AutoLayout>
-          <Text
-            name="Want to export your Figma Variables as Tokens? No problem! Validate naming conventions and export directly to Github."
-            fill="#696969"
-            width="fill-parent"
-            verticalAlignText="center"
-            horizontalAlignText="center"
-            lineHeight="130%"
-            fontFamily="Inter"
-            fontSize={14}
-            fontWeight={700}
-          >
-            Want to export your Figma Variables as tokens? No problem! Validate
-            naming conventions and export directly to Github.
-          </Text>
+          {empty ? (
+            <Text
+              name="Want to export your Figma Variables as Tokens? No problem! Validate naming conventions and export directly to Github."
+              width={512}
+              verticalAlignText="center"
+              horizontalAlignText="center"
+              {...typography.leading}
+              fill={colors.active.info}
+            >
+              Want to export your Figma Variables as Tokens? No problem! {"\n"}{" "}
+              How about your icons and svg illustrations? We got you! {"\n"}{" "}
+              Validate naming conventions and export directly to GitHub.
+            </Text>
+          ) : (
+            children
+          )}
         </AutoLayout>
       </AutoLayout>
     </AutoLayout>

@@ -18,5 +18,5 @@ export const loadTemplateModule: TemplateLoader<TemplateModule> = async (
     (await installedModuleLoader(templateId, options)) ??
     (await relativeEsmLoader(templateId, options));
   if (!module) throw new Error(`Template ${templateId} not found`);
-  return module;
+  return { ...module };
 };

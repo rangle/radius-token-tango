@@ -8,6 +8,7 @@ import {
   SmallRepositoryRibbonProps,
 } from "./short-repository-ribbon";
 import { colors } from "@repo/bandoneon";
+import { LibraryButton } from "./library-button";
 
 const { widget } = figma;
 const { Text, AutoLayout, Frame } = widget;
@@ -16,6 +17,7 @@ export type RefreshedContentProps = {
   loadedIcons: number | null;
   loadTokens: () => void;
   loadIcons: () => void;
+  clearIcons: () => void;
   openConfig: () => void;
   format: TokenNameFormatType;
 } & SmallRepositoryRibbonProps;
@@ -23,9 +25,9 @@ export type RefreshedContentProps = {
 export const RefreshedContent: FunctionalWidget<RefreshedContentProps> = ({
   name,
   status,
-  format,
   loadTokens,
   loadedIcons,
+  clearIcons,
   loadIcons,
   openConfig,
 }) => {
@@ -48,7 +50,6 @@ export const RefreshedContent: FunctionalWidget<RefreshedContentProps> = ({
         verticalAlignItems="center"
         horizontalAlignItems="center"
       >
-        <FormatDescription {...{ format }} />
         <AutoLayout
           name="Frame1000002081"
           overflow="visible"
@@ -83,37 +84,48 @@ export const RefreshedContent: FunctionalWidget<RefreshedContentProps> = ({
             </Text>
           </AutoLayout>
         </AutoLayout>
-        <AutoLayout spacing={8}>
-          {loadedIcons ? (
-            <RoundButton
-              icon="image"
-              fill={colors.active.bg}
-              color={colors.active.fg}
-              onClick={loadIcons}
-            >
-              {String(loadedIcons)} Icons Loaded
-            </RoundButton>
-          ) : (
-            <RoundButton
-              icon="select"
-              fill={colors.active.bg}
-              color={colors.active.fg}
-              onClick={loadIcons}
-            >
-              Select your Icons
-            </RoundButton>
-          )}
-
-          <RoundButton
-            icon="variables"
-            fill={colors.active.bg}
-            color={colors.active.fg}
-            onClick={loadTokens}
-          >
-            Let's load your tokens
-          </RoundButton>
-        </AutoLayout>
+        <InitialActionButtonBar
+          {...{ status, loadedIcons, loadIcons, loadTokens, clearIcons }}
+        />
       </AutoLayout>
+    </AutoLayout>
+  );
+};
+
+export type InitialActionButtonBarProps = {
+  status: SmallRepositoryRibbonProps["status"];
+  loadedIcons: number | null;
+  loadIcons: () => void;
+  clearIcons: () => void;
+  loadTokens: () => void;
+};
+
+export const InitialActionButtonBar: FunctionalWidget<
+  InitialActionButtonBarProps
+> = ({ status, loadedIcons, clearIcons, loadIcons, loadTokens }) => {
+  return (
+    <AutoLayout spacing={4}>
+      {loadedIcons ? (
+        <LibraryButton
+          icon="star"
+          onClick={clearIcons}
+          label={`Loaded vectors`}
+          count={loadedIcons}
+          state="loaded"
+        ></LibraryButton>
+      ) : (
+        <LibraryButton
+          icon="star"
+          onClick={loadIcons}
+          label="Load selected vectors"
+        ></LibraryButton>
+      )}
+      <LibraryButton
+        icon="variables"
+        state={status !== "online" ? "inactive" : "default"}
+        label="Let's load your tokens"
+        onClick={status === "online" ? loadTokens : undefined}
+      ></LibraryButton>
     </AutoLayout>
   );
 };

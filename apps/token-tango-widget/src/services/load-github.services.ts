@@ -7,10 +7,15 @@ import {
   isPackageJSON,
   isGithubFileDetails,
   githubUrlToPath,
+  PackageJSON,
+  CommitDetails,
+  GithubFileDetails,
+  LastCommit,
 } from "@repo/utils";
 import { TokenLayers } from "radius-toolkit";
 
 import { createLogger } from "@repo/utils";
+import { RepositoryTokenLayers } from "../../types/state";
 
 const log = createLogger("Services:load-github");
 
@@ -109,7 +114,7 @@ export const fetchRepositoryTokenLayers = async (options: GithubOptions) => {
   );
 
   log("debug", "fetchRepositoryTokenLayers 4");
-  const lastCommits = lastCommitsFromRepo.map(
+  const lastCommits: Array<LastCommit> = lastCommitsFromRepo.map(
     ({
       commit: { author, committer, message },
       sha,
@@ -124,6 +129,7 @@ export const fetchRepositoryTokenLayers = async (options: GithubOptions) => {
       commiter_avatar_url: committerDetails?.avatar_url,
     }),
   );
+
   log("debug", "fetchRepositoryTokenLayers 5");
 
   // retry obtaining token file content if the original one is empty (ISSUE WITH GITHUB API)
@@ -177,11 +183,6 @@ export const fetchRepositoryTokenLayers = async (options: GithubOptions) => {
   log("debug", tokenLayers);
   return [tokenLayers, packagejson, meta] as const;
 };
-
-export type RepositoryTokenLayers =
-  ReturnType<typeof fetchRepositoryTokenLayers> extends Promise<infer T>
-    ? T
-    : never;
 
 /**
  * Saves the repository token layers and increments the package.json version.

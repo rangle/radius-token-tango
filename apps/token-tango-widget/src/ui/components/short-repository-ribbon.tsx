@@ -82,7 +82,7 @@ export const SmallRepositoryRibbon: FunctionalWidget<
                 fontFamily="Roboto Mono"
                 fontSize={14}
               >
-                Repositoryyyy:
+                Repository:
               </Text>
               <Text
                 name="Frontend-monorepo"

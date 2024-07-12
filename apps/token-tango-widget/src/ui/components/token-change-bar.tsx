@@ -6,9 +6,13 @@ import { BulletLabel, BulletLabelProps } from "./bullet-label";
 import { ErrorPill } from "./error-pill";
 import { Icon16px, IconProps } from "./icon";
 import { VariableBullet } from "./variable-bullet";
+import { IssuePill } from "./IssuePill";
+import { typography } from "@repo/bandoneon";
 
 const { widget } = figma;
 const { Text, AutoLayout, useSyncedState } = widget;
+
+export const MAX_CHANGES_TO_SHOW = 25;
 
 export type TokenChangeType = "new" | "modified" | "deleted";
 
@@ -17,16 +21,19 @@ export type TokenChangeBarProps = {
   variant: "default" | "start" | "end";
   tokensChanged: string[];
   issues: FormatValidationResult[];
+  openIssues: () => void;
 } & BaseProps &
   TextChildren;
 
 const propMap: Record<
   TokenChangeType,
-  Pick<BulletLabelProps, "color"> & { text: string }
+  Pick<BulletLabelProps, "color"> & { text: string } & {
+    icon?: IconProps["icon"];
+  }
 > = {
-  new: { color: "green", text: "New" },
-  modified: { color: "amber", text: "Modified" },
-  deleted: { color: "red", text: "Deleted" },
+  new: { color: "green", text: "Added", icon: "changeAdded" },
+  modified: { color: "amber", text: "Modified", icon: "changeModified" },
+  deleted: { color: "red", text: "Deleted", icon: "changeRemoved" },
 };
 
 const cornerRadii: Record<
@@ -59,6 +66,7 @@ export const TokenChangeBar: FunctionalWidget<TokenChangeBarProps> = ({
   tokensChanged,
   issues,
   children,
+  openIssues,
   ...props
 }) => {
   const [open, setOpen] = useSyncedState<boolean>(
@@ -100,11 +108,8 @@ export const TokenChangeBar: FunctionalWidget<TokenChangeBarProps> = ({
           verticalAlignItems="center"
           onClick={tokensChanged.length > 0 ? () => setOpen(!open) : undefined}
         >
-          {issues.length > 0 ? (
-            <ErrorPill name="IssueBadge">{issues.length} issues</ErrorPill>
-          ) : (
-            <></>
-          )}
+          <IssuePill issues={issues.filter(({ isWarning }) => !isWarning)} />
+          <IssuePill issues={issues.filter(({ isWarning }) => isWarning)} />
           <Icon16px
             name="expand_more"
             icon={open ? "chevron-up" : "chevron-down"}
@@ -123,15 +128,40 @@ export const TokenChangeBar: FunctionalWidget<TokenChangeBarProps> = ({
           direction="vertical"
           width="fill-parent"
         >
-          {tokensChanged.map((token) => (
+          {tokensChanged.slice(0, MAX_CHANGES_TO_SHOW).map((token) => (
             <VariableBullet
               name={token}
+              icon={propMap[changeType].icon}
               width={"fill-parent"}
               issues={issues
                 .filter(isTokenValidationResult)
                 .filter(({ token: { name } }) => name === token)}
             />
           ))}
+          {tokensChanged.length > MAX_CHANGES_TO_SHOW ? (
+            <AutoLayout
+              width={"fill-parent"}
+              horizontalAlignItems={"end"}
+              padding={{
+                vertical: 4,
+                horizontal: 8,
+              }}
+              onClick={() => openIssues()}
+            >
+              <Text
+                name="MoreTokens"
+                textDecoration="underline"
+                width={"fill-parent"}
+                horizontalAlignText="right"
+                {...typography.small}
+                fill="#00f"
+              >
+                and {tokensChanged.length - MAX_CHANGES_TO_SHOW} more
+              </Text>
+            </AutoLayout>
+          ) : (
+            <></>
+          )}
         </AutoLayout>
       ) : (
         <></>

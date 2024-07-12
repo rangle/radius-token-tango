@@ -8,6 +8,16 @@ import {
 } from "./token-parser.types.js";
 import { toKebabCase } from "../formats";
 
+export const DEFAULT_MODE_NAME = "Mode 1";
+export const formatLayerName = (modeName: string, description: string) => {
+  const visibleModeName = modeName !== DEFAULT_MODE_NAME ? modeName : undefined;
+  const cleanDescription = toKebabCase(description.replace(/\d+-/, ""));
+
+  return visibleModeName
+    ? `${cleanDescription}--${toKebabCase(visibleModeName)}`
+    : cleanDescription;
+};
+
 /** create a formatted key that's more css-friendly */
 export const formatKey = (str: string) => toKebabCase(str);
 

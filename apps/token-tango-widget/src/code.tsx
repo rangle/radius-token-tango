@@ -3,13 +3,15 @@ import { emit, on } from "@create-figma-plugin/utilities";
 import {
   ConfirmPushHandler,
   IssueVisualizerHandler,
+  RepositoryTokenLayers,
+  State,
   UiCloseHandler,
   UiCommitHandler,
   UiStateHandler,
   WidgetStateHandler,
+  getState,
 } from "../types/state";
 import {
-  RepositoryTokenLayers,
   fetchRepositoryTokenLayers,
   saveRepositoryTokenLayers,
 } from "./services/load-github.services";
@@ -35,7 +37,6 @@ import {
 import { SuccessfullyPushedDetails } from "./ui/components/success-panel";
 
 import { createLogger } from "@repo/utils";
-import { i } from "vitest/dist/reporters-P7C2ytIv.js";
 import {
   isComponent,
   isComposite,
@@ -82,14 +83,20 @@ export function Widget() {
     "persistedTokens",
     null,
   );
-  const [persistedIcons, setPersistedIcons] = useSyncedState<string | null>(
-    "persistedIcons",
+  const [persistedVectors, setPersistedVectors] = useSyncedState<string | null>(
+    "persistedVectors",
     null,
   );
-  const [loadedIcons, setLoadedIcons] = useSyncedState<number | null>(
-    "loadedIcons",
+  const [loadedVectors, setLoadedVectors] = useSyncedState<number | null>(
+    "loadedVectors",
     null,
   );
+
+  const [withVectors, setWithVectors] = useSyncedState<boolean>(
+    "withVectors",
+    false,
+  );
+
   const [allErrors, setAllErrors] = useSyncedState<FormatValidationResult[]>(
     "allErrors",
     [],
@@ -213,8 +220,8 @@ export function Widget() {
       .filter(Boolean);
 
     log("debug", "RESULT", result);
-    setLoadedIcons(result.length);
-    setPersistedIcons(JSON.stringify(result));
+    setLoadedVectors(result.length);
+    setPersistedVectors(JSON.stringify(result));
   };
 
   return (
@@ -222,6 +229,7 @@ export function Widget() {
       synched={synchConfiguration !== null}
       error={errorMessage}
       appVersion={version}
+      format={format}
       name={synchConfiguration ? synchConfiguration.name : ""}
       synchDetails={synchDetails}
       openConfig={createRepositoryConfigurationDialogCallback(
@@ -235,10 +243,17 @@ export function Widget() {
           selectedFormat={tokenNameFormat}
           selectFormat={(newFormat) => setTokenNameFormat(newFormat)}
           synchConfig={synchConfiguration}
-          loadedIcons={loadedIcons}
+          loadedIcons={loadedVectors}
           loadIcons={() => {
             log("debug", "Loading your icons!");
             waitForTask(doLoadIcons());
+          }}
+          withVectors={withVectors}
+          toggleWithVectors={() => setWithVectors(!withVectors)}
+          clearIcons={() => {
+            log("debug", "Clearing your icons!");
+            setPersistedVectors(null);
+            setLoadedVectors(null);
           }}
           loadTokens={async () => {
             log("debug", "Loading your tokens!");
@@ -253,14 +268,24 @@ export function Widget() {
         <LoadedPage
           format={format}
           allTokens={JSON.parse(persistedTokens)}
-          errors={allErrors}
+          issues={allErrors}
           successfullyPushed={successfullyPushed}
           synchDetails={synchDetails}
-          loadedIcons={loadedIcons}
+          loadedIcons={loadedVectors}
+          loadIcons={doLoadIcons}
+          clearIcons={() => {
+            log("debug", "Clearing your icons!");
+            setPersistedVectors(null);
+            setLoadedVectors(null);
+          }}
           openIssues={createIssueDialogCallback(
-            JSON.parse(persistedTokens),
-            format,
-            allErrors,
+            getState(
+              persistedTokens,
+              persistedVectors,
+              synchDetails,
+              format,
+              allErrors,
+            ),
           )}
           reloadTokens={async () => {
             log("debug", ">>> RELOADING ALL VARIABLES");
@@ -271,12 +296,14 @@ export function Widget() {
             (edits) => {
               log("debug", "PUSHING TO THE REPOSITORY", edits);
 
-              // get the new token layers
-              const { tokenLayers } = JSON.parse(persistedTokens);
-              const vectors = persistedIcons
-                ? JSON.parse(persistedIcons)
-                : undefined;
-              const [_oldTokenLayers, packagejson, meta] = synchDetails;
+              const { tokenLayers, vectors, packagejson, meta } = getState(
+                persistedTokens,
+                persistedVectors,
+                synchDetails,
+                format,
+                allErrors,
+              );
+
               // merge them with the existing data from Github
               const newSyncDetails: RepositoryTokenLayers = [
                 { ...tokenLayers, vectors },
@@ -434,15 +461,9 @@ function createRepositoryConfigurationDialogCallback(
     );
 }
 
-function createIssueDialogCallback(
-  { collections: parsedCollections }: { collections: unknown[] },
-  format: TokenNameFormatType,
-  issues: FormatValidationResult[],
-): () => void {
-  log("debug", "BEFORE TOKENS TOKENS");
-  const collections = parsedCollections.every(isTokenCollection)
-    ? toTokenNameCollection(parsedCollections, format)
-    : [];
+function createIssueDialogCallback(state: State): () => void {
+  log("debug", "createIssueDialogCallback");
+  log("debug", { state });
   return () =>
     waitForTask(
       new Promise((resolve) => {
@@ -454,9 +475,7 @@ function createIssueDialogCallback(
         emit<IssueVisualizerHandler>(
           "PLUGIN_VIEW_ISSUE",
           JSON.stringify({
-            collections,
-            format,
-            issues,
+            state,
           }),
         );
         on<UiCloseHandler>("UI_CLOSE", () => {

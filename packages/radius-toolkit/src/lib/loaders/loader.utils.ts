@@ -13,6 +13,7 @@ export type TemplateLoaderOptions = {
  * @see TemplateRenderFunction
  */
 export type TemplateModule = {
+  name?: string;
   formatFileName?:
     | ((name: string, options: { kebabCase: boolean }) => string)
     | ((name: string) => string);

@@ -7,9 +7,12 @@ import { emit, on } from "@create-figma-plugin/utilities";
 import {
   ConfirmPushHandler,
   IssueVisualizerHandler,
+  State,
   UiCommitHandler,
   UiStateHandler,
   WidgetStateHandler,
+  isState,
+  whyIsState,
 } from "../../../apps/token-tango-widget/types/state";
 
 import { PushConfirmation } from "./components/push";
@@ -18,15 +21,10 @@ import { PushMessageType, WidgetConfiguration } from "@repo/config";
 
 import "./index.css";
 import { ValidationResult } from "./components/validation";
-import {
-  FormatValidationResult,
-  TokenNameCollection,
-  TokenNameFormatType,
-  isFormatValidationResult,
-  isTokenNameCollection,
-  isTokenNamePortableFormatType,
-} from "radius-toolkit";
+import { radiusLayerSubjectTypeFormat } from "radius-toolkit";
+
 import { createLogger } from "@repo/utils";
+import SpinningLogo from "./components/loading-icon";
 
 const log = createLogger("WEB:index");
 
@@ -40,9 +38,19 @@ const initialState: WidgetConfiguration = {
   createNewFile: false,
 };
 
+const defaultFormat = radiusLayerSubjectTypeFormat;
+
 const initialCommitState: PushMessageType = {
   branchName: "",
   commitMessage: "",
+};
+
+export const parseSerializedState = (serializedStateAndCollections: string) => {
+  const { state: parsedState } = JSON.parse(serializedStateAndCollections);
+
+  const state = isState(parsedState) ? parsedState : null;
+  log("warn", "why", state ?? whyIsState(parsedState));
+  return { state };
 };
 
 export type AppRoute =
@@ -56,9 +64,7 @@ export const App: FC = () => {
   const [route, setRoute] = useState<AppRoute>("loading");
   const [config, setConfig] = useState<WidgetConfiguration>(initialState);
   const [commit, setCommit] = useState<PushMessageType>(initialCommitState);
-  const [issues, setIssues] = useState<FormatValidationResult[]>([]);
-  const [format, setFormat] = useState<TokenNameFormatType | null>(null);
-  const [collections, setCollections] = useState<TokenNameCollection[]>([]);
+  const [state, setState] = useState<State | null>(null);
 
   // establish the initial handers for routing and updates
   useEffect(() => {
@@ -82,40 +88,28 @@ export const App: FC = () => {
 
     on<IssueVisualizerHandler>("PLUGIN_VIEW_ISSUE", (serializedState) => {
       log("warn", "PLUGIN_VIEW_ISSUE");
-      const state = JSON.parse(serializedState);
-      log("warn", "PLUGIN_VIEW_ISSUE 1");
-      const issues =
-        Array.isArray(state.issues) &&
-        state.issues.every(isFormatValidationResult)
-          ? state.issues
-          : [];
-      log("warn", "PLUGIN_VIEW_ISSUE 2");
-      const format =
-        isTokenNamePortableFormatType(state.format) && state.format;
-      log("warn", "PLUGIN_VIEW_ISSUE 3");
-      const collections =
-        Array.isArray(state.collections) &&
-        state.collections.every(isTokenNameCollection)
-          ? state.collections
-          : [];
+      const { state: parsedState } = JSON.parse(serializedState);
+      log("warn", "PLUGIN_VIEW_ISSUE", parsedState);
 
-      log("warn", "PLUGIN_VIEW_ISSUE", issues, format, collections);
+      const state = isState(parsedState) ? parsedState : null;
+      log("warn", "PLUGIN_VIEW_ISSUE", state);
       setRoute("validation");
-      setIssues(issues);
-      setFormat(format);
-      setCollections(collections);
+      setState(state);
     });
 
-    const hash = window.location.hash.substring(1);
-    if (hash === "config") {
-      setRoute("config");
-    } else if (hash === "push") {
-      setRoute("push");
-    } else if (hash === "repository") {
-      setRoute("repository");
-    } else if (hash === "validation") {
-      setRoute("validation");
-    }
+    // const hash = window.location.hash.substring(1);
+    // if (hash === "config") {
+    //   setRoute("config");
+    // } else if (hash === "push") {
+    //   setRoute("push");
+    // } else if (hash === "repository") {
+    //   setRoute("repository");
+    // } else if (hash === "validation") {
+    //   const state = isState(mockState) ? mockState : null;
+    //   log("warn", "MOCK", state);
+    //   setRoute("validation");
+    //   setState(state);
+    // }
   }, []);
 
   const updateState = (newState: WidgetConfiguration) => {
@@ -130,6 +124,8 @@ export const App: FC = () => {
 
   log("warn", "ROUTE", route);
 
+  log("debug", { state });
+
   return (
     <Fragment>
       {route === "config" ? (
@@ -141,10 +137,10 @@ export const App: FC = () => {
         />
       ) : route === "repository" ? (
         <RepositoryConfig state={config} updateState={updateState} />
-      ) : route === "validation" ? (
-        <ValidationResult {...{ collections, format, issues }} />
+      ) : route === "validation" && state !== null ? (
+        <ValidationResult state={state} />
       ) : (
-        <div>Loading</div>
+        <SpinningLogo />
       )}
     </Fragment>
   );

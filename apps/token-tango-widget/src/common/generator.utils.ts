@@ -3,33 +3,21 @@ import {
   toKebabCase,
   TokenLayer,
   TokenLayers,
-  TokenOutput,
-  getTokenType,
+  formatLayerName,
   inferVariableType,
   TokenCollection,
   TokenVariable,
   VariablesMode,
   TokenNameFormatType,
   convertVariableToToken,
-  VectorOutput,
-  isNotNil,
+  isString,
 } from "radius-toolkit";
 
 import { createLogger } from "@repo/utils";
 
 const log = createLogger("utils:generator");
 
-const DEFAULT_MODE_NAME = "Mode 1";
 export const PARAM_SECTION_NAME = "section-name";
-
-const formatLayerName = (modeName: string, description: string) => {
-  const visibleModeName = modeName !== DEFAULT_MODE_NAME ? modeName : undefined;
-  const cleanDescription = toKebabCase(description.replace(/\d+-/, ""));
-
-  return visibleModeName
-    ? `${cleanDescription}--${toKebabCase(visibleModeName)}`
-    : cleanDescription;
-};
 
 const SCREEN_SIZE_VARIABLES =
   /(screen|screens|grid)[.-/ ](minWidth|maxWidth|min[-./ ][Ww]idth|max[-./ ][Ww]idth)/;
@@ -95,4 +83,7 @@ export const isTokenLayers = (u: unknown): u is TokenLayers =>
   "order" in u &&
   "layers" in u &&
   Array.isArray(u.layers) &&
-  u.layers.every(isTokenLayer);
+  u.layers.every(isTokenLayer) &&
+  (u as TokenLayers).order.every(isString) &&
+  ((u as TokenLayers).vectors === undefined ||
+    Array.isArray((u as TokenLayers).vectors));

@@ -1,4 +1,10 @@
-import React, { Ref, SVGProps, forwardRef } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+import React, { FC, Ref, SVGProps, forwardRef } from "react";
 
 export const ChevronDownIcon = forwardRef<SVGSVGElement, SVGProps<{}>>(
   (props, ref: Ref<SVGSVGElement>) => (
@@ -150,3 +156,129 @@ export const FileAddIcon = forwardRef<SVGSVGElement, SVGProps<{}>>(
     </svg>
   )
 );
+
+export const AddedIcon = forwardRef<SVGSVGElement, SVGProps<{}>>(
+  (props, ref: Ref<SVGSVGElement>) => (
+    <svg
+      {...props}
+      ref={ref}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width="16"
+      height="16"
+    >
+      <rect
+        x="4"
+        y="4"
+        width="16"
+        height="16"
+        rx="2"
+        ry="2"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      />
+      <line
+        x1="12"
+        y1="8"
+        x2="12"
+        y2="16"
+        stroke="currentColor"
+        stroke-width="2"
+      />
+      <line
+        x1="8"
+        y1="12"
+        x2="16"
+        y2="12"
+        stroke="currentColor"
+        stroke-width="2"
+      />
+    </svg>
+  )
+);
+
+export const RemovedIcon = forwardRef<SVGSVGElement, SVGProps<{}>>(
+  (props, ref: Ref<SVGSVGElement>) => (
+    <svg
+      {...props}
+      ref={ref}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width="16"
+      height="16"
+    >
+      <rect
+        x="4"
+        y="4"
+        width="16"
+        height="16"
+        rx="2"
+        ry="2"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      />
+      <line
+        x1="8"
+        y1="12"
+        x2="16"
+        y2="12"
+        stroke="currentColor"
+        stroke-width="2"
+      />
+    </svg>
+  )
+);
+
+export const ModifiedIcon = forwardRef<SVGSVGElement, SVGProps<{}>>(
+  (props, ref: Ref<SVGSVGElement>) => (
+    <svg
+      {...props}
+      ref={ref}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width="16"
+      height="16"
+    >
+      <rect
+        x="4"
+        y="4"
+        width="16"
+        height="16"
+        rx="2"
+        ry="2"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      />
+      <circle cx="12" cy="12" r="2" fill="currentColor" />
+    </svg>
+  )
+);
+
+export const ChangeIcon: FC<{
+  changeType: "added" | "modified" | "deleted" | undefined;
+  label?: string;
+}> = ({ changeType, label }) =>
+  changeType && (
+    <Tooltip>
+      <TooltipTrigger>
+        {
+          {
+            added: <AddedIcon className="mr-1 text-green-500" />,
+            modified: <ModifiedIcon className="mr-1 text-blue-500" />,
+            deleted: <RemovedIcon className="mr-1 text-red-500" />,
+          }[changeType]
+        }
+      </TooltipTrigger>
+      <TooltipContent>
+        {label ??
+          {
+            added: "Added",
+            modified: "Modified",
+            deleted: "Deleted",
+          }[changeType]}
+      </TooltipContent>
+    </Tooltip>
+  );

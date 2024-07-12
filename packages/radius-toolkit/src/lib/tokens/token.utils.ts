@@ -77,9 +77,11 @@ export const toTokenName = (
   const getType = inferVariableType(format);
   return (variable: TokenVariable, idx: number): TokenName => {
     const variableValues = findVariableValueInAllModes(modes, idx);
+    const isAlias = Object.values(variableValues).some((v) => "alias" in v);
     return {
       name: variable.name.replaceAll("/", format.separator),
       type: getType(variable),
+      isAlias,
       values: variableValues,
     };
   };
@@ -92,8 +94,8 @@ const findVariableValueInAllModes = (modes: VariablesMode[], idx: number) => {
       if (!variable) return acc;
       return {
         ...acc,
-        [mode.name]: isVariableAlias(variable.value)
-          ? { alias: variable.value.id.replaceAll("/", ".") }
+        [mode.name]: variable.alias
+          ? { alias: variable.alias.replaceAll("/", ".") }
           : { value: variable.value },
       };
     },

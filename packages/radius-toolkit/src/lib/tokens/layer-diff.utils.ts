@@ -1,10 +1,9 @@
 import semver from "semver";
-import { TokenLayers } from "radius-toolkit";
-import { n } from "vitest/dist/reporters-P7C2ytIv.js";
+import { TokenLayers } from "./token-parser.types";
 
-export const listLayers = ({ order }: TokenLayers) => order;
-
-export const indexAllVariables = ({ layers }: TokenLayers) => {
+export const indexAllVariables = <T extends Pick<TokenLayers, "layers">>({
+  layers,
+}: T) => {
   const allVariables = layers.flatMap(({ variables }) => variables);
   return allVariables.reduce(
     (acc, variable) => {
@@ -15,19 +14,20 @@ export const indexAllVariables = ({ layers }: TokenLayers) => {
           }
         : { ...acc, [variable.name]: variable.value };
     },
-    {} as Record<string, string>,
+    {} as Record<string, string>
   );
 };
 
 export const diffTokenLayers = (
   newLayers: TokenLayers,
-  oldLayers: TokenLayers,
+  oldLayers: TokenLayers | undefined
 ) => {
+  const layersToCompare = oldLayers ?? { layers: [] };
   const left = indexAllVariables(newLayers);
-  const right = indexAllVariables(oldLayers);
+  const right = indexAllVariables(layersToCompare);
   const onlyLeft = Object.keys(left).filter((n) => !right[n]);
   const leftValues = Object.keys(left).filter(
-    (n) => right[n] && left[n] !== right[n],
+    (n) => right[n] && left[n] !== right[n]
   );
   const onlyRight = Object.keys(right).filter((n) => !left[n]);
   return [onlyLeft, leftValues, onlyRight] as const;
@@ -43,7 +43,7 @@ const bumpStrategies: BumpStrategy = (version) =>
 
 export const semVerBump = (
   version: string,
-  changes: [additions: boolean, modifications: boolean, breaking: boolean],
+  changes: [additions: boolean, modifications: boolean, breaking: boolean]
 ): string => {
   const [additions, modifications, breaking] = changes;
 
@@ -53,7 +53,7 @@ export const semVerBump = (
       !change || acc !== version
         ? acc
         : semver.inc(version, bump(idx as 0 | 1 | 2)) ?? version,
-    version,
+    version
   );
 };
 

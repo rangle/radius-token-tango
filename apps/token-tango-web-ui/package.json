@@ -9,6 +9,7 @@
     "lint:fix": "eslint --ext .ts,.tsx --ignore-pattern node_modules --fix .",
     "tsc": "tsc --noEmit -p widget-src",
     "dev": "pnpm run build --watch",
+    "serve": "npx http-server dist --port 8080",
     "test": "vitest",
     "generate:component": "turbo gen react-component"
   },
@@ -27,7 +28,8 @@
     "tailwindcss": "^3.4.4",
     "typescript": "^5.4.5",
     "vite": "^5.2.12",
-    "vite-plugin-singlefile": "^2.0.1"
+    "vite-plugin-singlefile": "^2.0.1",
+    "vitest": "^1.4.0"
   },
   "dependencies": {
     "@create-figma-plugin/ui": "^3.1.0",
@@ -42,6 +44,7 @@
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
+    "@radix-ui/react-tabs": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.1",
     "@repo/utils": "workspace:*",
     "class-variance-authority": "^0.7.0",

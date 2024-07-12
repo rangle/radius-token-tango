@@ -64,19 +64,12 @@ export const validateTokenCollection = (
 
   log("debug", "validateTokenCollection 2", allTokens.length);
 
-  log(
-    "debug",
-    "validateTokenCollection 2.5",
-    allTokens
-      .filter(isNotNil)
-      .filter((t) => /semantic.focus.color.innerline/.test(t.name)).length,
-  );
-
   const tokenResults = allTokens.reduce<TokenValidationResult[]>(
     (issues, token) => {
       const tokenName: TokenName = {
         name: token.name.replaceAll("/", format.separator) ?? "",
         type: token.type,
+        isAlias: !!token.alias,
       };
       const [errors, warnings] = validateTokens(tokenName.name, tokenName.type);
 

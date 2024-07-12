@@ -18,6 +18,7 @@ export type TokenValue =
 export type TokenName = {
   name: string;
   type: string;
+  isAlias: boolean;
   values?: Record<string, TokenValue>;
 };
 

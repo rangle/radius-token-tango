@@ -8,7 +8,8 @@ export type RoundButtonProps = {
   label?: string;
 } & BaseProps &
   TextChildren &
-  IconProps;
+  IconProps &
+  AutoLayoutProps;
 
 const colorScheme = {
   default: ["#232323", "#FFFFFF"],
@@ -59,6 +60,7 @@ export const RoundButton: FunctionalWidget<RoundButtonProps> = ({
         >
           {label ?? children}
         </Text>
+        {label ? children : null}
       </AutoLayout>
     </AutoLayout>
   );

@@ -1,5 +1,4 @@
-import { semVerBump } from "../../common/layer-diff.utils";
-import { FormatValidationResult } from "radius-toolkit";
+import { FormatValidationResult, semVerBump } from "radius-toolkit";
 import { Icon16px, IconProps } from "./icon";
 import { RoundButton } from "./round-button";
 import { TokenChangeBar } from "./token-change-bar";
@@ -13,20 +12,22 @@ const { Frame, Text, AutoLayout, useSyncedState } = widget;
 
 export type PushPanelProps = {
   diff: [string[], string[], string[]];
-  errors: [FormatValidationResult[], FormatValidationResult[]];
+  issues: [FormatValidationResult[], FormatValidationResult[]];
   previousVersion: string;
   reloadTokens: () => void;
   pushTokens: (branch: string, message: string, version: string) => void;
+  openIssues: () => void;
 } & BaseProps &
   TextChildren;
 
 export const PushPanel: FunctionalWidget<PushPanelProps> = ({
   children,
   diff,
-  errors,
+  issues,
   previousVersion,
   reloadTokens,
   pushTokens,
+  openIssues,
   ...props
 }) => {
   const [ignoreIssues, setIgnoreIssues] = useSyncedState<boolean>(
@@ -38,7 +39,7 @@ export const PushPanel: FunctionalWidget<PushPanelProps> = ({
     false,
   );
   const [added, modified, deleted] = diff;
-  const [addedErrs, modifiedErrs] = errors;
+  const [addedErrs, modifiedErrs] = issues;
 
   const newVersion = semVerBump(previousVersion, [
     added.length > 0,
@@ -90,6 +91,7 @@ export const PushPanel: FunctionalWidget<PushPanelProps> = ({
             variant="start"
             tokensChanged={added}
             issues={addedErrs}
+            openIssues={openIssues}
           />
           <TokenChangeBar
             name="ModifiedTokens"
@@ -97,29 +99,32 @@ export const PushPanel: FunctionalWidget<PushPanelProps> = ({
             variant="default"
             tokensChanged={modified}
             issues={modifiedErrs}
+            openIssues={openIssues}
           />
           <TokenChangeBar
             name="DeletedTokens"
             changeType="deleted"
             variant="end"
             tokensChanged={deleted}
+            openIssues={openIssues}
             issues={[]}
           />
         </AutoLayout>
+      </AutoLayout>
+      <AutoLayout spacing={8} direction="vertical">
         <CheckBox
           label="Ignore issues and publish anyway"
           checked={ignoreIssues}
           setChecked={setIgnoreIssues}
         />
+        {deleted.length === 0 && (
+          <CheckBox
+            label="Manually bump version"
+            checked={manuallyBump}
+            setChecked={setManuallyBump}
+          />
+        )}
       </AutoLayout>
-
-      {deleted.length === 0 && (
-        <CheckBox
-          label="Manually bump version"
-          checked={manuallyBump}
-          setChecked={setManuallyBump}
-        />
-      )}
       <AutoLayout padding={8} horizontalAlignItems={"center"}>
         <VersionBump from={previousVersion} to={newVersion} />
       </AutoLayout>
@@ -140,12 +145,6 @@ export const PushPanel: FunctionalWidget<PushPanelProps> = ({
           horizontalAlignItems="center"
           verticalAlignItems="end"
         >
-          <LgButton
-            name="CheckAgainButton"
-            icon="refresh"
-            label="Check again"
-            onClick={() => reloadTokens()}
-          ></LgButton>
           <LgButton
             label="Push to Github"
             name="PushToGithubButton"

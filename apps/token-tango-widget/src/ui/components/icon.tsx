@@ -35,10 +35,17 @@ const iconSrc = {
 `,
 
   variables: `
-  <svg width='14' height='16' viewBox='0 0 14 16' fill='none' xmlns='http://www.w3.org/2000/svg'>
-  <path fill-rule='evenodd' clip-rule='evenodd' d='M7 0L14 4.00044V11.9978L7 16L0 11.9978V4.00044L7 0ZM1.76589 5.00886V10.9911L7 13.9814L12.2341 10.9911V5.00711L7 2.01857L1.76589 5.00886Z' fill='#262626'/>
-  <path d='M8.6383 7.70368C8.6383 8.68679 7.83762 9.48146 6.85107 9.48146C5.86451 9.48146 5.06383 8.68679 5.06383 7.70368C5.06383 6.72235 5.86451 5.9259 6.85107 5.9259C7.83762 5.9259 8.6383 6.72235 8.6383 7.70368Z' fill='#262626'/>
-  </svg>
+<svg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'>
+<g clip-path='url(#clip0_1029_1414)'>
+<path fill-rule='evenodd' clip-rule='evenodd' d='M8 -0.0200195L15 3.98042V11.9778L8 15.98L1 11.9778V3.98042L8 -0.0200195ZM2.76589 4.98884V10.9711L8 13.9614L13.2341 10.9711V4.98709L8 1.99855L2.76589 4.98884Z' fill='white'/>
+<path d='M10 7.97998C10 9.08598 9.104 9.97998 8.00001 9.97998C6.896 9.97998 6 9.08598 6 7.97998C6 6.87599 6.896 5.97998 8.00001 5.97998C9.104 5.97998 10 6.87599 10 7.97998Z' fill='white'/>
+</g>
+<defs>
+<clipPath id='clip0_1029_1414'>
+<rect width='16' height='16' fill='white'/>
+</clipPath>
+</defs>
+</svg>
 `,
 
   tokens: `
@@ -101,9 +108,8 @@ const iconSrc = {
 <path fill-rule="evenodd" clip-rule="evenodd" d="M5 5V19H19V12H21V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H12V5H5ZM14 5V3H21V10H19V6.41L9.17 16.24L7.76 14.83L17.59 5H14Z" fill="#262626"/>
 </svg>
 `,
-  tune: `
-svg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'>
-<path fill-rule='evenodd' clip-rule='evenodd' d='M12 6H14V4H18V2H14V0H12V6ZM4 6V8H0V10H4V12H6V6H4ZM10 16V18H8V12H10V14H18V16H10ZM0 16V14H6V16H0ZM18 8V10H8V8H18ZM10 2H0V3.99H10V2Z' fill='white'/>
+  tune: `<svg width='16' height='12' viewBox='0 0 16 12' fill='none' xmlns='http://www.w3.org/2000/svg'>
+<path d='M2 10H4V8H2V10ZM6 10V12H4H2H0V10V8V6H2H4H6V8H15H16V10H15H6ZM1 4H0V2H1H10V0H12H14H16V2V4V6H14H12H10V4H1ZM14 4V2H12V4H14Z' fill='white'/>
 </svg>`,
   image: `
 <svg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -120,6 +126,72 @@ svg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.
 <path fill-rule='evenodd' clip-rule='evenodd' d='M14 0H12V2H14V0ZM22 8H20V10H22V8ZM22 12H20V14H22V12ZM20 16H22C22 17 21 18 20 18V16ZM20 4H22V6H20V4ZM20 0V2H22C22 1 21 0 20 0ZM10 12V18H2C0.9 18 0 17.1 0 16V12H10ZM2 4H0V6H2V4ZM12 16H14V18H12V16ZM18 0H16V2H18V0ZM16 16H18V18H16V16ZM2 0C1 0 0 1 0 2H2V0ZM0 8H2V10H0V8ZM10 0H8V2H10V0ZM4 0H6V2H4V0Z' fill='#262626'/>
 </svg>
 `,
+  star: `svg width='18' height='16' viewBox='0 0 18 16' fill='none' xmlns='http://www.w3.org/2000/svg'>
+<path d='M9.00332 0L11.7064 5.125L17.4158 6.1125L13.3752 10.2656L14.2002 16L9.00332 13.4438L3.80332 16L4.62832 10.2656L0.59082 6.1125L6.29707 5.125L9.00332 0Z' fill='white'/>
+</svg>`,
+  changeAdded: `
+ <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24">
+      <rect 
+        x="4" 
+        y="4"
+        width="16"
+        height="16"
+        rx="2"
+        ry="2"
+        fill="none"
+        stroke="currentColor"
+      />
+      <line
+        x1="12"
+        y1="8"
+        x2="12"
+        y2="16"
+        stroke="currentColor"
+      />
+      <line
+        x1="8"
+        y1="12"
+        x2="16"
+        y2="12"
+        stroke="currentColor"
+      />
+    </svg>`,
+  changeRemoved: `
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+      <rect
+        x="4"
+        y="4"
+        width="16"
+        height="16"
+        rx="2"
+        ry="2"
+        fill="none"
+        stroke="currentColor"
+      />
+      <line
+        x1="8"
+        y1="12"
+        x2="16"
+        y2="12"
+        stroke="currentColor"
+      />
+    </svg>
+  `,
+  changeModified: `
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+      <rect
+        x="4"
+        y="4"
+        width="16"
+        height="16"
+        rx="2"
+        ry="2"
+        fill="none"
+        stroke="currentColor"
+      />
+      <circle cx="12" cy="12" r="2" fill="currentColor" />
+    </svg>
+  `,
 };
 
 export type IconType = keyof typeof iconSrc;

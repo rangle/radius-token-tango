@@ -10,7 +10,6 @@ export type VariableBulletProps = {
   issues?: TokenValidationResult[];
   separator?: string;
   variant?: "default" | "compact";
-  onClick?: () => void;
   icon?: IconProps["icon"];
 } & BaseProps &
   AutoLayoutProps &
@@ -22,12 +21,10 @@ export const VariableBullet: FunctionalWidget<VariableBulletProps> = ({
   issues = [],
   separator = ".",
   variant = "default",
-  onClick,
   icon,
   children,
   ...props
 }) => {
-  const { bg } = onClick ? colorTokens.active : colorTokens.base;
   const segments = name.split(".");
   const iconSelection = icon || ("variables" as const);
   const errorSegments = issues.flatMap(
@@ -36,7 +33,6 @@ export const VariableBullet: FunctionalWidget<VariableBulletProps> = ({
   return (
     <AutoLayout
       name="FormatBullet"
-      stroke={bg}
       cornerRadius={16}
       height={24}
       verticalAlignItems="center"
@@ -45,7 +41,6 @@ export const VariableBullet: FunctionalWidget<VariableBulletProps> = ({
     >
       <AutoLayout
         name="Spacer"
-        fill={bg}
         overflow="visible"
         spacing={10}
         padding={{
@@ -58,12 +53,10 @@ export const VariableBullet: FunctionalWidget<VariableBulletProps> = ({
       {variant !== "compact" && (
         <AutoLayout
           name="TokenType"
-          fill={bg}
           overflow="visible"
           spacing={4}
           padding={4}
           verticalAlignItems="center"
-          onClick={onClick}
         >
           <Icon16px
             icon={iconSelection}
@@ -76,10 +69,9 @@ export const VariableBullet: FunctionalWidget<VariableBulletProps> = ({
         <>
           <AutoLayout
             name="Layer"
-            stroke="#EFEFEF"
             overflow="visible"
             spacing={4}
-            padding={4}
+            padding={0}
             height="fill-parent"
             verticalAlignItems="center"
           >
@@ -95,11 +87,10 @@ export const VariableBullet: FunctionalWidget<VariableBulletProps> = ({
           {idx < segments.length - 1 && (
             <AutoLayout
               name="Dot"
-              fill="#FFF"
               overflow="visible"
               spacing={4}
               padding={{
-                vertical: 4,
+                vertical: 2,
                 horizontal: 0,
               }}
               height="fill-parent"

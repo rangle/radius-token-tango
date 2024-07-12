@@ -119,7 +119,7 @@ export type CompositeLeafTypography = {
 export type TokenLayer = {
   variables: TokenOutput[];
   name: string;
-  parameters: Record<string, string | undefined>;
+  parameters: Record<string, string | number | undefined>;
   dependencies: string[];
   isStatic: boolean;
 };

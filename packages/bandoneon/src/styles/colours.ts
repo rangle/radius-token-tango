@@ -53,7 +53,7 @@ export const success = {
   bg: "#00b012",
   fg: "#ffffff",
   info: "#696969",
-  muted: "#dadada",
+  muted: "#defadd",
 } as const;
 
 export const colors = {
@@ -66,4 +66,5 @@ export const colors = {
   repository,
   library,
   active,
+  success,
 } as const;
