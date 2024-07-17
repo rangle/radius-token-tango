@@ -2,6 +2,7 @@ import { Command } from "commander";
 import { version } from "../package.json";
 import { registerGenerateCommand } from "./cli/generate";
 import { registerValidateCommand } from "./cli/validate";
+import { registerExtractCommand } from "./cli/extract";
 
 const program = new Command();
 
@@ -12,5 +13,6 @@ program
 
 registerGenerateCommand(program);
 registerValidateCommand(program);
+registerExtractCommand(program);
 
 program.parse(process.argv);

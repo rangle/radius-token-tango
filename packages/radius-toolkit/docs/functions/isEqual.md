@@ -24,4 +24,4 @@
 
 ## Defined in
 
-[lib/tokens/token-parser.utils.ts:41](https://github.com/rangle/radius-token-tango/blob/0fa25351e79af51a833bcebadbd83e27a9791a4f/packages/radius-toolkit/src/lib/tokens/token-parser.utils.ts#L41)
+[lib/tokens/token-parser.utils.ts:51](https://github.com/rangle/radius-token-tango/blob/5b6e6f5adbda55f8c41a4c8308d1d8885a9b9a2f/packages/radius-toolkit/src/lib/tokens/token-parser.utils.ts#L51)

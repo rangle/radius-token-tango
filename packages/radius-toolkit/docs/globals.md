@@ -1,6 +1,6 @@
-[**radius-toolkit**](../README.md) • **Docs**
+[**radius-toolkit**](README.md) • **Docs**
 
----
+***
 
 # radius-toolkit
 
@@ -16,6 +16,8 @@
 
 - [BasicReference](type-aliases/BasicReference.md)
 - [BoxShadowDefinition](type-aliases/BoxShadowDefinition.md)
+- [BumpStrategy](type-aliases/BumpStrategy.md)
+- [BumpType](type-aliases/BumpType.md)
 - [ComponentTokens](type-aliases/ComponentTokens.md)
 - [ComponentUsage](type-aliases/ComponentUsage.md)
 - [CompositeLeafBoxShadow](type-aliases/CompositeLeafBoxShadow.md)
@@ -40,6 +42,9 @@
 - [ServiceOptions](type-aliases/ServiceOptions.md)
 - [SingleTokenReference](type-aliases/SingleTokenReference.md)
 - [SystemOperations](type-aliases/SystemOperations.md)
+- [TemplateLoader](type-aliases/TemplateLoader.md)
+- [TemplateLoaderOptions](type-aliases/TemplateLoaderOptions.md)
+- [TemplateModule](type-aliases/TemplateModule.md)
 - [TemplateOptions](type-aliases/TemplateOptions.md)
 - [TemplateRenderFunction](type-aliases/TemplateRenderFunction.md)
 - [TokenCollection](type-aliases/TokenCollection.md)
@@ -67,19 +72,23 @@
 - [TokenTypeName](type-aliases/TokenTypeName.md)
 - [TokenUse](type-aliases/TokenUse.md)
 - [TokenValidationResult](type-aliases/TokenValidationResult.md)
+- [TokenValue](type-aliases/TokenValue.md)
 - [TokenVariable](type-aliases/TokenVariable.md)
 - [VariableResolvedDataType](type-aliases/VariableResolvedDataType.md)
 - [VariableValue](type-aliases/VariableValue.md)
 - [VariablesMode](type-aliases/VariablesMode.md)
+- [VectorFile](type-aliases/VectorFile.md)
+- [VectorOutput](type-aliases/VectorOutput.md)
 
 ## Variables
 
-- [PARAM_SCREEN_MAX_WIDTH](variables/PARAM_SCREEN_MAX_WIDTH.md)
-- [PARAM_SCREEN_MIN_WIDTH](variables/PARAM_SCREEN_MIN_WIDTH.md)
-- [PARAM_SECTION_NAME](variables/PARAM_SECTION_NAME.md)
-- [SPECIAL_LAYER_VARIABLES](variables/SPECIAL_LAYER_VARIABLES.md)
-- [THIS_IS_A_CONSTANT](variables/THIS_IS_A_CONSTANT.md)
-- [TYPOGRAPHY_TOKEN_PROPS](variables/TYPOGRAPHY_TOKEN_PROPS.md)
+- [DEFAULT\_MODE\_NAME](variables/DEFAULT_MODE_NAME.md)
+- [PARAM\_SCREEN\_MAX\_WIDTH](variables/PARAM_SCREEN_MAX_WIDTH.md)
+- [PARAM\_SCREEN\_MIN\_WIDTH](variables/PARAM_SCREEN_MIN_WIDTH.md)
+- [PARAM\_SECTION\_NAME](variables/PARAM_SECTION_NAME.md)
+- [SPECIAL\_LAYER\_VARIABLES](variables/SPECIAL_LAYER_VARIABLES.md)
+- [THIS\_IS\_A\_CONSTANT](variables/THIS_IS_A_CONSTANT.md)
+- [TYPOGRAPHY\_TOKEN\_PROPS](variables/TYPOGRAPHY_TOKEN_PROPS.md)
 - [defaultOptions](variables/defaultOptions.md)
 - [formatNames](variables/formatNames.md)
 - [formats](variables/formats.md)
@@ -93,15 +102,20 @@
 
 - [calculateSubjectsFromProps](functions/calculateSubjectsFromProps.md)
 - [combineComponentUsage](functions/combineComponentUsage.md)
+- [convertVariableToToken](functions/convertVariableToToken.md)
 - [createReplaceFunction](functions/createReplaceFunction.md)
 - [createValidatorFunctions](functions/createValidatorFunctions.md)
 - [createValidators](functions/createValidators.md)
+- [diffTokenLayers](functions/diffTokenLayers.md)
 - [formatKey](functions/formatKey.md)
+- [formatLayerName](functions/formatLayerName.md)
+- [formatReference](functions/formatReference.md)
 - [getFormat](functions/getFormat.md)
 - [getTokenType](functions/getTokenType.md)
 - [globalValidationError](functions/globalValidationError.md)
 - [globalValidationWarning](functions/globalValidationWarning.md)
 - [hasParameters](functions/hasParameters.md)
+- [indexAllVariables](functions/indexAllVariables.md)
 - [inferVariableType](functions/inferVariableType.md)
 - [invertGroupedObject](functions/invertGroupedObject.md)
 - [isArray](functions/isArray.md)
@@ -136,7 +150,9 @@
 - [isTokenTypeName](functions/isTokenTypeName.md)
 - [isTokenUse](functions/isTokenUse.md)
 - [isTokenValidationResult](functions/isTokenValidationResult.md)
+- [isVariableAlias](functions/isVariableAlias.md)
 - [isVariableReference](functions/isVariableReference.md)
+- [isVectorOutput](functions/isVectorOutput.md)
 - [noop](functions/noop.md)
 - [parseData](functions/parseData.md)
 - [processKeyName](functions/processKeyName.md)
@@ -145,9 +161,13 @@
 - [renderKey](functions/renderKey.md)
 - [renderName](functions/renderName.md)
 - [renderOtherKey](functions/renderOtherKey.md)
+- [renderSimpleKey](functions/renderSimpleKey.md)
+- [renderValue](functions/renderValue.md)
 - [ruleSet](functions/ruleSet.md)
+- [semVerBump](functions/semVerBump.md)
 - [splitBy](functions/splitBy.md)
 - [toKebabCase](functions/toKebabCase.md)
+- [toTokenName](functions/toTokenName.md)
 - [toTokenNameCollection](functions/toTokenNameCollection.md)
 - [validationError](functions/validationError.md)
 - [validationResult](functions/validationResult.md)

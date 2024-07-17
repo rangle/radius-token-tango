@@ -27,7 +27,7 @@ export const registerValidateCommand = (program: Command) => {
       "Checks if a token name is valid. list error messages and warnings if it is not."
     )
     .action(async (name: string, options: ValidateOptions) => {
-      console.log(name, options);
+      // console.log(name, options);
       const [validateTokenName] = createValidators(options.format);
       console.log(validateTokenName(name, ""));
     });

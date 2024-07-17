@@ -90,7 +90,7 @@ export const ValidationResult: FC<ValidationResultProps> = ({ state }) => {
       filterLibraryState(
         collectionEntries,
         vectorCollectionEntries,
-        searchTerm,
+        searchTerm ? searchTerm.toLowerCase() : "",
         showOnlyChanges
       ),
     [collectionEntries, vectorCollectionEntries, searchTerm, showOnlyChanges]

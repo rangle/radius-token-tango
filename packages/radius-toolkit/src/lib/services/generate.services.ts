@@ -1,14 +1,7 @@
-import {
-  parseData,
-  TemplateRenderFunction,
-  ServiceOptions,
-  SystemOperations,
-} from "../exporting";
+import { parseData, ServiceOptions, SystemOperations } from "../exporting";
 import { createReplaceFunction } from "../tokens/token-parser.utils";
 import { GeneratorMappingDictionary } from "../tokens/token-parser.types";
-import { builtInTemplates } from "../../templates/exporting";
-import { loadTemplateModule } from "./service.utils";
-import { TemplateModule } from "../loaders/loader.utils";
+import { TemplateModule } from "../loaders/loader.types";
 
 /**
  * reads the tokens from a source

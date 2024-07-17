@@ -176,7 +176,14 @@ export const toCollectionEntries = (state: State): CollectionEntry[] => {
 export const diffVectors = (a: VectorOutput[], b: VectorOutput[]) => {
   const added = a.filter((v) => !b.some((bv) => bv.name === v.name));
   const modified = a.filter((v) =>
-    b.some((bv) => bv.name === v.name && bv.source !== v.source)
+    b.some(
+      (bv) =>
+        bv.name === v.name &&
+        (bv.source !== v.source ||
+          bv.description !== v.description ||
+          Object.entries(bv.properties).join() !==
+            Object.entries(v.properties).join())
+    )
   );
   const deleted = b.filter((v) => !a.some((av) => av.name === v.name));
   return [added, modified, deleted] as const;

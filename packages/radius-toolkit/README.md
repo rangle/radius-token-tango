@@ -75,6 +75,8 @@ npx radius-toolkit generate <tokens-file.json> <options>
 
 Generates assets (CSS, Tailwind Configuration) from the tokens file.
 
+for more details, refer to the [CLI documentation for the command](./src/cli/generate/README.md).
+
 #### Validate Tokens
 
 ```bash
@@ -82,6 +84,8 @@ npx radius-toolkit validate <tokens-file.json> <options>
 ```
 
 Validates the tokens in the specified tokens file.
+
+for more details, refer to the [CLI documentation for the command](./src/cli/validate/README.md).
 
 ## Validation Formats
 

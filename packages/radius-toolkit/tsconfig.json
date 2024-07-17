@@ -17,8 +17,14 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    "paths": {
+      // externalized templates need to import the library by name
+      "radius-toolkit": ["./src/index.ts"]
+    }
   },
+
   /* Monorepo */
   "composite": true,
 

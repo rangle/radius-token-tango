@@ -310,17 +310,17 @@ export const rules = ruleSet({
     validate: (
       collections: TokenNameCollection[]
     ): TokenGlobalRuleValidationResult => {
-      console.log("RULE: attributes-used-sparingly 1");
+      // console.log("RULE: attributes-used-sparingly 1");
       const flatCollectionOfTokens = collections.reduce(
         (acc, collection) => [...acc, ...collection.tokens],
         [] as TokenNameCollection["tokens"]
       );
-      console.log("RULE: attributes-used-sparingly 2", flatCollectionOfTokens);
+      // console.log("RULE: attributes-used-sparingly 2", flatCollectionOfTokens);
       const maxNumberOfSegments = Math.max(
         0,
         ...flatCollectionOfTokens.map((token) => token.name.split(".").length)
       );
-      console.log("RULE: attributes-used-sparingly 3", maxNumberOfSegments);
+      // console.log("RULE: attributes-used-sparingly 3", maxNumberOfSegments);
 
       if (maxNumberOfSegments < 4) return [];
 
@@ -331,10 +331,10 @@ export const rules = ruleSet({
             i + 4,
             collections
           );
-          console.log(
-            "RULE: attributes-used-sparingly 4",
-            tokensByFirstNSegments
-          );
+          // console.log(
+          //   "RULE: attributes-used-sparingly 4",
+          //   tokensByFirstNSegments
+          // );
           return Object.entries(tokensByFirstNSegments)
             .filter(([_, { count }]) => count === 1)
             .map(
@@ -343,10 +343,10 @@ export const rules = ruleSet({
             );
         })
         .flat();
-      console.log(
-        "RULE: attributes-used-sparingly 5",
-        indistinguisedAttributes
-      );
+      // console.log(
+      //   "RULE: attributes-used-sparingly 5",
+      //   indistinguisedAttributes
+      // );
       return indistinguisedAttributes.length === 0
         ? []
         : globalValidationWarning(

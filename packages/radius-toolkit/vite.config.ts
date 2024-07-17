@@ -11,7 +11,7 @@ export default defineConfig({
       formats: ["es", "cjs"],
     },
     rollupOptions: {
-      external: [],
+      external: ["radius-toolkit"],
       output: {
         globals: {},
       },

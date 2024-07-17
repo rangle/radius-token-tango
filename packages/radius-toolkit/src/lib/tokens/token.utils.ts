@@ -6,7 +6,6 @@ import {
 } from "../formats";
 import { ComponentUsage, TokenCollection, VariablesMode } from "./token.types";
 import { TokenVariable } from "./token.types";
-import { isVariableAlias } from "./variable.types";
 
 export const isNotNil = <T>(o: T | null | undefined): o is T => !!o;
 

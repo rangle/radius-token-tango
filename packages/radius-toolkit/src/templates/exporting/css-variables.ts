@@ -1,14 +1,13 @@
-/*
-   TEMPLATE FOR CSS VARIABLES
+/**
+   STANDARD TEMPLATE FOR GENERATING CSS VARIABLES
    Generates a CSS file with all the variables in the library
+   in a single css file
 */
-import { toKebabCase } from "../../lib";
 import {
+  toKebabCase,
   TemplateRenderFunction,
   defaultOptions,
   isNotIgnoredLayer,
-} from "../../lib/exporting";
-import {
   PARAM_SECTION_NAME,
   PARAM_SCREEN_MIN_WIDTH,
   PARAM_SCREEN_MAX_WIDTH,
@@ -17,12 +16,78 @@ import {
   isExpression,
   TokenOutput,
   TokenLayer,
-} from "../../lib/tokens";
+} from "../../lib";
+// NOTE: replace relative import with "radius-toolkit" if you are using this template in your project
 
+/*
+  Exports 3 symbols to conform type TemplateModule:
+  - name: string
+  - formatFileName: (name: string, options: { kebabCase: boolean }) => string
+  - render: TemplateRenderFunction
+*/
+
+/** Name of the Template */
+export const name = "css-variables";
+
+/**
+ * Generates the file name for the output file
+ * @param name original name of the source file
+ * @param options options for generating the file name
+ * @returns formatted file name
+ */
 export const formatFileName = (
   name: string,
   options: { kebabCase: boolean }
 ) => (options.kebabCase ? `${toKebabCase(name)}.css` : `${name}.css`);
+
+/**
+ * Renders the template for generating CSS variables
+ * @param data data to be rendered
+ * @param options options for rendering the template
+ * @returns a buffer with the rendered content
+ */
+export const render: TemplateRenderFunction = (
+  { order, layers },
+  options = defaultOptions
+) => {
+  const ignoreLayers = options.ignoreLayers ?? defaultOptions.ignoreLayers;
+  const processValue = options.processValue ?? defaultOptions.processValue;
+
+  const effectiveLayers = layers.filter(isNotIgnoredLayer(ignoreLayers));
+
+  return Buffer.from(`
+@layer ${order.join()},defaultLayers;
+
+@layer defaultLayers {
+  /* Generated to allow the site to have defaults derived by Designer decisions */
+  :root {
+    --defaultLayers: ${getDefaultLayerCssClasses(effectiveLayers).join(" ")};
+  }
+}
+
+${effectiveLayers
+  .map(
+    ({ name, variables, parameters, dependencies }) => `
+
+@layer ${name} {
+  ${layerWrapper(
+    { ...parameters, name },
+    dependencies,
+    variables
+      .map(convertVariableReferences)
+      .map(convertExpressions)
+      .map(({ key, value }) => `${key}: ${processValue(key, value)};`)
+      .join("\n    ")
+  )}
+}`
+  )
+  .join("")}
+  `);
+};
+
+/* 
+   Utility functions
+*/
 
 /** Wraps the template for either `:root` or the different `dependencies` */
 const forEachDependency = (
@@ -116,45 +181,6 @@ const convertExpressions = (token: TokenOutput): TokenOutput =>
 const getDefaultLayerCssClasses = (layers: TokenLayer[]) => {
   return layers.flatMap(({ name, parameters }) => {
     const sectionName = parameters[PARAM_SECTION_NAME] ?? name;
-    return sectionName ? toKebabCase(sectionName) : [];
+    return sectionName ? toKebabCase(String(sectionName)) : [];
   });
-};
-
-export const render: TemplateRenderFunction = (
-  { order, layers },
-  options = defaultOptions
-) => {
-  const ignoreLayers = options.ignoreLayers ?? defaultOptions.ignoreLayers;
-  const processValue = options.processValue ?? defaultOptions.processValue;
-
-  const effectiveLayers = layers.filter(isNotIgnoredLayer(ignoreLayers));
-
-  return Buffer.from(`
-@layer ${order.join()},defaultLayers;
-
-@layer defaultLayers {
-  /* Generated to allow the site to have defaults derived by Designer decisions */
-  :root {
-    --defaultLayers: ${getDefaultLayerCssClasses(effectiveLayers).join(" ")};
-  }
-}
-
-${effectiveLayers
-  .map(
-    ({ name, variables, parameters, dependencies }) => `
-
-@layer ${name} {
-  ${layerWrapper(
-    { ...parameters, name },
-    dependencies,
-    variables
-      .map(convertVariableReferences)
-      .map(convertExpressions)
-      .map(({ key, value }) => `${key}: ${processValue(key, value)};`)
-      .join("\n    ")
-  )}
-}`
-  )
-  .join("")}
-  `);
 };
