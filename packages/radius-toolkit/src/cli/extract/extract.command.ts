@@ -16,7 +16,7 @@ export const registerExtractCommand = (program: Command) => {
     .argument("<templateName>", "Name of the template to extract")
     .addOption(
       new Option(
-        "-o, --output-dir <DIR>",
+        "-O, --output-dir <DIR>",
         "Directory to extract the template to"
       ).default("./extracted-templates")
     )
