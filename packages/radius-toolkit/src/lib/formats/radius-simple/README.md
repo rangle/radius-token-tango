@@ -48,7 +48,7 @@ const validateTokenName = createValidator({ format: "radius-simple" });
 
 // Example usage:
 const tokenName = "color.primaryBackground";
-console.log(validateTokenName(tokenName)); // Output: true
+console.log(validateTokenName(tokenName)); // Output: : [errors: TokenNameIssue[], warnings: TokenNameIssue[]]
 ```
 
 ## Detailed Rules

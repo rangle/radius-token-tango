@@ -2,6 +2,9 @@ import { parseData, ServiceOptions, SystemOperations } from "../exporting";
 import { createReplaceFunction } from "../tokens/token-parser.utils";
 import { GeneratorMappingDictionary } from "../tokens/token-parser.types";
 import { TemplateModule } from "../loaders/loader.types";
+import { createLogger } from "../utils/logging.utils";
+
+const log = createLogger("service:generate");
 
 /**
  * reads the tokens from a source
@@ -23,7 +26,7 @@ const readTokens = async (
   if ("stdin" in source) {
     return readStdin();
   }
-  console.warn("NO SOURCE SPECIFIED");
+  log("warn", "NO SOURCE SPECIFIED");
   return Buffer.from("");
 };
 
@@ -47,7 +50,7 @@ const writeTarget = async (
   if ("stdout" in target) {
     return writeToStdout(buffer);
   }
-  console.warn("NO TARGET SPECIFIED");
+  log("warn", "NO TARGET SPECIFIED");
 };
 
 const loadGeneratorMappingModule = async (
@@ -67,7 +70,7 @@ const loadGeneratorMappingModule = async (
  */
 
 export const loadGeneratorMappings = (templateName: string) => {
-  console.warn("LOADING GENERATOR MAPPINGS for", templateName);
+  log("warn", "LOADING GENERATOR MAPPINGS for", templateName);
   const mapping = [
     `./mapping/${templateName}-generator`,
     `./mapping/all-generator`,
@@ -109,6 +112,6 @@ export const generateFileService = async (
     )
     .then((buffer) => writeTarget(operations, target, buffer))
     .catch((e) => {
-      console.error("ERROR:", e);
+      log("error", "ERROR:", e);
     });
 };

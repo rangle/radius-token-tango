@@ -2,6 +2,9 @@ import { Command, Option } from "commander";
 import { mkdir, copyFile, access } from "node:fs/promises";
 import path from "path";
 import { asyncFind } from "../../lib/utils/common.utils";
+import { createLogger } from "../../lib/utils/logging.utils";
+
+const logger = createLogger("cli:extract");
 
 type ExtractTemplateOptions = {
   outputDir: string;
@@ -31,14 +34,18 @@ export const registerExtractCommand = (program: Command) => {
         await mkdir(outputDir, { recursive: true });
 
         const destPath = path.join(outputDir, path.basename(templatePath));
-        console.log("DEST", templatePath, destPath);
+        logger("info", "DEST", templatePath, destPath);
         await copyFile(templatePath, destPath);
 
-        console.log(
+        logger(
+          "info",
           `Template '${templateName}' has been extracted to ${destPath}`
         );
       } catch (error) {
-        console.error(`Error extracting template: ${(error as Error).message}`);
+        logger(
+          "error",
+          `Error extracting template: ${(error as Error).message}`
+        );
         process.exit(1);
       }
     });
@@ -55,10 +62,10 @@ async function findTemplatePath(templateName: string): Promise<string | null> {
     (await asyncFind(possiblePaths, async (path) => {
       try {
         await access(path); // user can access the file
-        console.log("FOUND", path);
+        logger("debug", "FOUND", path);
         return true;
       } catch {
-        console.log("NOT FOUND", path);
+        logger("debug", "NOT FOUND", path);
         return false;
       }
     })) ?? null

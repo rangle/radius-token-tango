@@ -1,5 +1,8 @@
 import { Command, Option } from "commander";
 import { createValidators, formatNames } from "../../lib";
+import { createLogger } from "../../lib/utils/logging.utils";
+
+const log = createLogger("cli:validate");
 
 type ValidateOptions = {
   format: (typeof formatNames)[number];
@@ -27,8 +30,8 @@ export const registerValidateCommand = (program: Command) => {
       "Checks if a token name is valid. list error messages and warnings if it is not."
     )
     .action(async (name: string, options: ValidateOptions) => {
-      // console.log(name, options);
+      log("debug", name, options);
       const [validateTokenName] = createValidators(options.format);
-      console.log(validateTokenName(name, ""));
+      log("info", validateTokenName(name, ""));
     });
 };

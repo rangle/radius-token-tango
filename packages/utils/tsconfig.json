@@ -23,5 +23,10 @@
   "composite": true,
 
   /* Include only the source files */
-  "include": ["./*.ts", "../radius-toolkit/src/lib/tokens/layer-diff.test.ts", "../radius-toolkit/src/lib/tokens/layer-diff.utils.ts"]
+  "include": [
+    "./*.ts",
+    "../radius-toolkit/src/lib/tokens/layer-diff.test.ts",
+    "../radius-toolkit/src/lib/tokens/layer-diff.utils.ts",
+    "../radius-toolkit/src/lib/utils/logging.utils.ts"
+  ]
 }

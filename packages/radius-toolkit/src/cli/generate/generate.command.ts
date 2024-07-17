@@ -5,6 +5,10 @@ import { systemOperations } from "../system.utils";
 import { generateFileService } from "../../lib/services/generate.services";
 import { Command, Option } from "commander";
 
+import { createLogger } from "../../lib/utils/logging.utils";
+
+const log = createLogger("cli:generate");
+
 export type GenerateOptions = {
   template: string;
   customTemplate?: string;
@@ -40,7 +44,7 @@ export const registerGenerateCommand = (program: Command) => {
     .addOption(new Option("-o, --output <OUTPUT>", "Output file"))
     .description("Generate outputs from design tokens")
     .action(async (fileName: string, options: GenerateOptions) => {
-      //  console.log("debug", "Generating outputs...", options);
+      log("debug", "Generating outputs...", options);
       const templateModule = await loadTemplateModule(
         options.customTemplate ?? options.template,
         {
@@ -58,7 +62,7 @@ export const registerGenerateCommand = (program: Command) => {
         templateModule.formatFileName?.(fileName, { kebabCase: true }) ??
         `${fileName}.${options.template}`;
 
-      console.log("SAVING: ", outputFile);
+      log("info", "SAVING: ", outputFile);
 
       return await generateFileService(templateModule, {
         source: { fileName },

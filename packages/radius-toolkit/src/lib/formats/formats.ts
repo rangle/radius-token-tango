@@ -7,6 +7,10 @@ import {
   isTokenNameRule,
 } from "./format.types";
 
+import { createLogger } from "../utils/logging.utils";
+
+const log = createLogger("lib:formats");
+
 export const formats = [
   radiusLayerSubjectTypeFormat,
   radiusSimpleFormat,
@@ -70,7 +74,10 @@ export const createValidatorFunctions = (format: TokenNameFormatType) => {
   const [globalRules, rules] = splityGlobalRules(allRules);
 
   return [
-    function validateTokenName(tokenName: string, tokenType: string) {
+    function validateTokenName(
+      tokenName: string,
+      tokenType: string
+    ): [errors: TokenNameIssue[], warnings: TokenNameIssue[]] {
       const [errors, warnings] = rules.reduce<
         [TokenNameIssue[], TokenNameIssue[]]
       >(
@@ -89,19 +96,22 @@ export const createValidatorFunctions = (format: TokenNameFormatType) => {
         },
         [[], []] as [TokenNameIssue[], TokenNameIssue[]]
       );
-      return [errors, warnings];
+      return [errors, warnings] as const;
     },
-    function validateTokenCollections(tokenCollections: TokenNameCollection[]) {
-      console.log("validating token collections", tokenCollections.length);
+    function validateTokenCollections(
+      tokenCollections: TokenNameCollection[]
+    ): [errors: TokenNameIssue[], warnings: TokenNameIssue[]] {
+      log("debug", "validating token collections", tokenCollections.length);
       const [errors, warnings] = globalRules.reduce<
         [TokenGlobalIssue[], TokenGlobalIssue[]]
       >(
         (acc, rule) => {
-          console.log("validating global rule", rule);
+          log("debug", "validating global rule", rule);
           const [errors, warnings] = acc;
           const [message, isWarning, offendingSegments] =
             rule.validate(tokenCollections);
-          console.log(
+          log(
+            "debug",
             "global rule result",
             message,
             isWarning,
@@ -116,7 +126,7 @@ export const createValidatorFunctions = (format: TokenNameFormatType) => {
         },
         [[], []] as [TokenGlobalIssue[], TokenGlobalIssue[]]
       );
-      return [errors, warnings];
+      return [errors, warnings] as const;
     },
   ] as const;
 };

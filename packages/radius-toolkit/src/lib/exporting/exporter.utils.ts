@@ -1,4 +1,7 @@
 import { GeneratorMappingFunction, TokenLayer, TokenLayers } from "../tokens";
+import { createLogger } from "../utils/logging.utils";
+
+const log = createLogger("lib:exporter");
 
 /**
  * A type to be used to inject system operations into the services
@@ -12,9 +15,9 @@ export type SystemOperations = {
 
 // converts the buffer to JSON and parse it
 export const parseData = (input: Buffer) => {
-  console.warn("PARSING JSON DATA");
+  log("info", "PARSING JSON DATA");
   const fileDataAsString = input.toString();
-  console.warn(` read ${fileDataAsString.length} bytes`);
+  log("info", `read ${fileDataAsString.length} bytes`);
   return JSON.parse(fileDataAsString);
 };
 

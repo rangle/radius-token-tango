@@ -86,7 +86,7 @@ const validateTokenName = createValidator({
 
 // Example usage:
 const tokenName = "primitive.color.primaryBackground";
-console.log(validateTokenName(tokenName)); // Output: true
+console.log(validateTokenName(tokenName)); // Output: : [errors: TokenNameIssue[], warnings: TokenNameIssue[]]
 ```
 
 ## Contributing

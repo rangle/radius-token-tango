@@ -6,6 +6,9 @@ import {
 } from "../formats";
 import { ComponentUsage, TokenCollection, VariablesMode } from "./token.types";
 import { TokenVariable } from "./token.types";
+import { createLogger } from "../utils/logging.utils";
+
+const log = createLogger("lib:tokens");
 
 export const isNotNil = <T>(o: T | null | undefined): o is T => !!o;
 
@@ -24,7 +27,7 @@ export const inferVariableType =
   (format: TokenNameFormatType) =>
   (variable: TokenVariable): string => {
     if (!format) {
-      console.warn("no format selected");
+      log("warn", "no format selected");
       return variable.type;
     }
     // from type and name

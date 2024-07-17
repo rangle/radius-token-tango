@@ -2,6 +2,9 @@ import { TemplateLoader, TemplateModule } from "../loaders/loader.types";
 import { installedModuleLoader } from "../loaders/installed.loader";
 import { internalTemplateLoader } from "../loaders/internal.loader";
 import { relativeLoader } from "../loaders/relative.loader";
+import { createLogger } from "../utils/logging.utils";
+
+const log = createLogger("services:template");
 
 const prioritizedLoaders = [
   relativeLoader,
@@ -25,7 +28,7 @@ export const loadTemplateModule: TemplateLoader<TemplateModule> = async (
         return (await result) ?? loader(templateId, options);
       } catch (error) {
         // Log error and continue to next loader
-        console.log("Loader failed:", (error as Error).message);
+        log("error", "Loader failed:", (error as Error).message);
         return null;
       }
     },
