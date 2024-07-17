@@ -100,7 +100,7 @@ export const createValidatorFunctions = (format: TokenNameFormatType) => {
     },
     function validateTokenCollections(
       tokenCollections: TokenNameCollection[]
-    ): [errors: TokenNameIssue[], warnings: TokenNameIssue[]] {
+    ): [errors: TokenGlobalIssue[], warnings: TokenGlobalIssue[]] {
       log("debug", "validating token collections", tokenCollections.length);
       const [errors, warnings] = globalRules.reduce<
         [TokenGlobalIssue[], TokenGlobalIssue[]]
