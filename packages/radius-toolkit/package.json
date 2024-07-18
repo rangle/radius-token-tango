@@ -1,6 +1,6 @@
 {
   "name": "radius-toolkit",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "A toolkit for handling design tokens",
   "main": "dist/lib/radius-toolkit.cjs.js",
   "module": "dist/lib/radius-toolkit.es.js",
@@ -18,7 +18,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rangle/radius-token-tango/tree/main/packages/radius-toolkit"
+    "url": "https://github.com/rangle/radius-token-tango"
   },
   "bugs": {
     "url": "https://github.com/rangle/radius-token-tango/issues"
