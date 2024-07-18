@@ -61,7 +61,7 @@ const validationResult = validate(tokenData);
 const output = generateFileService("templateName", { tokens: tokenData });
 ```
 
-For more details, refer to the [API documentation](packages/radius-toolkit/docs/globals.md).
+For more details, refer to the [API documentation](/packages/radius-toolkit/docs/globals.md).
 
 ### CLI
 
@@ -75,7 +75,7 @@ npx radius-toolkit generate <tokens-file.json> <options>
 
 Generates assets (CSS, Tailwind Configuration) from the tokens file.
 
-for more details, refer to the [CLI documentation for the command](packages/radius-toolkit/src/cli/generate/README.md).
+for more details, refer to the [CLI documentation for the command](/packages/radius-toolkit/src/cli/generate/README.md).
 
 #### Validate Tokens
 
@@ -85,7 +85,7 @@ npx radius-toolkit validate <tokens-file.json> <options>
 
 Validates the tokens in the specified tokens file.
 
-for more details, refer to the [CLI documentation for the command](packages/radius-toolkit/src/cli/validate/README.md).
+for more details, refer to the [CLI documentation for the command](/packages/radius-toolkit/src/cli/validate/README.md).
 
 ## Validation Formats
 
@@ -93,13 +93,13 @@ for more details, refer to the [CLI documentation for the command](packages/radi
 
 The `radius-simple` design token name validator ensures that design tokens follow a consistent and simple naming convention, especially useful in scenarios where all tokens belong to a single token collection. This format is ideal for cases without semantic aliases, although it can still be used in such cases with meaningful names to clearly distinguish between primitive and semantic tokens.
 
-More details can be found [here](packages/radius-toolkit/src/lib/formats/radius-simple).
+More details can be found [here](/packages/radius-toolkit/src/lib/formats/radius-simple).
 
 ### Radius Layer Subject Type
 
 The `radius-layer-subject-type` design token name format ensures that design tokens follow a consistent naming convention as the complexity of the token layer increases. This format is ideal for scenarios where multiple modes and layers of aliases are needed, ensuring clarity and distinction among various types of tokens.
 
-More details can be found [here](packages/radius-toolkit/src/lib/formats/radius-layer-subject-type).
+More details can be found [here](/packages/radius-toolkit/src/lib/formats/radius-layer-subject-type).
 
 To use these formats:
 
@@ -124,7 +124,7 @@ Currently, the library and CLI do not support custom formats and templates. Thes
 
 ## Contributing
 
-We welcome contributions to Radius Toolkit. Please see the [CONTRIBUTING.md](packages/radius-toolkit/CONTRIBUTING.md) file for more details.
+We welcome contributions to Radius Toolkit. Please see the [CONTRIBUTING.md](/packages/radius-toolkit/CONTRIBUTING.md) file for more details.
 
 ## License
 
