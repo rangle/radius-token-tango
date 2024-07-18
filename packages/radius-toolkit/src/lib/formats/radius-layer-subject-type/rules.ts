@@ -111,7 +111,7 @@ export const rules = ruleSet({
       "The subject segment is mandatory for semantic or component tokens but absent in primitive tokens. Subjects should be the second segment, that can be any name, but not a type.",
     validate: (name: string) => {
       const segments = name.split(".");
-      const isPrimitive = segments.length <= 4;
+      const isPrimitive = isPrimitiveToken(name);
       const [_layer, subject] = segments;
       return isPrimitive || (!!subject && !getTokenType(subject))
         ? validationResult(true)
@@ -126,7 +126,7 @@ export const rules = ruleSet({
       "The fourth segment and subsequent segments can be anything the designers want to use to distinguish tokens.",
     validate: (name: string) => {
       const segments = name.split(".");
-      const isPrimitive = segments.length <= 4;
+      const isPrimitive = isPrimitiveToken(name);
       const hasAttributes = segments.length > 3;
       return isPrimitive || hasAttributes
         ? validationResult(true)

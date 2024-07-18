@@ -7,6 +7,11 @@ export type RuleTest<T extends string = string> = {
   warnings?: (keyof TokenRuleSet<T>)[];
 };
 
+/**
+ * automatically runs a set of test cases for a given rule set
+ * @param tokenNameTests list of test cases to run
+ */
+
 export const ruleTestValues = <T extends string>(
   tokenNameTests: RuleTest<T>[]
 ) => {
@@ -19,7 +24,7 @@ export const ruleTestValues = <T extends string>(
       }
       tokenNameTests.forEach((tokenNameTest) => {
         const { input, errors, warnings } = tokenNameTest;
-        test(`Rule ${ruleName} should validate ${input}`, () => {
+        test(`Rule '${ruleName}' should validate '${input}'`, () => {
           const [ok, msg] = rule.validate(input, "");
           if (!ok) {
             expect(errors, "to expect errors").toBeTruthy();
@@ -33,13 +38,13 @@ export const ruleTestValues = <T extends string>(
           } else {
             const err = errors?.find((e) => e === ruleName);
             const warn = warnings?.find((e) => e === ruleName);
+
             expect(err, "to expect no errors").toBeFalsy();
             if (warn) {
               expect(warn, "to have the correct warning").toBe(ruleName);
             } else {
               expect(msg, "to have no warnings").toBeFalsy();
             }
-            expect(ok, "to have passed").toBe(true);
           }
         });
       });

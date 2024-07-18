@@ -71,7 +71,6 @@ export const testInvalidValues = ruleTestValues<keyof typeof rules>([
       "minimum-three-segments",
       "consistent-type-naming",
       "layer-as-first-segment",
-      "attribute-segments",
     ],
   },
   {

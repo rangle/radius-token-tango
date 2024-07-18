@@ -16,6 +16,14 @@
   ],
   "author": "Jason Santos <jason.santos@rangle.io>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rangle/radius-token-tango/tree/main/packages/radius-toolkit"
+  },
+  "bugs": {
+    "url": "https://github.com/rangle/radius-token-tango/issues"
+  },
+  "homepage": "https://radius.rangle.io/products/radius-token-tango",
   "scripts": {
     "docs": "typedoc --out docs src",
     "dev": "vite",
@@ -24,7 +32,7 @@
     "build:lib": "vite build",
     "build:cli": "vite build --config vite.config.cli.ts && chmod +x dist/cli/cli.cjs.js",
     "test": "vitest",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "pnpm run build && pnpm run type-check && pnpm run test"
   },
   "devDependencies": {
     "@types/semver": "^7.5.8",
