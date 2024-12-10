@@ -285,7 +285,8 @@ export const filterLibraryState = (
         tokens: filteredTokens,
       };
     })
-    .filter((collection) => collection.tokens.length > 0);
+    .filter((collection) => collection.tokens.length > 0)
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   const totalNumOfTokens = filteredCollections.reduce(
     (acc, collection) => acc + collection.tokens.length,

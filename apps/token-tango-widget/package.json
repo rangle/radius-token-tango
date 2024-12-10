@@ -1,6 +1,6 @@
 {
   "name": "@repo/widget",
-  "version": "0.9.0",
+  "version": "0.10.0-alpha",
   "description": "Radius Token Tango -- a Figma widget to Synchronize Design Tokens between Figma and Code",
   "type": "module",
   "scripts": {

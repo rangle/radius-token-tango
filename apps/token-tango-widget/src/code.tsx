@@ -39,6 +39,7 @@ import { SuccessfullyPushedDetails } from "./ui/components/success-panel";
 import { createLogger } from "@repo/utils";
 import {
   isComponent,
+  isComponentSet,
   isComposite,
   isFrame,
   isInstance,
@@ -153,25 +154,49 @@ export function Widget() {
   const renderLayer = async (
     node: SceneNode,
     parent: string | undefined = undefined,
+    isVariant: boolean = false,
   ): Promise<LayerRender[]> => {
+    console.log("RENDERING LAYER", node.name, parent, node.type);
     const result: LayerRender[] = [];
     if (!isComposite(node)) {
       log("debug", "Not a composite node", node.name, parent, node.type);
       return result;
     }
+    // this is a component or an instance therefore an individual vector
     if (isComponent(node) || isInstance(node)) {
+      console.log(
+        "BEFORE RENDERING LAYER",
+        node,
+        isComponent(node),
+        isInstance(node),
+        isVariant,
+      );
+
       const source = await node.exportAsync({ format: "SVG_STRING" });
 
-      const properties = isComponent(node)
-        ? Object.entries(node.componentPropertyDefinitions).reduce(
-            (acc, [name, { defaultValue }]) => {
-              return { ...acc, [removeSuffix(name)]: String(defaultValue) };
-            },
-            {} as Record<string, string>,
-          )
-        : node.variantProperties ?? {};
+      console.log(
+        "AFTER EXPORTING",
+        node.name,
+        source,
+        isComponent(node),
+        isVariant,
+      );
 
+      console.log("VARIANT PROPERTIES", node.variantProperties);
+
+      const properties =
+        isComponent(node) && !isVariant
+          ? getPropertyDefinitions(node, removeSuffix)
+          : node.variantProperties ?? {};
+
+      console.log("AFTER RENDERING LAYER", node.name, "properties", properties);
       const description = isComponent(node) ? node.description : "";
+      console.log(
+        "AFTER RENDERING LAYER",
+        node.name,
+        "description",
+        description,
+      );
 
       result.push({
         name: node.name,
@@ -182,6 +207,9 @@ export function Widget() {
       });
       return result;
     }
+
+    console.log("FINISHED LOADING", result.length, "items");
+    // this is also an individual vector wrapped in a frame
     if (isFrame(node) && node.children.every(isVector)) {
       const source = await node.exportAsync({ format: "SVG_STRING" });
       result.push({
@@ -193,12 +221,17 @@ export function Widget() {
       });
       return result;
     }
+
+    // if this is a layer with children, we need to render each child
     if (node.children) {
+      console.log("OBJECT WITH CHILDREN", node.name, node.children.length);
+      const isThisAComponentSet = isComponentSet(node);
+      console.log("IS COMPONENT SET", isThisAComponentSet);
       await Promise.all(
         node.children.map(async (child) => {
-          const childResult = (await renderLayer(child, node.name)).filter(
-            (r) => (Array.isArray(r) ? r.length > 0 : r),
-          );
+          const childResult = (
+            await renderLayer(child, node.name, isThisAComponentSet)
+          ).filter((r) => (Array.isArray(r) ? r.length > 0 : r));
           result.push(...childResult);
         }),
       );
@@ -332,6 +365,27 @@ export function Widget() {
 }
 
 widget.register(Widget);
+
+function getPropertyDefinitions(
+  node: ComponentNode,
+  removeSuffix: (name: string) => string,
+) {
+  console.log("[getPropertyDefinitions] GETTING PROPS FROM", node.name);
+  try {
+    return Object.entries(node.componentPropertyDefinitions).reduce(
+      (acc, [name, { defaultValue }]) => {
+        return { ...acc, [removeSuffix(name)]: String(defaultValue) };
+      },
+      {} as Record<string, string>,
+    );
+  } catch (e) {
+    console.error(
+      `[getPropertyDefinitions] Error getting props from ${node.name}`,
+      e,
+    );
+    throw e;
+  }
+}
 
 async function loadVariables(
   format: TokenNameFormatType,
