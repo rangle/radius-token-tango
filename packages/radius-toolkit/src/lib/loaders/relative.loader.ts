@@ -5,7 +5,7 @@ import { createLogger } from "../utils/logging.utils";
 
 const log = createLogger("loader:relative");
 
-const jitiLoader = jiti(__filename, { interopDefault: true });
+export const jitiLoader = jiti(__filename, { interopDefault: true });
 
 const moduleCache: Map<string, TemplateModule> = new Map();
 
@@ -24,7 +24,7 @@ const loadModule = (modulePath: string): TemplateModule | null => {
   }
 };
 
-const findValidModule = (paths: string[]): TemplateModule | null =>
+export const findValidModule = (paths: string[]): TemplateModule | null =>
   paths.length === 0
     ? null
     : loadModule(paths[0]) ?? findValidModule(paths.slice(1));

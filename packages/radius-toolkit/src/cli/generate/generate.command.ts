@@ -64,12 +64,16 @@ export const registerGenerateCommand = (program: Command) => {
 
       log("info", "SAVING: ", outputFile);
 
-      return await generateFileService(templateModule, {
-        source: { fileName },
-        target: {
-          fileName: outputFile,
+      return await generateFileService(
+        templateModule,
+        {
+          source: { fileName },
+          target: {
+            fileName: outputFile,
+          },
+          operations: systemOperations,
         },
-        operations: systemOperations,
-      });
+        pwd
+      );
     });
 };
