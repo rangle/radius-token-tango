@@ -96,6 +96,7 @@ export const createReplaceFunction = (
   mapping: GeneratorMappingDictionary[string]
 ): GeneratorMappingFunction => {
   const items = mapping || [];
+
   const replacingFunctions = items.flatMap((item) => {
     if (isGeneratorMappingSpecificDictionaryItem(item)) {
       const [tokenRegex, specificItems] = item;
