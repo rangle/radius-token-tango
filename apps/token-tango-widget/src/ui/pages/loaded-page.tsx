@@ -2,7 +2,6 @@ const { widget } = figma;
 const { AutoLayout, Text, useSyncedState } = widget;
 
 import { NameFormat } from "../components/name-format";
-import { LoadedTokens } from "../../code";
 import { Icon16px } from "../components/icon";
 import {
   TokenIssuesSummary,
@@ -28,6 +27,7 @@ import {
 import { createLogger } from "@repo/utils";
 import { RepositoryTokenLayers } from "../../../types/state";
 import { Fragment } from "preact";
+import { LoadedTokens } from "../../types/widget-types";
 
 const log = createLogger("pages:loaded");
 
