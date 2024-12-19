@@ -52,9 +52,10 @@ const getPackageJson = async (client: GithubClient, options: GithubOptions) => {
   const [tokenFilePath, packageFileDetails] =
     await client.getFileInPreviousPath(options.tokenFilePath, "package.json");
   log("debug", ">>", "getPackageJson 2", tokenFilePath);
-  if (!packageFileDetails)
-    throw new Error("Cannot find package.json in the repository");
-
+  if (!packageFileDetails) {
+    log("error", ">>>", "package.json not found!");
+    return [undefined, undefined] as const;
+  }
   if (!isGithubFileDetails(packageFileDetails)) {
     log("debug", "PACKAGE.JSON UNKNOWN FORMAT:", packageFileDetails);
     return [undefined, tokenFilePath] as const;
@@ -84,10 +85,17 @@ export const fetchRepositoryTokenLayers = async (options: GithubOptions) => {
   log("debug", "fetchRepositoryTokenLayers 1");
   const client = createGithubRepositoryClient(options.credentials);
   log("debug", "fetchRepositoryTokenLayers 2");
-  const [packagejson, tokenFilePath, packageFileDetails] = await getPackageJson(
-    client,
-    options,
-  );
+    const [packagejson, tokenFilePath, packageFileDetails] = await getPackageJson(
+        client,
+        options,
+    );
+
+    if (!packagejson) {
+      log("error", "fetchRepositoryTokenLayers 2.1", "instruct user to create a package.json file in their repo");
+      throw new Error(
+          "package.json file not found, must be a Node repository",
+      );
+    }
 
   const tokenFileDetails = await client
     .getFileDetailsByPath(tokenFilePath, options.branch)

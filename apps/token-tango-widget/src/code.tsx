@@ -483,9 +483,14 @@ function synchRepository(
         return setSynchDetails(details);
       })
       .catch((e: unknown) => {
-        log("debug", "synchronizing...ERROR!");
-        setErrorMessage("Error Synchronizing with Git repository");
-        updateConfiguration("Error Synchronizing with Git repository");
+        if (e instanceof Error) {
+          setErrorMessage("Error Synchronizing with Git repository, " + e.message);
+          updateConfiguration("Error Synchronizing with Git repository, " + e.message);
+        }
+        else {
+          setErrorMessage("Error Synchronizing with Git repository");
+          updateConfiguration("Error Synchronizing with Git repository");
+        }
         console.error(e);
       });
   };
