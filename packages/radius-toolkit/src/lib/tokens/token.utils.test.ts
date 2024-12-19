@@ -5,11 +5,21 @@ import {
   combineComponentUsage,
 } from "./token.utils";
 import { ComponentUsage } from "./token.types";
-import { getFormat, radiusLayerSubjectTypeFormat } from "../formats";
+import {
+  getFormat,
+  radiusLayerSubjectTypeFormat,
+  toTokenNameFormatType,
+} from "../formats";
 
 describe("calculateSubjectsFromProps", () => {
+  const format = getFormat("radius-layer-subject-type");
+  if (!format) {
+    throw new Error("Format not found");
+  }
+  const formatType = toTokenNameFormatType(format);
+
   const getSubjects = calculateSubjectsFromProps(
-    getFormat("radius-layer-subject-type") ?? radiusLayerSubjectTypeFormat
+    formatType ?? radiusLayerSubjectTypeFormat
   );
 
   it("should return an array of subjects from component props", () => {
@@ -38,9 +48,12 @@ describe("inferVariableType", () => {
       value: "#FF0000",
       type: "color",
     };
-    const getTokenType = inferVariableType(
-      getFormat("radius-layer-subject-type") ?? radiusLayerSubjectTypeFormat
-    );
+    const format = getFormat("radius-layer-subject-type");
+    if (!format) {
+      throw new Error("Format not found");
+    }
+    const formatType = toTokenNameFormatType(format);
+    const getTokenType = inferVariableType(formatType);
     const type = getTokenType(variable);
     expect(type).toBe("color");
   });

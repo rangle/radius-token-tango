@@ -6,8 +6,6 @@ export const installedModuleLoader: TemplateLoader = async (
 ) => {
   if (templateId.startsWith(".")) return null;
   try {
-    // console.log("internalTemplateLoader", templateId);
-
     const module = await import(templateId);
     if (!("render" in module)) return null;
     return module as TemplateModule;

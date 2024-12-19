@@ -1,3 +1,4 @@
+import { toKebabCase } from "../formats/format.utils";
 import {
   TokenOutput,
   JSONStructure,
@@ -5,8 +6,7 @@ import {
   GeneratorMappingFunction,
   isGeneratorMappingSpecificDictionaryItem,
   isString,
-} from "./token-parser.types.js";
-import { toKebabCase } from "../formats";
+} from "./token-parser.types";
 
 export const DEFAULT_MODE_NAME = "Mode 1";
 export const formatLayerName = (modeName: string, description: string) => {

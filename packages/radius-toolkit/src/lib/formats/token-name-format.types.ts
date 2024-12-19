@@ -1,52 +1,108 @@
 export const tokenTypeNames = [
-  // Responsiveness
-  "screens",
-  "supports",
-  "data",
-
-  // Reusable base configs
+  // Core Design Tokens (Primitive Values)
   "colors",
   "spacing",
 
-  // Components
+  // Layout & Responsive Patterns
+  "screens",
   "container",
+  "supports",
+  "data",
 
-  // Utilities
+  // Spacing Derivatives
+  "padding",
+  "margin",
+  "gap",
+  "space",
   "inset",
-  "zIndex",
-  "order",
+  "scrollMargin",
+  "scrollPadding",
+
+  // Sizing & Dimensions
+  "width",
+  "minWidth",
+  "maxWidth",
+  "height",
+  "minHeight",
+  "maxHeight",
+  "aspectRatio",
+
+  // Grid System
   "gridColumn",
   "gridColumnStart",
   "gridColumnEnd",
   "gridRow",
   "gridRowStart",
   "gridRowEnd",
+  "gridAutoColumns",
+  "gridAutoRows",
+  "gridTemplateColumns",
+  "gridTemplateRows",
+  "columns",
 
-  "aspectRatio",
-
-  "height",
-  "maxHeight",
-  "minHeight",
-  "width",
-  "maxWidth",
-  "minWidth",
-
-  "gap",
-
-  "backgroundColor",
-
-  "fill",
-  "stroke",
-
-  "padding",
-  "margin",
-
+  // Flexbox
   "flex",
   "flexShrink",
   "flexGrow",
   "flexBasis",
 
+  // Positioning & Stacking
+  "zIndex",
+  "order",
+
+  // Colors & Opacity Derivatives
+  "backgroundColor",
+  "backgroundOpacity",
+  "borderColor",
+  "borderOpacity",
+  "textColor",
+  "textOpacity",
+  "placeholderColor",
+  "placeholderOpacity",
+  "ringColor",
+  "ringOpacity",
+  "divideColor",
+  "divideOpacity",
+  "boxShadowColor",
+  "outlineColor",
+  "ringOffsetColor",
+  "caretColor",
+  "accentColor",
+  "opacity",
+  "fill",
+  "stroke",
+
+  // Typography
+  "fontFamily",
+  "fontSize",
+  "fontWeight",
+  "lineHeight",
+  "letterSpacing",
+  "textIndent",
+  "textDecorationColor",
+  "textDecorationThickness",
+  "textUnderlineOffset",
+  "listStyleType",
+
+  // Borders & Outlines
+  "borderRadius",
+  "borderWidth",
   "borderSpacing",
+  "outlineWidth",
+  "outlineOffset",
+  "ringWidth",
+  "ringOffsetWidth",
+  "divideWidth",
+  "strokeWidth",
+
+  // Backgrounds & Images
+  "backgroundImage",
+  "gradientColorStops",
+  "backgroundSize",
+  "backgroundPosition",
+  "objectPosition",
+
+  // Transforms & Animations
   "transformOrigin",
   "translate",
   "rotate",
@@ -54,59 +110,8 @@ export const tokenTypeNames = [
   "scale",
   "animation",
   "keyframes",
-  "cursor",
-  "scrollMargin",
-  "scrollPadding",
-  "listStyleType",
-  "columns",
-  "gridAutoColumns",
-  "gridAutoRows",
-  "gridTemplateColumns",
-  "gridTemplateRows",
-  "space",
-  "divideWidth",
-  "divideColor",
-  "divideOpacity",
 
-  "borderRadius",
-  "borderWidth",
-  "borderColor",
-  "borderOpacity",
-  "backgroundOpacity",
-  "backgroundImage",
-  "gradientColorStops",
-  "backgroundSize",
-  "backgroundPosition",
-  "strokeWidth",
-  "objectPosition",
-
-  "textIndent",
-  "fontFamily",
-  "fontSize",
-  "fontWeight",
-  "lineHeight",
-  "letterSpacing",
-  "textColor",
-  "textOpacity",
-  "textDecorationColor",
-  "textDecorationThickness",
-  "textUnderlineOffset",
-
-  "placeholderColor",
-  "placeholderOpacity",
-  "caretColor",
-  "accentColor",
-  "opacity",
-  "boxShadow",
-  "boxShadowColor",
-  "outlineWidth",
-  "outlineOffset",
-  "outlineColor",
-  "ringWidth",
-  "ringColor",
-  "ringOpacity",
-  "ringOffsetWidth",
-  "ringOffsetColor",
+  // Filters & Effects
   "blur",
   "brightness",
   "contrast",
@@ -116,6 +121,9 @@ export const tokenTypeNames = [
   "invert",
   "saturate",
   "sepia",
+  "boxShadow",
+
+  // Backdrop Filters
   "backdropBlur",
   "backdropBrightness",
   "backdropContrast",
@@ -125,10 +133,15 @@ export const tokenTypeNames = [
   "backdropOpacity",
   "backdropSaturate",
   "backdropSepia",
+
+  // Transitions & Animations
   "transitionProperty",
   "transitionTimingFunction",
   "transitionDelay",
   "transitionDuration",
+
+  // Miscellaneous
+  "cursor",
   "willChange",
   "content",
   "aria",
@@ -152,9 +165,14 @@ export type TokenNameDescription = {
 const isTokenType = (t: unknown): t is TokenTypeName =>
   tokenTypeNames.indexOf(t as TokenTypeName) !== -1;
 
-export const getTokenType = (t: unknown): TokenTypeName | undefined =>
-  isTokenType(t)
-    ? t
-    : (t as keyof typeof tokenTypeAliases) in tokenTypeAliases
-      ? (tokenTypeAliases[t as keyof typeof tokenTypeAliases] as TokenTypeName)
-      : undefined;
+export const getTokenType = (t: unknown): TokenTypeName | undefined => {
+  if (isTokenType(t)) {
+    return t;
+  }
+  if ((t as keyof typeof tokenTypeAliases) in tokenTypeAliases) {
+    return tokenTypeAliases[
+      t as keyof typeof tokenTypeAliases
+    ] as TokenTypeName;
+  }
+  return undefined;
+};
