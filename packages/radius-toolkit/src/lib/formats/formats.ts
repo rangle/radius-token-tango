@@ -3,8 +3,10 @@ import { radiusLayerSubjectTypeFormat } from "./radius-layer-subject-type";
 import {
   TokenNameCollection,
   TokenNameFormatType,
+  TokenNamePortableFormatType,
   isTokenGlobalNameRule,
   isTokenNameRule,
+  toTokenNameFormatType,
 } from "./format.types";
 
 import { createLogger } from "../utils/logging.utils";
@@ -22,7 +24,7 @@ export const formatNames: FormatName[] = formats.map((format) => format.name);
 
 export const getFormat = (
   formatName: FormatName
-): TokenNameFormatType | undefined => {
+): TokenNamePortableFormatType | undefined => {
   return formats.find((format) => format.name === formatName);
 };
 
@@ -31,7 +33,8 @@ export const createValidators = (formatName: FormatName) => {
   if (!format) {
     throw new Error(`Format ${formatName} not found`);
   }
-  return createValidatorFunctions(format);
+  const formatType = toTokenNameFormatType(format);
+  return createValidatorFunctions(formatType);
 };
 
 export const splitBy =
@@ -57,11 +60,13 @@ const splityGlobalRules = splitBy(isTokenGlobalNameRule, isTokenNameRule);
 
 export type TokenNameIssue = {
   message?: string;
+  isWarning?: boolean;
   offendingSegments?: string[];
 };
 
 export type TokenGlobalIssue = {
   message?: string;
+  isWarning?: boolean;
   offendingSegments?: [
     collectionName: string,
     tokenName?: string | undefined,
@@ -88,9 +93,31 @@ export const createValidatorFunctions = (format: TokenNameFormatType) => {
             tokenType
           );
           if (!isValid && message) {
-            return [[...errors, { message, offendingSegments }], warnings];
+            return [
+              [
+                ...errors,
+                {
+                  message,
+                  offendingSegments: Array.isArray(offendingSegments)
+                    ? offendingSegments
+                    : undefined,
+                },
+              ],
+              warnings,
+            ];
           } else if (message) {
-            return [errors, [...warnings, { message, offendingSegments }]];
+            return [
+              errors,
+              [
+                ...warnings,
+                {
+                  message,
+                  offendingSegments: Array.isArray(offendingSegments)
+                    ? offendingSegments
+                    : undefined,
+                },
+              ],
+            ];
           }
           return [errors, warnings];
         },

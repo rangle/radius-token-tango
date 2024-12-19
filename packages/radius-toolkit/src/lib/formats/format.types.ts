@@ -1,4 +1,10 @@
 import { TokenVariable } from "../tokens/token.types";
+import {
+  createDecompositionFunction,
+  createRuleSet,
+  RuleDescriptions,
+  TokenFormatDescription,
+} from "./rules.utils";
 import { TokenNameDescription } from "./token-name-format.types";
 
 /**
@@ -39,9 +45,15 @@ export const isTokenNameCollection = (o: unknown): o is TokenNameCollection =>
   Array.isArray((o as TokenNameCollection).tokens);
 
 export type TokenNameValidationResult =
-  | readonly [isValid: true] // ok
-  | readonly [isValid: boolean, message: string] // error or warning
-  | readonly [isValid: boolean, message: string, offendingSegments: string[]]; // error or warning with offending segments
+  | readonly [isValid: true] // success case
+  | readonly [isValid: false, message: string] // error without segments
+  | readonly [isValid: false, message: string, offendingSegments: string[]] // error with segments
+  | readonly [
+      isValid: false,
+      message: string,
+      offendingSegments: string[],
+      isWarning: true,
+    ]; // warning with segments
 
 export type TokenGlobalRuleValidationResult =
   | readonly []
@@ -177,38 +189,15 @@ export type DecomposeTokenName = (name: string) => TokenNameDescription | null;
 /** Token Name Format Type
  * Describes the format of a token name
  */
-export type TokenNameFormatType<FormatName = string> = {
-  name: FormatName;
-  description: string;
-  version: string;
-  segments: string[];
-  separator: string;
-  decomposeTokenName: DecomposeTokenName;
-  rules?: TokenRuleSet;
-};
-
-/** Token Name Format Type
- * Describes the format of a token name
- */
 export type TokenNamePortableFormatType<FormatName = string> = {
   name: FormatName;
   description: string;
   version: string;
   segments: string[];
   separator: string;
+  formatDescription: TokenFormatDescription;
+  ruleDescriptions: RuleDescriptions;
 };
-
-export const isTokenNameFormatType = (
-  format: unknown
-): format is TokenNameFormatType =>
-  typeof format === "object" &&
-  format !== null &&
-  "name" in format &&
-  "description" in format &&
-  "version" in format &&
-  "segments" in format &&
-  "separator" in format &&
-  "decomposeTokenName" in format;
 
 export const isTokenNamePortableFormatType = (
   format: unknown
@@ -219,4 +208,21 @@ export const isTokenNamePortableFormatType = (
   "description" in format &&
   "version" in format &&
   "segments" in format &&
-  "separator" in format;
+  "separator" in format &&
+  "decomposeTokenName" in format;
+
+export type TokenNameFormatType<T extends string = string> =
+  TokenNamePortableFormatType<T> & {
+    rules: TokenRuleSet;
+    decomposeTokenName: DecomposeTokenName;
+  };
+
+export const toTokenNameFormatType = (
+  format: TokenNamePortableFormatType
+): TokenNameFormatType => {
+  return {
+    ...format,
+    rules: createRuleSet(format.ruleDescriptions),
+    decomposeTokenName: createDecompositionFunction(format.formatDescription),
+  };
+};

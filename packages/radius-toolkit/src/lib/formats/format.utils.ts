@@ -10,6 +10,11 @@ export const isNumber = (s: string) => !isNaN(Number(s));
 
 export const isNumberOrFraction = (s: string) => isNumber(s) || isFraction(s);
 
+export const isLowerCase = (s: string) => s === s.toLowerCase();
+
+export const isLowerCaseIdentifier = (s: string) =>
+  /^[a-z_][a-z0-9_]*$/.test(s);
+
 export const isCamelCase = (s: string) =>
   /^[a-z0-9]+(?:[A-Z][a-z0-9]*)*$/.test(s) && !/[A-Z]{2}/.test(s);
 
@@ -30,7 +35,9 @@ export const validationResult = (
   message?: string,
   offendingSegments?: string[]
 ): TokenNameValidationResult => {
-  return [result, message || "", offendingSegments || []] as const;
+  return result
+    ? [result]
+    : ([result, message || "", offendingSegments || []] as const);
 };
 
 export const validationError = (
@@ -44,7 +51,7 @@ export const validationWarning = (
   message: string,
   offendingSegments?: string[]
 ): TokenNameValidationResult => {
-  return [true, message || "", offendingSegments || []] as const;
+  return [false, message || "", offendingSegments || []] as const;
 };
 
 export const globalValidationError = (

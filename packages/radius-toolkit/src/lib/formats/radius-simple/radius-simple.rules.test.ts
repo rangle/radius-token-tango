@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { rules } from "./rules";
+import { rules } from "./radius-simple.rules";
 import { ruleTestValues } from "../rules-testing.utils";
 
-export const testValidValues = ruleTestValues([
+export const testValidValues = ruleTestValues<keyof typeof rules>([
   { input: "accentColor.auto" },
   { input: "animation.none" },
   { input: "animation.spin" },

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { rules } from "./rules";
+import { rules } from "./radius-layer-subject-type.rules";
 import { ruleTestValues } from "../rules-testing.utils";
 
 export const testValidValues = ruleTestValues([
@@ -22,12 +22,6 @@ export const testValidValues = ruleTestValues([
   { input: "semantic.action.outlineColor.blue" },
   { input: "semantic.action.padding.primary.xs" },
   { input: "semantic.action.padding.primary.sm" },
-  { input: "component.button.spacing.primary.sm" },
-  { input: "component.button.spacing.primary.md" },
-  { input: "component.button.spacing.primary.lg" },
-  { input: "component.button.spacing.secondary.sm" },
-  { input: "component.button.spacing.secondary.md" },
-  { input: "component.button.spacing.secondary.lg" },
   { input: "someLayer.genericSubject.animation.slow" },
   { input: "someLayer.genericSubject.width.1/2" },
   { input: "someLayer.genericSubject.width.2" },
@@ -71,6 +65,7 @@ export const testInvalidValues = ruleTestValues<keyof typeof rules>([
       "minimum-three-segments",
       "consistent-type-naming",
       "layer-as-first-segment",
+      "attribute-segments",
     ],
   },
   {
@@ -93,6 +88,36 @@ export const testInvalidValues = ruleTestValues<keyof typeof rules>([
       "layer-as-first-segment",
       "subject-for-non-primitive-tokens",
     ],
+  },
+  {
+    input: "component.button.spacing.primary.sm",
+    errors: [],
+    warnings: ["avoid-generic-types"],
+  },
+  {
+    input: "component.button.spacing.primary.md",
+    errors: [],
+    warnings: ["avoid-generic-types"],
+  },
+  {
+    input: "component.button.spacing.primary.lg",
+    errors: [],
+    warnings: ["avoid-generic-types"],
+  },
+  {
+    input: "component.button.spacing.secondary.sm",
+    errors: [],
+    warnings: ["avoid-generic-types"],
+  },
+  {
+    input: "component.button.spacing.secondary.md",
+    errors: [],
+    warnings: ["avoid-generic-types"],
+  },
+  {
+    input: "component.button.spacing.secondary.lg",
+    errors: [],
+    warnings: ["avoid-generic-types"],
   },
 ]);
 
