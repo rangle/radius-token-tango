@@ -23,7 +23,7 @@ For example, in `component.button.background.primary`, `button` is the subject t
 
 ### Types
 
-Types, the third segment in the name, define what the token represents, such as color, size, or spacing. Consistent naming for types is crucial for clarity and to enable automation. Types should be drawn from a predefined list to ensure uniformity. You can find the list of types [here](../token-types.md). Designers should prefer more specific types over generic ones to ensure that the tokens are self-explanatory and easy to understand. For example, `component.button.background.primary` is more descriptive and actionable than `component.button.color.primary.background`.
+Types, the third segment in the name, define what the token represents, such as color, size, or spacing. Consistent naming for types is crucial for clarity and to enable automation. Types should be drawn from a predefined list to ensure uniformity. You can find the list of types [here](../token-name-format.types.ts). Designers should prefer more specific types over generic ones to ensure that the tokens are self-explanatory and easy to understand. For example, `component.button.background.primary` is more descriptive and actionable than `component.button.color.primary.background`.
 
 ### Attributes
 

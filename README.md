@@ -71,8 +71,16 @@ pnpm format
 To publish the Figma Widget, follow these steps:
 
 1. Navigate to the `apps/token-tango-widget` directory.
-2. Ensure you have the correct Figma manifest file located at `apps/token-tango.manifest.json`.
-3. Follow the steps in [Figma's documentation](https://www.figma.com/widget-docs/) to publish the widget.
+2. Ensure you have the correct Figma manifest file located at `apps/manifest.json`.
+3. Download and install the Desktop version of Figma: https://www.figma.com/downloads/
+   4. If you already have Figma, ensure your using the latest version.
+5. Log in to your account and open the Figma desktop app
+   6. I suggest opening a file with Figma Variables 
+6. From the menu, select "Widgets" -> "Development" -> "Import widget from manifest..." -> 
+   7. This opens the File Explorer, find and select: `apps/manifest.json`
+   8. The widget will load into the currently open Figma file.
+      9. It will position the Widget into a Frame which can affect your layout, be careful when inserting.
+      10. it's trivial to delete the widget and restore it from the right click menu.
 
 ## Future Plans
 
