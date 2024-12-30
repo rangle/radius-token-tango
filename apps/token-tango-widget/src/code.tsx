@@ -4,131 +4,101 @@ import { EmptyPage } from "./ui/pages/empty-page";
 import { LoadedPage } from "./ui/pages/loaded-page";
 import { PageLayout } from "./ui/pages/layout";
 import { version } from "../package.json";
-import { formats } from "radius-toolkit";
 import { getState } from "../types/state";
-import { useTokenManagement } from "./hooks/use-token-management";
-import { useVectorManagement } from "./hooks/use-vector-management";
-import { useSyncManagement } from "./hooks/use-sync-management";
-import { createRepositoryConfigurationDialogCallback, createIssueDialogCallback, createPushTokensDialogCallback } from "./dialogs/dialog-handlers";
+import {
+  createRepositoryConfigurationDialogCallback,
+  createIssueDialogCallback,
+  createPushTokensDialogCallback,
+} from "./dialogs/dialog-handlers";
 import { createLogger } from "@repo/utils";
-import { LoadedTokens } from "./types/widget-types";
+import { useAppState } from "./hooks/use-app-state";
+import { isLoadedAppState } from "./types/app-state";
 
 const log = createLogger("WIDGET:code");
 
 const { widget } = figma;
-const { waitForTask } = widget;
 
+/**
+ * Main widget component that handles the routing logic and state management
+ */
 export function Widget() {
-  const [tokenState, tokenActions] = useTokenManagement();
-  const [vectorState, vectorActions] = useVectorManagement();
-  const [syncState, syncActions] = useSyncManagement();
+  console.log("rendering Widget");
 
-  const format = tokenState.tokenNameFormat
-    ? formats.find((f) => f.name === tokenState.tokenNameFormat) ?? formats[0]
-    : formats[0];
+  try {
+    const [state, actions] = useAppState();
 
-  const doLoadTokensAndSynch = async () => {
-    log("debug", ">>> LOADING YOUR TOKENS");
-    waitForTask(
-      Promise.all([
-        tokenActions.loadTokens(format),
-        syncActions.synchronize(),
-      ]),
+    console.log("Widget currentRoute", state.route);
+
+    const openConfig = createRepositoryConfigurationDialogCallback(
+      state.configuration,
+      actions.setConfiguration,
     );
-  };
 
-  return (
-    <PageLayout
-      synched={syncState.configuration !== null}
-      error={syncState.errorMessage}
-      appVersion={version}
-      format={format}
-      name={syncState.configuration ? syncState.configuration.name : ""}
-      synchDetails={syncState.synchDetails}
-      openConfig={createRepositoryConfigurationDialogCallback(
-        syncState.configuration,
-        syncActions.setConfiguration,
-      )}
-      synchronize={() => syncActions.synchronize()}
-    >
-      {tokenState.persistedTokens === null || syncState.synchDetails === null ? (
-        <EmptyPage
-          selectedFormat={tokenState.tokenNameFormat}
-          selectFormat={(newFormat) => tokenActions.setTokenNameFormat(newFormat)}
-          synchConfig={syncState.configuration}
-          loadedIcons={vectorState.loadedVectors}
-          loadIcons={() => {
-            log("debug", "Loading your icons!");
-            waitForTask(vectorActions.loadVectors());
-          }}
-          withVectors={vectorState.withVectors}
-          toggleWithVectors={vectorActions.toggleVectors}
-          clearIcons={vectorActions.clearVectors}
-          loadTokens={async () => {
-            log("debug", "Loading your tokens!");
-            waitForTask(doLoadTokensAndSynch());
-          }}
-          openConfig={createRepositoryConfigurationDialogCallback(
-            syncState.configuration,
-            syncActions.setConfiguration,
-          )}
-        />
-      ) : (
-        <LoadedPage
-          format={format}
-          allTokens={JSON.parse(tokenState.persistedTokens) as LoadedTokens}
-          issues={tokenState.allErrors}
-          successfullyPushed={syncState.successfullyPushed}
-          synchDetails={syncState.synchDetails}
-          loadedIcons={vectorState.loadedVectors}
-          loadIcons={vectorActions.loadVectors}
-          clearIcons={vectorActions.clearVectors}
-          openIssues={createIssueDialogCallback(
-            getState(
-              tokenState.persistedTokens,
-              vectorState.persistedVectors,
-              syncState.synchDetails,
-              format,
-              tokenState.allErrors,
-            ),
-          )}
-          reloadTokens={async () => {
-            log("debug", ">>> RELOADING ALL VARIABLES");
-            waitForTask(doLoadTokensAndSynch());
-          }}
-          pushTokens={createPushTokensDialogCallback(
-            syncState.configuration,
-            (pushMessage) => {
-              log("debug", "PUSHING TO THE REPOSITORY", pushMessage);
+    const result = (
+      <PageLayout
+        state={state}
+        actions={actions}
+        appVersion={version}
+        openConfig={openConfig}
+      >
+        {state.route === "empty" ? (
+          <EmptyPage state={state} actions={actions} openConfig={openConfig} />
+        ) : isLoadedAppState(state) ? (
+          <LoadedPage
+            state={state}
+            actions={actions}
+            openIssues={createIssueDialogCallback(
+              getState(
+                state.persistedTokens,
+                state.persistedVectors,
+                state.synchDetails,
+                state.tokenFormatType,
+                state.allErrors,
+              ),
+            )}
+            pushTokens={createPushTokensDialogCallback(
+              state.configuration,
+              (pushMessage) => {
+                log("debug", "PUSHING TO THE REPOSITORY", pushMessage);
 
-              const { tokenLayers, vectors, packagejson, meta } = getState(
-                tokenState.persistedTokens,
-                vectorState.persistedVectors,
-                syncState.synchDetails,
-                format,
-                tokenState.allErrors,
-              );
+                const { tokenLayers, vectors, packagejson, meta } = getState(
+                  state.persistedTokens,
+                  state.persistedVectors,
+                  state.synchDetails,
+                  state.tokenFormatType,
+                  state.allErrors,
+                );
 
-              // merge them with the existing data from Github
-              const newSyncDetails = [
-                { ...tokenLayers, vectors },
-                packagejson,
-                meta,
-              ] as const;
-              
-              log("debug", newSyncDetails);
-              waitForTask(
-                syncActions.saveTokens(newSyncDetails, pushMessage, () => {
+                // merge them with the existing data from Github
+                const newSyncDetails = [
+                  { ...tokenLayers, vectors },
+                  packagejson,
+                  meta,
+                ] as const;
+
+                log("debug", newSyncDetails);
+                actions.saveTokens(newSyncDetails, pushMessage, () => {
                   log("debug", "FINISHED!!");
-                }),
-              );
-              log("debug", "FINISHED PUSHING TO THE REPOSITORY");
-            },
-          )}
-        />
-      )}
-    </PageLayout>
-  );
+                });
+                log("debug", "FINISHED PUSHING TO THE REPOSITORY");
+              },
+            )}
+          />
+        ) : null}
+      </PageLayout>
+    );
+    console.log("Widget FINAL", result);
+    return result;
+  } catch (e) {
+    console.error("Error rendering widget:", e);
+    // Return a minimal fallback UI
+    return widget.h("text", { fill: "#FF0000" }, "Widget Error");
+  }
 }
 
-widget.register(Widget);
+// Wrap registration in try-catch
+try {
+  widget.register(Widget);
+} catch (e) {
+  console.error("Error registering widget:", e);
+}

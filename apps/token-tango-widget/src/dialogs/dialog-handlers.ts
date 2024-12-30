@@ -33,10 +33,12 @@ export function createRepositoryConfigurationDialogCallback(
         });
         emit<WidgetStateHandler>("PLUGIN_STATE_CHANGE", synchConfiguration);
         on<UiStateHandler>("UI_STATE_CHANGE", (msg) => {
+          console.log("UI_STATE_CHANGE sent from WEB UI", msg);
           setSynchConfiguration(msg);
           resolve("close");
         });
         on<UiCloseHandler>("UI_CLOSE", () => {
+          console.log("UI_CLOSE sent from WEB UI");
           resolve("close");
         });
       }),

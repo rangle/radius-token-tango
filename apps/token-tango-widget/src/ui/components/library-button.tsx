@@ -1,11 +1,7 @@
+const { widget } = figma;
+const { AutoLayout, Text, Frame, SVG } = widget;
 import { colors } from "@repo/bandoneon";
 import { Icon16px, IconProps } from "./icon.js";
-import { RoundButton } from "./round-button.js";
-import { WarningBadge } from "./warning-badge.js";
-import { h } from "preact";
-
-const { widget } = figma;
-const { Text, AutoLayout } = widget;
 
 export type LibrayButtonProps = {
   state?: "default" | "inactive" | "loaded";

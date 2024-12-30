@@ -66,7 +66,15 @@ export const VariableBullet: FunctionalWidget<VariableBulletProps> = ({
         </AutoLayout>
       )}
       {segments.map((segment, idx) => (
-        <>
+        <AutoLayout
+          key={`${name}-${segment}-${idx}`}
+          name="SegmentContainer"
+          overflow="visible"
+          spacing={4}
+          padding={0}
+          height="fill-parent"
+          verticalAlignItems="center"
+        >
           <AutoLayout
             name="Layer"
             overflow="visible"
@@ -105,7 +113,7 @@ export const VariableBullet: FunctionalWidget<VariableBulletProps> = ({
               </Text>
             </AutoLayout>
           )}
-        </>
+        </AutoLayout>
       ))}
       {variant !== "compact" && (
         <AutoLayout

@@ -81,7 +81,12 @@ export const VariantsDocs: FunctionalWidget<VariantsDocsProps> = ({
       }}
     >
       {items.map(({ name, subjects, attribute, tokens }) => (
-        <>
+        <AutoLayout
+          key={`${name}-${attribute}`}
+          name="Component-Container"
+          direction="vertical"
+          width="fill-parent"
+        >
           <AutoLayout
             name="Component-Header"
             stroke={"#aaa"}
@@ -144,7 +149,9 @@ export const VariantsDocs: FunctionalWidget<VariantsDocsProps> = ({
                     subjects:
                   </Text>
                   {subjects.map((subject, idx) => (
-                    <Pill key={idx}>{subject}</Pill>
+                    <Pill key={`${name}-${attribute}-${subject}`}>
+                      {subject}
+                    </Pill>
                   ))}
                 </AutoLayout>
               </AutoLayout>
@@ -174,6 +181,7 @@ export const VariantsDocs: FunctionalWidget<VariantsDocsProps> = ({
             >
               {tokens.map(([key, value]) => (
                 <PropDocs
+                  key={`${name}-${attribute}-${key}`}
                   prop={{
                     name: key,
                     value: value,
@@ -192,7 +200,7 @@ export const VariantsDocs: FunctionalWidget<VariantsDocsProps> = ({
               <Text fontSize={12}>Same properties as default</Text>
             </AutoLayout>
           )}
-        </>
+        </AutoLayout>
       ))}
     </AutoLayout>
   );

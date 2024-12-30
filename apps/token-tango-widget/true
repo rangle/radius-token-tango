@@ -1,0 +1,2785 @@
+{
+  "inputs": {
+    "src/constants.ts": {
+      "bytes": 296,
+      "imports": [],
+      "format": "esm"
+    },
+    "../../packages/bandoneon/src/styles/colours.ts": {
+      "bytes": 1093,
+      "imports": [],
+      "format": "esm"
+    },
+    "../../packages/bandoneon/src/styles/typography.ts": {
+      "bytes": 2656,
+      "imports": [
+        {
+          "path": "../../packages/bandoneon/src/styles/colours.ts",
+          "kind": "import-statement",
+          "original": "./colours"
+        }
+      ],
+      "format": "esm"
+    },
+    "../../packages/bandoneon/src/styles/spacing.ts": {
+      "bytes": 533,
+      "imports": [],
+      "format": "esm"
+    },
+    "../../packages/bandoneon/src/styles/index.ts": {
+      "bytes": 84,
+      "imports": [
+        {
+          "path": "../../packages/bandoneon/src/styles/colours.ts",
+          "kind": "import-statement",
+          "original": "./colours"
+        },
+        {
+          "path": "../../packages/bandoneon/src/styles/typography.ts",
+          "kind": "import-statement",
+          "original": "./typography"
+        },
+        {
+          "path": "../../packages/bandoneon/src/styles/spacing.ts",
+          "kind": "import-statement",
+          "original": "./spacing"
+        }
+      ],
+      "format": "esm"
+    },
+    "../../packages/bandoneon/src/index.ts": {
+      "bytes": 26,
+      "imports": [
+        {
+          "path": "../../packages/bandoneon/src/styles/index.ts",
+          "kind": "import-statement",
+          "original": "./styles"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/icon.tsx": {
+      "bytes": 16708,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/variable-bullet.tsx": {
+      "bytes": 3148,
+      "imports": [
+        {
+          "path": "radius-toolkit",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/ui/components/icon.tsx",
+          "kind": "import-statement",
+          "original": "./icon.js"
+        },
+        {
+          "path": "../../packages/bandoneon/src/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/bandoneon"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/name-format.tsx": {
+      "bytes": 6727,
+      "imports": [
+        {
+          "path": "../../packages/bandoneon/src/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/bandoneon"
+        },
+        {
+          "path": "./icon.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/ui/components/variable-bullet.tsx",
+          "kind": "import-statement",
+          "original": "./variable-bullet.js"
+        },
+        {
+          "path": "radius-toolkit",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/constants.ts",
+          "kind": "import-statement",
+          "original": "../../constants.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/status-button.tsx": {
+      "bytes": 2909,
+      "imports": [
+        {
+          "path": "../../packages/bandoneon/src/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/bandoneon"
+        },
+        {
+          "path": "src/ui/components/icon.tsx",
+          "kind": "import-statement",
+          "original": "./icon.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/short-repository-ribbon.tsx": {
+      "bytes": 4100,
+      "imports": [
+        {
+          "path": "../../packages/bandoneon/src/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/bandoneon"
+        },
+        {
+          "path": "./icon.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/ui/components/status-button.tsx",
+          "kind": "import-statement",
+          "original": "./status-button.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/library-button.tsx": {
+      "bytes": 2782,
+      "imports": [
+        {
+          "path": "../../packages/bandoneon/src/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/bandoneon"
+        },
+        {
+          "path": "src/ui/components/icon.tsx",
+          "kind": "import-statement",
+          "original": "./icon.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/refreshed-content.tsx": {
+      "bytes": 3616,
+      "imports": [
+        {
+          "path": "radius-toolkit",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./button",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./icon",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./name-format",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./round-button",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/ui/components/short-repository-ribbon.tsx",
+          "kind": "import-statement",
+          "original": "./short-repository-ribbon"
+        },
+        {
+          "path": "@repo/bandoneon",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/ui/components/library-button.tsx",
+          "kind": "import-statement",
+          "original": "./library-button"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../packages/radius-toolkit/dist/lib/radius-toolkit.es.js": {
+      "bytes": 71491,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/lg-button.tsx": {
+      "bytes": 1961,
+      "imports": [
+        {
+          "path": "../../packages/bandoneon/src/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/bandoneon"
+        },
+        {
+          "path": "src/ui/components/icon.tsx",
+          "kind": "import-statement",
+          "original": "./icon.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/pages/empty-page.tsx": {
+      "bytes": 4509,
+      "imports": [
+        {
+          "path": "src/constants.ts",
+          "kind": "import-statement",
+          "original": "../../constants"
+        },
+        {
+          "path": "src/ui/components/name-format.tsx",
+          "kind": "import-statement",
+          "original": "../components/name-format"
+        },
+        {
+          "path": "src/ui/components/refreshed-content.tsx",
+          "kind": "import-statement",
+          "original": "../components/refreshed-content"
+        },
+        {
+          "path": "../../packages/radius-toolkit/dist/lib/radius-toolkit.es.js",
+          "kind": "import-statement",
+          "original": "radius-toolkit"
+        },
+        {
+          "path": "src/ui/components/lg-button.tsx",
+          "kind": "import-statement",
+          "original": "../components/lg-button"
+        },
+        {
+          "path": "../../packages/bandoneon/src/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/bandoneon"
+        },
+        {
+          "path": "../../types/app-state",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../../hooks/use-app-state",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/error-pill.tsx": {
+      "bytes": 868,
+      "imports": [
+        {
+          "path": "../../packages/bandoneon/src/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/bandoneon"
+        },
+        {
+          "path": "./icon.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/IssuePill.tsx": {
+      "bytes": 570,
+      "imports": [
+        {
+          "path": "radius-toolkit",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/ui/components/error-pill.tsx",
+          "kind": "import-statement",
+          "original": "./error-pill"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/token-issues-summary.tsx": {
+      "bytes": 6894,
+      "imports": [
+        {
+          "path": "../../packages/bandoneon/src/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/bandoneon"
+        },
+        {
+          "path": "radius-toolkit",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./icon",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./button",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./round-button",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/ui/components/lg-button.tsx",
+          "kind": "import-statement",
+          "original": "./lg-button"
+        },
+        {
+          "path": "src/ui/components/library-button.tsx",
+          "kind": "import-statement",
+          "original": "./library-button"
+        },
+        {
+          "path": "src/ui/components/IssuePill.tsx",
+          "kind": "import-statement",
+          "original": "./IssuePill"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/bullet-label.tsx": {
+      "bytes": 886,
+      "imports": [
+        {
+          "path": "./icon.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/token-change-bar.tsx": {
+      "bytes": 4595,
+      "imports": [
+        {
+          "path": "../../packages/radius-toolkit/dist/lib/radius-toolkit.es.js",
+          "kind": "import-statement",
+          "original": "radius-toolkit"
+        },
+        {
+          "path": "src/ui/components/bullet-label.tsx",
+          "kind": "import-statement",
+          "original": "./bullet-label"
+        },
+        {
+          "path": "./error-pill",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/ui/components/icon.tsx",
+          "kind": "import-statement",
+          "original": "./icon"
+        },
+        {
+          "path": "src/ui/components/variable-bullet.tsx",
+          "kind": "import-statement",
+          "original": "./variable-bullet"
+        },
+        {
+          "path": "src/ui/components/IssuePill.tsx",
+          "kind": "import-statement",
+          "original": "./IssuePill"
+        },
+        {
+          "path": "../../packages/bandoneon/src/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/bandoneon"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/version-bump.tsx": {
+      "bytes": 2618,
+      "imports": [
+        {
+          "path": "../../packages/bandoneon/src/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/bandoneon"
+        },
+        {
+          "path": "./icon.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/warning-badge.tsx": {
+      "bytes": 706,
+      "imports": [
+        {
+          "path": "../../packages/bandoneon/src/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/bandoneon"
+        },
+        {
+          "path": "src/ui/components/icon.tsx",
+          "kind": "import-statement",
+          "original": "./icon.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/push-panel.tsx": {
+      "bytes": 6646,
+      "imports": [
+        {
+          "path": "../../packages/radius-toolkit/dist/lib/radius-toolkit.es.js",
+          "kind": "import-statement",
+          "original": "radius-toolkit"
+        },
+        {
+          "path": "src/ui/components/icon.tsx",
+          "kind": "import-statement",
+          "original": "./icon"
+        },
+        {
+          "path": "./round-button",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/ui/components/token-change-bar.tsx",
+          "kind": "import-statement",
+          "original": "./token-change-bar"
+        },
+        {
+          "path": "src/ui/components/version-bump.tsx",
+          "kind": "import-statement",
+          "original": "./version-bump"
+        },
+        {
+          "path": "src/ui/components/warning-badge.tsx",
+          "kind": "import-statement",
+          "original": "./warning-badge"
+        },
+        {
+          "path": "../../packages/bandoneon/src/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/bandoneon"
+        },
+        {
+          "path": "src/ui/components/lg-button.tsx",
+          "kind": "import-statement",
+          "original": "./lg-button"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../packages/utils/logging.utils.ts": {
+      "bytes": 630,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/requires-port@1.0.0/node_modules/requires-port/index.js": {
+      "bytes": 753,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "cjs"
+    },
+    "../../node_modules/.pnpm/querystringify@2.2.0/node_modules/querystringify/index.js": {
+      "bytes": 2564,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "cjs"
+    },
+    "../../node_modules/.pnpm/url-parse@1.5.10/node_modules/url-parse/index.js": {
+      "bytes": 16622,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/requires-port@1.0.0/node_modules/requires-port/index.js",
+          "kind": "require-call",
+          "original": "requires-port"
+        },
+        {
+          "path": "../../node_modules/.pnpm/querystringify@2.2.0/node_modules/querystringify/index.js",
+          "kind": "require-call",
+          "original": "querystringify"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "cjs"
+    },
+    "../../packages/utils/github.utils.ts": {
+      "bytes": 14611,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/url-parse@1.5.10/node_modules/url-parse/index.js",
+          "kind": "import-statement",
+          "original": "url-parse"
+        },
+        {
+          "path": "../../packages/utils/logging.utils.ts",
+          "kind": "import-statement",
+          "original": "./logging.utils"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../packages/utils/index.ts": {
+      "bytes": 65,
+      "imports": [
+        {
+          "path": "../../packages/utils/logging.utils.ts",
+          "kind": "import-statement",
+          "original": "./logging.utils"
+        },
+        {
+          "path": "../../packages/utils/github.utils.ts",
+          "kind": "import-statement",
+          "original": "./github.utils"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/common/generator.utils.ts": {
+      "bytes": 2550,
+      "imports": [
+        {
+          "path": "../../packages/radius-toolkit/dist/lib/radius-toolkit.es.js",
+          "kind": "import-statement",
+          "original": "radius-toolkit"
+        },
+        {
+          "path": "../../packages/utils/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/utils"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/success-panel.tsx": {
+      "bytes": 6189,
+      "imports": [
+        {
+          "path": "@repo/config",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./icon",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./round-button",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./token-change-bar",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./version-bump",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./warning-badge",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "@repo/bandoneon",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/ui/components/lg-button.tsx",
+          "kind": "import-statement",
+          "original": "./lg-button"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/preact@10.25.4/node_modules/preact/dist/preact.module.js": {
+      "bytes": 11430,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/pages/loaded-page.tsx": {
+      "bytes": 6657,
+      "imports": [
+        {
+          "path": "../components/name-format",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/ui/components/token-issues-summary.tsx",
+          "kind": "import-statement",
+          "original": "../components/token-issues-summary"
+        },
+        {
+          "path": "src/ui/components/push-panel.tsx",
+          "kind": "import-statement",
+          "original": "../components/push-panel"
+        },
+        {
+          "path": "src/common/generator.utils.ts",
+          "kind": "import-statement",
+          "original": "../../common/generator.utils"
+        },
+        {
+          "path": "../../packages/radius-toolkit/dist/lib/radius-toolkit.es.js",
+          "kind": "import-statement",
+          "original": "radius-toolkit"
+        },
+        {
+          "path": "../../packages/bandoneon/src/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/bandoneon"
+        },
+        {
+          "path": "src/ui/components/success-panel.tsx",
+          "kind": "import-statement",
+          "original": "../components/success-panel"
+        },
+        {
+          "path": "../../packages/utils/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/utils"
+        },
+        {
+          "path": "../../node_modules/.pnpm/preact@10.25.4/node_modules/preact/dist/preact.module.js",
+          "kind": "import-statement",
+          "original": "preact"
+        },
+        {
+          "path": "../../types/app-state",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../../hooks/use-app-state",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/widget-header.tsx": {
+      "bytes": 9607,
+      "imports": [
+        {
+          "path": "../../packages/bandoneon/src/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/bandoneon"
+        },
+        {
+          "path": "./button.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./icon.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./name-format.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/bottom-logo.tsx": {
+      "bytes": 16869,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/commit-ribbon.tsx": {
+      "bytes": 3472,
+      "imports": [
+        {
+          "path": "src/ui/components/icon.tsx",
+          "kind": "import-statement",
+          "original": "./icon.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/repository-ribbon.tsx": {
+      "bytes": 4093,
+      "imports": [
+        {
+          "path": "./button.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/ui/components/commit-ribbon.tsx",
+          "kind": "import-statement",
+          "original": "./commit-ribbon.js"
+        },
+        {
+          "path": "src/ui/components/icon.tsx",
+          "kind": "import-statement",
+          "original": "./icon.js"
+        },
+        {
+          "path": "src/ui/components/short-repository-ribbon.tsx",
+          "kind": "import-statement",
+          "original": "./short-repository-ribbon.js"
+        },
+        {
+          "path": "src/ui/components/status-button.tsx",
+          "kind": "import-statement",
+          "original": "./status-button.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/pages/layout.tsx": {
+      "bytes": 2703,
+      "imports": [
+        {
+          "path": "src/ui/components/widget-header.tsx",
+          "kind": "import-statement",
+          "original": "../components/widget-header"
+        },
+        {
+          "path": "src/ui/components/bottom-logo.tsx",
+          "kind": "import-statement",
+          "original": "../components/bottom-logo"
+        },
+        {
+          "path": "src/ui/components/repository-ribbon.tsx",
+          "kind": "import-statement",
+          "original": "../components/repository-ribbon"
+        },
+        {
+          "path": "../../packages/bandoneon/src/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/bandoneon"
+        },
+        {
+          "path": "src/ui/components/name-format.tsx",
+          "kind": "import-statement",
+          "original": "../components/name-format"
+        },
+        {
+          "path": "../../types/app-state",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../../hooks/use-app-state",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "package.json": {
+      "bytes": 2587,
+      "imports": []
+    },
+    "types/state.ts": {
+      "bytes": 4171,
+      "imports": [
+        {
+          "path": "@create-figma-plugin/utilities",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "@repo/config",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../../packages/utils/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/utils"
+        },
+        {
+          "path": "../../packages/radius-toolkit/dist/lib/radius-toolkit.es.js",
+          "kind": "import-statement",
+          "original": "radius-toolkit"
+        },
+        {
+          "path": "src/common/generator.utils.ts",
+          "kind": "import-statement",
+          "original": "../src/common/generator.utils"
+        },
+        {
+          "path": "preact/compat",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/hex-rgb@5.0.0/node_modules/hex-rgb/index.js": {
+      "bytes": 1392,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/color/convert-hex-color-to-rgb-color.js": {
+      "bytes": 447,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/hex-rgb@5.0.0/node_modules/hex-rgb/index.js",
+          "kind": "import-statement",
+          "original": "hex-rgb"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/color/private/named-colors.js": {
+      "bytes": 3762,
+      "imports": [],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/color/convert-named-color-to-hex-color.js": {
+      "bytes": 330,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/color/private/named-colors.js",
+          "kind": "import-statement",
+          "original": "./private/named-colors.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/rgb-hex@4.1.0/node_modules/rgb-hex/index.js": {
+      "bytes": 1966,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/color/convert-rgb-color-to-hex-color.js": {
+      "bytes": 422,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/rgb-hex@4.1.0/node_modules/rgb-hex/index.js",
+          "kind": "import-statement",
+          "original": "rgb-hex"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/color/is-valid-hex-color.js": {
+      "bytes": 230,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/color/convert-hex-color-to-rgb-color.js",
+          "kind": "import-statement",
+          "original": "./convert-hex-color-to-rgb-color.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/events.js": {
+      "bytes": 1858,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/function/ensure-minimum-time.js": {
+      "bytes": 553,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/image/create-canvas-element-from-image-element.js": {
+      "bytes": 419,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/image/create-image-element-from-blob-async.js": {
+      "bytes": 413,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/image/create-canvas-element-from-blob-async.js": {
+      "bytes": 456,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/image/create-canvas-element-from-image-element.js",
+          "kind": "import-statement",
+          "original": "./create-canvas-element-from-image-element.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/image/create-image-element-from-blob-async.js",
+          "kind": "import-statement",
+          "original": "./create-image-element-from-blob-async.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/image/create-image-element-from-bytes-async.js": {
+      "bytes": 287,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/image/create-image-element-from-blob-async.js",
+          "kind": "import-statement",
+          "original": "./create-image-element-from-blob-async.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/image/create-canvas-element-from-bytes-async.js": {
+      "bytes": 463,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/image/create-canvas-element-from-image-element.js",
+          "kind": "import-statement",
+          "original": "./create-canvas-element-from-image-element.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/image/create-image-element-from-bytes-async.js",
+          "kind": "import-statement",
+          "original": "./create-image-element-from-bytes-async.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/image/create-image-paint.js": {
+      "bytes": 262,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/image/read-bytes-from-canvas-element-async.js": {
+      "bytes": 495,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/mixed-values.js": {
+      "bytes": 132,
+      "imports": [],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/monetization/document-use-count.js": {
+      "bytes": 762,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/monetization/gumroad/private/empty-license.js": {
+      "bytes": 191,
+      "imports": [],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/monetization/gumroad/validate-gumroad-license-key-main-async.js": {
+      "bytes": 1941,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/monetization/gumroad/private/empty-license.js",
+          "kind": "import-statement",
+          "original": "./private/empty-license.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/monetization/gumroad/validate-gumroad-license-key-ui-async.js": {
+      "bytes": 1803,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/monetization/gumroad/private/empty-license.js",
+          "kind": "import-statement",
+          "original": "./private/empty-license.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/monetization/total-use-count.js": {
+      "bytes": 662,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/absolute-position/get-absolute-position.js": {
+      "bytes": 196,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/absolute-position/set-absolute-position.js": {
+      "bytes": 863,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/traverse-node.js": {
+      "bytes": 428,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/collapse-layer.js": {
+      "bytes": 366,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/traverse-node.js",
+          "kind": "import-statement",
+          "original": "./traverse-node.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/get-nodes/get-parent-node.js": {
+      "bytes": 235,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/compute-bounding-box.js": {
+      "bytes": 796,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/absolute-position/get-absolute-position.js",
+          "kind": "import-statement",
+          "original": "./absolute-position/get-absolute-position.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/get-nodes/get-parent-node.js",
+          "kind": "import-statement",
+          "original": "./get-nodes/get-parent-node.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/compute-maximum-bounds.js": {
+      "bytes": 823,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/compute-bounding-box.js",
+          "kind": "import-statement",
+          "original": "./compute-bounding-box.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/deduplicate-nodes.js": {
+      "bytes": 216,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/get-node-index-path.js": {
+      "bytes": 828,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/get-nodes/get-document-components.js": {
+      "bytes": 549,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/traverse-node.js",
+          "kind": "import-statement",
+          "original": "../traverse-node.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/get-nodes/get-scene-node-by-id.js": {
+      "bytes": 360,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/get-nodes/get-selected-nodes-or-all-nodes.js": {
+      "bytes": 290,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/insert-node/insert-after-node.js": {
+      "bytes": 323,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/get-nodes/get-parent-node.js",
+          "kind": "import-statement",
+          "original": "../get-nodes/get-parent-node.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/insert-node/insert-before-node.js": {
+      "bytes": 329,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/get-nodes/get-parent-node.js",
+          "kind": "import-statement",
+          "original": "../get-nodes/get-parent-node.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/is-locked.js": {
+      "bytes": 256,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/is-visible.js": {
+      "bytes": 261,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/is-within-instance-node.js": {
+      "bytes": 387,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/load-fonts-async.js": {
+      "bytes": 1254,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/relaunch-button/private/update-relaunch-buttons-data.js": {
+      "bytes": 641,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/relaunch-button/set-relaunch-button.js": {
+      "bytes": 480,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/relaunch-button/private/update-relaunch-buttons-data.js",
+          "kind": "import-statement",
+          "original": "./private/update-relaunch-buttons-data.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/relaunch-button/unset-relaunch-button.js": {
+      "bytes": 666,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/relaunch-button/private/update-relaunch-buttons-data.js",
+          "kind": "import-statement",
+          "original": "./private/update-relaunch-buttons-data.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/sibling-nodes/are-sibling-nodes.js": {
+      "bytes": 469,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/get-nodes/get-parent-node.js",
+          "kind": "import-statement",
+          "original": "../get-nodes/get-parent-node.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/sibling-nodes/compute-sibling-nodes.js": {
+      "bytes": 1071,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/get-nodes/get-parent-node.js",
+          "kind": "import-statement",
+          "original": "../get-nodes/get-parent-node.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/sort-nodes/sort-nodes-by-canonical-order.js": {
+      "bytes": 840,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/get-nodes/get-parent-node.js",
+          "kind": "import-statement",
+          "original": "../get-nodes/get-parent-node.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/sibling-nodes/are-sibling-nodes.js",
+          "kind": "import-statement",
+          "original": "../sibling-nodes/are-sibling-nodes.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/natural-compare-lite@1.4.0/node_modules/natural-compare-lite/index.js": {
+      "bytes": 1303,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "cjs"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/sort-nodes/sort-nodes-by-name.js": {
+      "bytes": 649,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/natural-compare-lite@1.4.0/node_modules/natural-compare-lite/index.js",
+          "kind": "import-statement",
+          "original": "natural-compare-lite"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/object/compare-string-arrays.js": {
+      "bytes": 281,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/sort-nodes/update-nodes-sort-order.js": {
+      "bytes": 1225,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/object/compare-string-arrays.js",
+          "kind": "import-statement",
+          "original": "../../object/compare-string-arrays.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/get-nodes/get-parent-node.js",
+          "kind": "import-statement",
+          "original": "../get-nodes/get-parent-node.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/sibling-nodes/are-sibling-nodes.js",
+          "kind": "import-statement",
+          "original": "../sibling-nodes/are-sibling-nodes.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/traverse-node-async.js": {
+      "bytes": 517,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/number/private/regex.js": {
+      "bytes": 307,
+      "imports": [],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/number/evaluate-numeric-expression.js": {
+      "bytes": 610,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/number/private/regex.js",
+          "kind": "import-statement",
+          "original": "./private/regex.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/number/is-valid-numeric-input.js": {
+      "bytes": 657,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/number/private/regex.js",
+          "kind": "import-statement",
+          "original": "./private/regex.js"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/object/clone-object.js": {
+      "bytes": 602,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/object/compare-objects.js": {
+      "bytes": 1063,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/object/deduplicate-array.js": {
+      "bytes": 331,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/object/extract-attributes.js": {
+      "bytes": 544,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/settings.js": {
+      "bytes": 535,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/string/format-message.js": {
+      "bytes": 410,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/string/pluralize.js": {
+      "bytes": 216,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/ui.js": {
+      "bytes": 620,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/index.js": {
+      "bytes": 4392,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/color/convert-hex-color-to-rgb-color.js",
+          "kind": "import-statement",
+          "original": "./color/convert-hex-color-to-rgb-color.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/color/convert-named-color-to-hex-color.js",
+          "kind": "import-statement",
+          "original": "./color/convert-named-color-to-hex-color.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/color/convert-rgb-color-to-hex-color.js",
+          "kind": "import-statement",
+          "original": "./color/convert-rgb-color-to-hex-color.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/color/is-valid-hex-color.js",
+          "kind": "import-statement",
+          "original": "./color/is-valid-hex-color.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/events.js",
+          "kind": "import-statement",
+          "original": "./events.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/function/ensure-minimum-time.js",
+          "kind": "import-statement",
+          "original": "./function/ensure-minimum-time.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/image/create-canvas-element-from-blob-async.js",
+          "kind": "import-statement",
+          "original": "./image/create-canvas-element-from-blob-async.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/image/create-canvas-element-from-bytes-async.js",
+          "kind": "import-statement",
+          "original": "./image/create-canvas-element-from-bytes-async.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/image/create-canvas-element-from-image-element.js",
+          "kind": "import-statement",
+          "original": "./image/create-canvas-element-from-image-element.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/image/create-image-element-from-blob-async.js",
+          "kind": "import-statement",
+          "original": "./image/create-image-element-from-blob-async.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/image/create-image-element-from-bytes-async.js",
+          "kind": "import-statement",
+          "original": "./image/create-image-element-from-bytes-async.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/image/create-image-paint.js",
+          "kind": "import-statement",
+          "original": "./image/create-image-paint.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/image/read-bytes-from-canvas-element-async.js",
+          "kind": "import-statement",
+          "original": "./image/read-bytes-from-canvas-element-async.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/mixed-values.js",
+          "kind": "import-statement",
+          "original": "./mixed-values.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/monetization/document-use-count.js",
+          "kind": "import-statement",
+          "original": "./monetization/document-use-count.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/monetization/gumroad/validate-gumroad-license-key-main-async.js",
+          "kind": "import-statement",
+          "original": "./monetization/gumroad/validate-gumroad-license-key-main-async.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/monetization/gumroad/validate-gumroad-license-key-ui-async.js",
+          "kind": "import-statement",
+          "original": "./monetization/gumroad/validate-gumroad-license-key-ui-async.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/monetization/total-use-count.js",
+          "kind": "import-statement",
+          "original": "./monetization/total-use-count.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/absolute-position/get-absolute-position.js",
+          "kind": "import-statement",
+          "original": "./node/absolute-position/get-absolute-position.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/absolute-position/set-absolute-position.js",
+          "kind": "import-statement",
+          "original": "./node/absolute-position/set-absolute-position.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/collapse-layer.js",
+          "kind": "import-statement",
+          "original": "./node/collapse-layer.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/compute-bounding-box.js",
+          "kind": "import-statement",
+          "original": "./node/compute-bounding-box.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/compute-maximum-bounds.js",
+          "kind": "import-statement",
+          "original": "./node/compute-maximum-bounds.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/deduplicate-nodes.js",
+          "kind": "import-statement",
+          "original": "./node/deduplicate-nodes.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/get-node-index-path.js",
+          "kind": "import-statement",
+          "original": "./node/get-node-index-path.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/get-nodes/get-document-components.js",
+          "kind": "import-statement",
+          "original": "./node/get-nodes/get-document-components.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/get-nodes/get-parent-node.js",
+          "kind": "import-statement",
+          "original": "./node/get-nodes/get-parent-node.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/get-nodes/get-scene-node-by-id.js",
+          "kind": "import-statement",
+          "original": "./node/get-nodes/get-scene-node-by-id.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/get-nodes/get-selected-nodes-or-all-nodes.js",
+          "kind": "import-statement",
+          "original": "./node/get-nodes/get-selected-nodes-or-all-nodes.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/insert-node/insert-after-node.js",
+          "kind": "import-statement",
+          "original": "./node/insert-node/insert-after-node.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/insert-node/insert-before-node.js",
+          "kind": "import-statement",
+          "original": "./node/insert-node/insert-before-node.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/is-locked.js",
+          "kind": "import-statement",
+          "original": "./node/is-locked.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/is-visible.js",
+          "kind": "import-statement",
+          "original": "./node/is-visible.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/is-within-instance-node.js",
+          "kind": "import-statement",
+          "original": "./node/is-within-instance-node.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/load-fonts-async.js",
+          "kind": "import-statement",
+          "original": "./node/load-fonts-async.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/relaunch-button/set-relaunch-button.js",
+          "kind": "import-statement",
+          "original": "./node/relaunch-button/set-relaunch-button.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/relaunch-button/unset-relaunch-button.js",
+          "kind": "import-statement",
+          "original": "./node/relaunch-button/unset-relaunch-button.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/sibling-nodes/are-sibling-nodes.js",
+          "kind": "import-statement",
+          "original": "./node/sibling-nodes/are-sibling-nodes.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/sibling-nodes/compute-sibling-nodes.js",
+          "kind": "import-statement",
+          "original": "./node/sibling-nodes/compute-sibling-nodes.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/sort-nodes/sort-nodes-by-canonical-order.js",
+          "kind": "import-statement",
+          "original": "./node/sort-nodes/sort-nodes-by-canonical-order.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/sort-nodes/sort-nodes-by-name.js",
+          "kind": "import-statement",
+          "original": "./node/sort-nodes/sort-nodes-by-name.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/sort-nodes/update-nodes-sort-order.js",
+          "kind": "import-statement",
+          "original": "./node/sort-nodes/update-nodes-sort-order.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/traverse-node.js",
+          "kind": "import-statement",
+          "original": "./node/traverse-node.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/node/traverse-node-async.js",
+          "kind": "import-statement",
+          "original": "./node/traverse-node-async.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/number/evaluate-numeric-expression.js",
+          "kind": "import-statement",
+          "original": "./number/evaluate-numeric-expression.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/number/is-valid-numeric-input.js",
+          "kind": "import-statement",
+          "original": "./number/is-valid-numeric-input.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/object/clone-object.js",
+          "kind": "import-statement",
+          "original": "./object/clone-object.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/object/compare-objects.js",
+          "kind": "import-statement",
+          "original": "./object/compare-objects.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/object/compare-string-arrays.js",
+          "kind": "import-statement",
+          "original": "./object/compare-string-arrays.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/object/deduplicate-array.js",
+          "kind": "import-statement",
+          "original": "./object/deduplicate-array.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/object/extract-attributes.js",
+          "kind": "import-statement",
+          "original": "./object/extract-attributes.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/settings.js",
+          "kind": "import-statement",
+          "original": "./settings.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/string/format-message.js",
+          "kind": "import-statement",
+          "original": "./string/format-message.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/string/pluralize.js",
+          "kind": "import-statement",
+          "original": "./string/pluralize.js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/ui.js",
+          "kind": "import-statement",
+          "original": "./ui.js"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/types/figma-types.ts": {
+      "bytes": 1106,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/dialogs/dialog-handlers.ts": {
+      "bytes": 3123,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/index.js",
+          "kind": "import-statement",
+          "original": "@create-figma-plugin/utilities"
+        },
+        {
+          "path": "../../packages/utils/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/utils"
+        },
+        {
+          "path": "@repo/config",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "@repo/config",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/types/figma-types.ts",
+          "kind": "import-statement",
+          "original": "../types/figma-types"
+        },
+        {
+          "path": "../../types/state",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/common/variables.utils.ts": {
+      "bytes": 2532,
+      "imports": [
+        {
+          "path": "radius-toolkit",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "radius-toolkit",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../../packages/utils/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/utils"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/services/load-tokens.services.ts": {
+      "bytes": 4154,
+      "imports": [
+        {
+          "path": "../../packages/radius-toolkit/dist/lib/radius-toolkit.es.js",
+          "kind": "import-statement",
+          "original": "radius-toolkit"
+        },
+        {
+          "path": "src/common/generator.utils.ts",
+          "kind": "import-statement",
+          "original": "../common/generator.utils"
+        },
+        {
+          "path": "../../packages/radius-toolkit/dist/lib/radius-toolkit.es.js",
+          "kind": "import-statement",
+          "original": "radius-toolkit"
+        },
+        {
+          "path": "src/common/variables.utils.ts",
+          "kind": "import-statement",
+          "original": "../common/variables.utils"
+        },
+        {
+          "path": "../../packages/utils/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/utils"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/hooks/use-token-management.ts": {
+      "bytes": 2016,
+      "imports": [
+        {
+          "path": "../../packages/utils/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/utils"
+        },
+        {
+          "path": "radius-toolkit",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/services/load-tokens.services.ts",
+          "kind": "import-statement",
+          "original": "../services/load-tokens.services"
+        },
+        {
+          "path": "src/types/figma-types.ts",
+          "kind": "import-statement",
+          "original": "../types/figma-types"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/hooks/use-vector-management.ts": {
+      "bytes": 3277,
+      "imports": [
+        {
+          "path": "../../packages/utils/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/utils"
+        },
+        {
+          "path": "../types/vector-types",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/types/figma-types.ts",
+          "kind": "import-statement",
+          "original": "../types/figma-types"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/path-browserify@1.0.1/node_modules/path-browserify/index.js": {
+      "bytes": 16166,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "cjs"
+    },
+    "../../node_modules/.pnpm/base64-js@1.5.1/node_modules/base64-js/index.js": {
+      "bytes": 3932,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "cjs"
+    },
+    "../../node_modules/.pnpm/ieee754@1.2.1/node_modules/ieee754/index.js": {
+      "bytes": 2154,
+      "imports": [],
+      "format": "cjs"
+    },
+    "../../node_modules/.pnpm/buffer@6.0.3/node_modules/buffer/index.js": {
+      "bytes": 58353,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/base64-js@1.5.1/node_modules/base64-js/index.js",
+          "kind": "require-call",
+          "original": "base64-js"
+        },
+        {
+          "path": "../../node_modules/.pnpm/ieee754@1.2.1/node_modules/ieee754/index.js",
+          "kind": "require-call",
+          "original": "ieee754"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "cjs"
+    },
+    "src/services/load-github.services.ts": {
+      "bytes": 7903,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/path-browserify@1.0.1/node_modules/path-browserify/index.js",
+          "kind": "import-statement",
+          "original": "path-browserify"
+        },
+        {
+          "path": "../../node_modules/.pnpm/buffer@6.0.3/node_modules/buffer/index.js",
+          "kind": "import-statement",
+          "original": "buffer"
+        },
+        {
+          "path": "../../packages/utils/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/utils"
+        },
+        {
+          "path": "radius-toolkit",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../../packages/utils/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/utils"
+        },
+        {
+          "path": "../../types/state",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/types/widget-types.ts": {
+      "bytes": 1094,
+      "imports": [
+        {
+          "path": "radius-toolkit",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "@repo/config",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../ui/components/success-panel",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../../types/state",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/hooks/use-sync-management.ts": {
+      "bytes": 4369,
+      "imports": [
+        {
+          "path": "../../packages/utils/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/utils"
+        },
+        {
+          "path": "@repo/config",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../../types/state",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../ui/components/success-panel",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/services/load-github.services.ts",
+          "kind": "import-statement",
+          "original": "../services/load-github.services"
+        },
+        {
+          "path": "src/types/widget-types.ts",
+          "kind": "import-statement",
+          "original": "../types/widget-types"
+        },
+        {
+          "path": "src/types/figma-types.ts",
+          "kind": "import-statement",
+          "original": "../types/figma-types"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/hooks/use-routing.ts": {
+      "bytes": 1500,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/hooks/use-app-state.ts": {
+      "bytes": 3716,
+      "imports": [
+        {
+          "path": "src/hooks/use-token-management.ts",
+          "kind": "import-statement",
+          "original": "./use-token-management"
+        },
+        {
+          "path": "src/hooks/use-vector-management.ts",
+          "kind": "import-statement",
+          "original": "./use-vector-management"
+        },
+        {
+          "path": "src/hooks/use-sync-management.ts",
+          "kind": "import-statement",
+          "original": "./use-sync-management"
+        },
+        {
+          "path": "src/hooks/use-routing.ts",
+          "kind": "import-statement",
+          "original": "./use-routing"
+        },
+        {
+          "path": "../../packages/radius-toolkit/dist/lib/radius-toolkit.es.js",
+          "kind": "import-statement",
+          "original": "radius-toolkit"
+        },
+        {
+          "path": "../types/app-state",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../../packages/utils/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/utils"
+        },
+        {
+          "path": "src/types/figma-types.ts",
+          "kind": "import-statement",
+          "original": "../types/figma-types"
+        },
+        {
+          "path": "../types/widget-types",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/types/app-state.ts": {
+      "bytes": 1648,
+      "imports": [
+        {
+          "path": "radius-toolkit",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "@repo/config",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./state",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../ui/components/success-panel",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./widget-types",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/code.tsx": {
+      "bytes": 3141,
+      "imports": [
+        {
+          "path": "src/ui/pages/empty-page.tsx",
+          "kind": "import-statement",
+          "original": "./ui/pages/empty-page"
+        },
+        {
+          "path": "src/ui/pages/loaded-page.tsx",
+          "kind": "import-statement",
+          "original": "./ui/pages/loaded-page"
+        },
+        {
+          "path": "src/ui/pages/layout.tsx",
+          "kind": "import-statement",
+          "original": "./ui/pages/layout"
+        },
+        {
+          "path": "package.json",
+          "kind": "import-statement",
+          "original": "../package.json"
+        },
+        {
+          "path": "types/state.ts",
+          "kind": "import-statement",
+          "original": "../types/state"
+        },
+        {
+          "path": "src/dialogs/dialog-handlers.ts",
+          "kind": "import-statement",
+          "original": "./dialogs/dialog-handlers"
+        },
+        {
+          "path": "../../packages/utils/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/utils"
+        },
+        {
+          "path": "src/hooks/use-app-state.ts",
+          "kind": "import-statement",
+          "original": "./hooks/use-app-state"
+        },
+        {
+          "path": "src/types/app-state.ts",
+          "kind": "import-statement",
+          "original": "./types/app-state"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    }
+  },
+  "outputs": {
+    "dist/code.js": {
+      "imports": [],
+      "exports": [],
+      "entryPoint": "src/code.tsx",
+      "inputs": {
+        "../../node_modules/.pnpm/requires-port@1.0.0/node_modules/requires-port/index.js": {
+          "bytesInOutput": 763
+        },
+        "../../node_modules/.pnpm/querystringify@2.2.0/node_modules/querystringify/index.js": {
+          "bytesInOutput": 1788
+        },
+        "../../node_modules/.pnpm/url-parse@1.5.10/node_modules/url-parse/index.js": {
+          "bytesInOutput": 12545
+        },
+        "../../node_modules/.pnpm/path-browserify@1.0.1/node_modules/path-browserify/index.js": {
+          "bytesInOutput": 14718
+        },
+        "../../node_modules/.pnpm/base64-js@1.5.1/node_modules/base64-js/index.js": {
+          "bytesInOutput": 4239
+        },
+        "../../node_modules/.pnpm/ieee754@1.2.1/node_modules/ieee754/index.js": {
+          "bytesInOutput": 2756
+        },
+        "../../node_modules/.pnpm/buffer@6.0.3/node_modules/buffer/index.js": {
+          "bytesInOutput": 65517
+        },
+        "src/constants.ts": {
+          "bytesInOutput": 278
+        },
+        "../../packages/bandoneon/src/styles/colours.ts": {
+          "bytesInOutput": 1038
+        },
+        "../../packages/bandoneon/src/styles/index.ts": {
+          "bytesInOutput": 0
+        },
+        "../../packages/bandoneon/src/styles/typography.ts": {
+          "bytesInOutput": 1840
+        },
+        "../../packages/bandoneon/src/styles/spacing.ts": {
+          "bytesInOutput": 435
+        },
+        "../../packages/bandoneon/src/index.ts": {
+          "bytesInOutput": 0
+        },
+        "src/ui/components/icon.tsx": {
+          "bytesInOutput": 16812
+        },
+        "src/ui/components/variable-bullet.tsx": {
+          "bytesInOutput": 3257
+        },
+        "src/ui/components/name-format.tsx": {
+          "bytesInOutput": 7212
+        },
+        "src/ui/components/status-button.tsx": {
+          "bytesInOutput": 3209
+        },
+        "src/ui/components/short-repository-ribbon.tsx": {
+          "bytesInOutput": 4482
+        },
+        "src/ui/components/library-button.tsx": {
+          "bytesInOutput": 3069
+        },
+        "src/ui/components/refreshed-content.tsx": {
+          "bytesInOutput": 3321
+        },
+        "../../packages/radius-toolkit/dist/lib/radius-toolkit.es.js": {
+          "bytesInOutput": 76285
+        },
+        "src/ui/components/lg-button.tsx": {
+          "bytesInOutput": 2151
+        },
+        "src/ui/pages/empty-page.tsx": {
+          "bytesInOutput": 4202
+        },
+        "src/ui/components/error-pill.tsx": {
+          "bytesInOutput": 832
+        },
+        "src/ui/components/IssuePill.tsx": {
+          "bytesInOutput": 489
+        },
+        "src/ui/components/token-issues-summary.tsx": {
+          "bytesInOutput": 7889
+        },
+        "src/ui/components/bullet-label.tsx": {
+          "bytesInOutput": 790
+        },
+        "src/ui/components/token-change-bar.tsx": {
+          "bytesInOutput": 4467
+        },
+        "src/ui/components/version-bump.tsx": {
+          "bytesInOutput": 3060
+        },
+        "src/ui/components/warning-badge.tsx": {
+          "bytesInOutput": 739
+        },
+        "src/ui/components/push-panel.tsx": {
+          "bytesInOutput": 7028
+        },
+        "../../packages/utils/logging.utils.ts": {
+          "bytesInOutput": 537
+        },
+        "../../packages/utils/index.ts": {
+          "bytesInOutput": 0
+        },
+        "../../packages/utils/github.utils.ts": {
+          "bytesInOutput": 11426
+        },
+        "src/common/generator.utils.ts": {
+          "bytesInOutput": 2155
+        },
+        "src/ui/components/success-panel.tsx": {
+          "bytesInOutput": 6833
+        },
+        "../../node_modules/.pnpm/preact@10.25.4/node_modules/preact/dist/preact.module.js": {
+          "bytesInOutput": 15026
+        },
+        "src/ui/pages/loaded-page.tsx": {
+          "bytesInOutput": 5972
+        },
+        "src/ui/components/widget-header.tsx": {
+          "bytesInOutput": 10365
+        },
+        "src/ui/components/bottom-logo.tsx": {
+          "bytesInOutput": 17379
+        },
+        "src/ui/components/commit-ribbon.tsx": {
+          "bytesInOutput": 4162
+        },
+        "src/ui/components/repository-ribbon.tsx": {
+          "bytesInOutput": 4783
+        },
+        "src/ui/pages/layout.tsx": {
+          "bytesInOutput": 2311
+        },
+        "package.json": {
+          "bytesInOutput": 33
+        },
+        "types/state.ts": {
+          "bytesInOutput": 967
+        },
+        "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/events.js": {
+          "bytesInOutput": 1582
+        },
+        "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/index.js": {
+          "bytesInOutput": 0
+        },
+        "src/types/figma-types.ts": {
+          "bytesInOutput": 678
+        },
+        "src/dialogs/dialog-handlers.ts": {
+          "bytesInOutput": 2420
+        },
+        "src/common/variables.utils.ts": {
+          "bytesInOutput": 2116
+        },
+        "src/services/load-tokens.services.ts": {
+          "bytesInOutput": 4091
+        },
+        "src/hooks/use-token-management.ts": {
+          "bytesInOutput": 1539
+        },
+        "src/hooks/use-vector-management.ts": {
+          "bytesInOutput": 3321
+        },
+        "src/services/load-github.services.ts": {
+          "bytesInOutput": 5886
+        },
+        "src/types/widget-types.ts": {
+          "bytesInOutput": 109
+        },
+        "src/hooks/use-sync-management.ts": {
+          "bytesInOutput": 3651
+        },
+        "src/hooks/use-routing.ts": {
+          "bytesInOutput": 1347
+        },
+        "src/hooks/use-app-state.ts": {
+          "bytesInOutput": 2372
+        },
+        "src/types/app-state.ts": {
+          "bytesInOutput": 124
+        },
+        "src/code.tsx": {
+          "bytesInOutput": 2471
+        }
+      },
+      "bytes": 1269629
+    }
+  }
+}

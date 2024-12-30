@@ -10,6 +10,7 @@ import {
   FormatValidationResult,
   TokenLayers,
   TokenNameFormatType,
+  TokenNamePortableFormatType,
   isString,
   isTokenCollection,
   isVectorOutput,
@@ -62,7 +63,7 @@ export const getState = (
   persistedTokens: string | null,
   persistedIcons: string | null,
   syncDetails: RepositoryTokenLayers | null,
-  format: TokenNameFormatType,
+  format: TokenNamePortableFormatType,
   issues: FormatValidationResult[],
 ) => {
   if (!persistedTokens || !syncDetails || !syncDetails)
@@ -120,17 +121,17 @@ export const isState = (u: unknown): u is State =>
   "issues" in u;
 
 export const whyIsState = (u: unknown) => {
-  console.log(!!u);
+  console.log("is not nil", !!u);
   if (!u) return;
-  console.log(typeof u === "object");
+  console.log("is object", typeof u === "object");
   if (typeof u !== "object") return;
-  console.log("collections" in u);
-  console.log("tokenLayers" in u);
-  console.log("inspectedAt" in u);
-  console.log("oldTokenLayers" in u);
-  console.log("meta" in u);
-  console.log("format" in u);
-  console.log("issues" in u);
+  console.log("collections in u", "collections" in u);
+  console.log("tokenLayers in u", "tokenLayers" in u);
+  console.log("inspectedAt in u", "inspectedAt" in u);
+  console.log("oldTokenLayers in u", "oldTokenLayers" in u);
+  console.log("meta in u", "meta" in u);
+  console.log("format in u", "format" in u);
+  console.log("issues in u", "issues" in u);
 };
 
 export const deserializeState = (serializedState: string): State => {

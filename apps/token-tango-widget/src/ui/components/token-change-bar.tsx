@@ -130,6 +130,7 @@ export const TokenChangeBar: FunctionalWidget<TokenChangeBarProps> = ({
         >
           {tokensChanged.slice(0, MAX_CHANGES_TO_SHOW).map((token) => (
             <VariableBullet
+              key={`${changeType}-${token}`}
               name={token}
               icon={propMap[changeType].icon}
               width={"fill-parent"}

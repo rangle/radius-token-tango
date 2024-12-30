@@ -5,32 +5,29 @@ import { WidgetHeader } from "../components/widget-header";
 import { BottomLogo } from "../components/bottom-logo";
 import { RepositoryRibbon } from "../components/repository-ribbon";
 import { colors, padding, typography } from "@repo/bandoneon";
-import { RepositoryTokenLayers } from "../../../types/state";
 import { NameFormat } from "../components/name-format";
-import { TokenNameFormatType } from "radius-toolkit";
+import { AppState } from "../../types/app-state";
+import { AppStateActions } from "../../hooks/use-app-state";
 
 type PageLayoutProps = {
-  synched: boolean;
-  name: string;
-  error: string | null;
-  synchDetails: RepositoryTokenLayers | null;
+  state: AppState;
+  actions: Pick<AppStateActions, "synchronize" | "setConfiguration">;
   appVersion: string;
-  format: TokenNameFormatType;
   openConfig: () => void;
-  synchronize?: () => void;
-  loadVariables?: () => void;
 } & HasChildrenProps;
 
+/**
+ * Main layout component that wraps all pages
+ */
 export const PageLayout = ({
-  synched,
-  format,
-  error,
+  state,
+  actions,
   appVersion,
-  synchDetails,
   openConfig,
   children,
 }: PageLayoutProps) => {
-  const synchMetadata = synchDetails && synchDetails[2];
+  console.log("PageLayout", state.synchDetails);
+  const synchMetadata = state.synchDetails && state.synchDetails[2];
 
   return (
     <AutoLayout
@@ -52,10 +49,14 @@ export const PageLayout = ({
       spacing={16}
       padding={padding.base}
     >
-      <WidgetHeader empty={synchDetails === null}>
-        <NameFormat format={format} formats={[]} variant="compact" />
+      <WidgetHeader empty={state.synchDetails === null}>
+        <NameFormat
+          format={state.tokenFormatType}
+          formats={[]}
+          variant="compact"
+        />
       </WidgetHeader>
-      {error && (
+      {state.errorMessage && (
         <AutoLayout
           cornerRadius={6}
           padding={6}
@@ -64,7 +65,7 @@ export const PageLayout = ({
           fill="#fff"
         >
           <Text fontSize={12} fill={"#ff0000"}>
-            {error}
+            {state.errorMessage}
           </Text>
         </AutoLayout>
       )}
@@ -79,7 +80,7 @@ export const PageLayout = ({
             userName={synchMetadata.lastCommits[0].author.name}
             version={synchMetadata.version}
             openConfig={openConfig}
-            status={synched ? "online" : "disconnected"}
+            status={state.configuration !== null ? "online" : "disconnected"}
           />
         )}
 

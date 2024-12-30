@@ -1,46 +1,26 @@
 const { widget } = figma;
-const { AutoLayout, Text, useSyncedState } = widget;
+const { AutoLayout, Text } = widget;
 
 import { NameFormat } from "../components/name-format";
-import { Icon16px } from "../components/icon";
-import {
-  TokenIssuesSummary,
-  TokenIssuesSummaryProps,
-} from "../components/token-issues-summary";
+import { TokenIssuesSummary } from "../components/token-issues-summary";
 import { PushPanel } from "../components/push-panel";
 import { isTokenLayers } from "../../common/generator.utils";
-import {
-  TokenNameFormatType,
-  formats,
-  FormatValidationResult,
-  TokenCollection,
-  isTokenValidationResult,
-  diffTokenLayers,
-} from "radius-toolkit";
-import { isNotNil } from "radius-toolkit";
+import { isTokenValidationResult, diffTokenLayers } from "radius-toolkit";
 import { borderRadius, colors } from "@repo/bandoneon";
-import {
-  SuccessPanel,
-  SuccessfullyPushedDetails,
-} from "../components/success-panel";
-
+import { SuccessPanel } from "../components/success-panel";
 import { createLogger } from "@repo/utils";
-import { RepositoryTokenLayers } from "../../../types/state";
 import { Fragment } from "preact";
-import { LoadedTokens } from "../../types/widget-types";
+import { LoadedAppState } from "../../types/app-state";
+import { AppStateActions } from "../../hooks/use-app-state";
 
 const log = createLogger("pages:loaded");
 
 type LoadedPageProps = {
-  format: TokenNameFormatType;
-  allTokens: LoadedTokens;
-  issues: FormatValidationResult[];
-  synchDetails: RepositoryTokenLayers;
-  successfullyPushed: SuccessfullyPushedDetails | null;
-  loadedIcons: number | null;
-  loadIcons: () => void;
-  clearIcons: () => void;
-  reloadTokens: () => void;
+  state: LoadedAppState;
+  actions: Pick<
+    AppStateActions,
+    "loadTokens" | "loadIcons" | "clearIcons" | "saveTokens"
+  >;
   openIssues: () => void;
   pushTokens: (branch: string, message: string, version: string) => void;
 };
@@ -50,31 +30,34 @@ const sum =
   (acc: number, item: P) =>
     acc + transform(item);
 
+/**
+ * Page shown when tokens are loaded
+ */
 export const LoadedPage: FunctionalWidget<LoadedPageProps> = ({
-  format,
-  allTokens: { collections, inspectedAt, tokenLayers },
-  issues,
-  synchDetails: [previousTokenLayers, packageJson, meta],
-  successfullyPushed,
-  loadedIcons,
-  loadIcons,
-  clearIcons,
+  state,
+  actions,
   openIssues,
-  reloadTokens,
   pushTokens,
 }) => {
-  log("debug", "BEGIN RENDERING LOADED PAGE 1", successfullyPushed);
+  log("debug", "BEGIN RENDERING LOADED PAGE 1", state.successfullyPushed);
 
-  const summary = getSummaryOfCollections(collections, issues);
+  const { collections, inspectedAt, tokenLayers } = state.parsedTokens;
+  const [previousTokenLayers, packageJson, meta] = state.synchDetails;
+
+  const summary = getSummaryOfCollections(collections, state.allErrors);
 
   log("debug", "BEGIN RENDERING LOADED PAGE 2");
 
-  const collectionList = renderCollectionList(collections, format, issues);
+  const collectionList = renderCollectionList(
+    collections,
+    state.tokenFormatType,
+    state.allErrors,
+  );
 
   log("debug", "RENDERING LOADED PAGE");
 
   if (!isTokenLayers(tokenLayers) || !isTokenLayers(previousTokenLayers))
-    return invalidLayersFile(format, reloadTokens);
+    return invalidLayersFile(state.tokenFormatType, actions.loadTokens);
 
   log("debug", "DIFF TOKEN LAYERS");
   const [added, modified, deleted] = diffTokenLayers(
@@ -86,7 +69,7 @@ export const LoadedPage: FunctionalWidget<LoadedPageProps> = ({
   log("debug", "DELETED", deleted);
 
   // we only want to detail errors related to tokens
-  const tokenIssues = issues.filter(isTokenValidationResult);
+  const tokenIssues = state.allErrors.filter(isTokenValidationResult);
 
   // separate errors in added tokens and modified tokens
   const addedErrs = tokenIssues.filter(
@@ -101,11 +84,11 @@ export const LoadedPage: FunctionalWidget<LoadedPageProps> = ({
       <TokenIssuesSummary
         {...summary}
         lastUpdated={inspectedAt}
-        loadedIcons={loadedIcons}
+        loadedIcons={state.loadedVectors}
         openIssues={openIssues}
-        loadIcons={loadIcons}
-        clearIcons={clearIcons}
-        refreshTokens={reloadTokens}
+        loadIcons={actions.loadIcons}
+        clearIcons={actions.clearIcons}
+        refreshTokens={actions.loadTokens}
       />
       <AutoLayout
         name="PublishSummaryPanel"
@@ -114,18 +97,20 @@ export const LoadedPage: FunctionalWidget<LoadedPageProps> = ({
         width="fill-parent"
         padding={8}
         fill={
-          successfullyPushed ? colors.success.muted : colors.repository.muted
+          state.successfullyPushed
+            ? colors.success.muted
+            : colors.repository.muted
         }
         cornerRadius={borderRadius.base}
       >
-        {successfullyPushed ? (
-          <SuccessPanel details={successfullyPushed} />
+        {state.successfullyPushed ? (
+          <SuccessPanel details={state.successfullyPushed} />
         ) : (
           <PushPanel
             previousVersion={meta.version}
             diff={[added, modified, deleted]}
             issues={[addedErrs, modifiedErrs]}
-            reloadTokens={reloadTokens}
+            reloadTokens={actions.loadTokens}
             pushTokens={pushTokens}
             openIssues={openIssues}
           />
@@ -136,9 +121,9 @@ export const LoadedPage: FunctionalWidget<LoadedPageProps> = ({
 };
 
 const renderCollectionList = (
-  collections: LoadedTokens["collections"],
-  format: TokenNameFormatType,
-  errors: FormatValidationResult[],
+  collections: LoadedAppState["parsedTokens"]["collections"],
+  format: LoadedAppState["tokenFormatType"],
+  errors: LoadedAppState["allErrors"],
 ) => {
   return collections.map(({ name, modes }) => {
     const [mode] = modes;
@@ -150,17 +135,19 @@ const renderCollectionList = (
       name.split(format.separator),
     );
 
-    const segmentsBySegmentName = segmentNames.reduce(
+    const segmentsBySegmentName = segmentNames.reduce<Record<string, string[]>>(
       (acc, segmentName, idx) => {
         const uniqueSegments = new Set(
-          variablesAsSegments.map((segments) => segments[idx]),
+          variablesAsSegments
+            .map((segments) => segments[idx])
+            .filter((s): s is string => s !== undefined),
         );
         return {
           ...acc,
-          [segmentName]: Array.from(uniqueSegments).filter(isNotNil),
+          [segmentName]: Array.from(uniqueSegments),
         };
       },
-      {} as Record<string, string[]>,
+      {},
     );
 
     return {
@@ -175,8 +162,9 @@ const renderCollectionList = (
     };
   });
 };
+
 function invalidLayersFile(
-  format: TokenNameFormatType,
+  format: LoadedAppState["tokenFormatType"],
   reloadTokens: () => void,
 ): FigmaDeclarativeNode {
   return (
@@ -232,8 +220,8 @@ function invalidLayersFile(
 }
 
 function getSummaryOfCollections(
-  collections: TokenCollection[],
-  errors: FormatValidationResult[],
+  collections: LoadedAppState["parsedTokens"]["collections"],
+  errors: LoadedAppState["allErrors"],
 ) {
   return {
     collections: collections.length,

@@ -3,43 +3,43 @@ const { AutoLayout, Text, Frame, SVG } = widget;
 
 import { URL_ACCESS_TOKEN_DOCS } from "../../constants";
 import { NameFormat } from "../components/name-format";
-import { MessageRibbon } from "../components/message-ribbon";
 import { RefreshedContent } from "../components/refreshed-content";
-import { WidgetConfiguration } from "@repo/config";
-
-import { FormatName, formats, getFormat } from "radius-toolkit";
-import { FormatDescription } from "../components/name-format";
-import { Button } from "../components/button";
-import { colors, typography } from "@repo/bandoneon";
+import {
+  FormatName,
+  formats,
+  getFormat,
+  toTokenNameFormatType,
+} from "radius-toolkit";
 import { LgButton } from "../components/lg-button";
-import { RoundButton } from "../components/round-button";
-import { Icon16px } from "../components/icon";
-import { LibraryButton } from "../components/library-button";
+import { colors, typography } from "@repo/bandoneon";
+import { EmptyAppState } from "../../types/app-state";
+import { AppStateActions } from "../../hooks/use-app-state";
 
 type EmptyPageProps = {
-  synchConfig: WidgetConfiguration | null;
-  loadTokens: () => void;
-  clearIcons: () => void;
-  loadIcons: () => void;
+  state: EmptyAppState;
+  actions: Pick<
+    AppStateActions,
+    | "loadTokens"
+    | "loadIcons"
+    | "clearIcons"
+    | "setTokenNameFormat"
+    | "setConfiguration"
+  >;
   openConfig: () => void;
-  withVectors: boolean;
-  toggleWithVectors: () => void;
-  loadedIcons: number | null;
-  selectedFormat: FormatName | null;
-  selectFormat: (format: FormatName) => void;
 };
 
+/**
+ * Page shown when no tokens are loaded
+ */
 export const EmptyPage: FunctionalWidget<EmptyPageProps> = ({
-  synchConfig,
-  loadTokens,
-  loadIcons,
-  clearIcons,
-  loadedIcons,
+  state,
+  actions,
   openConfig,
-  selectedFormat,
-  selectFormat,
 }) => {
-  const format = getFormat(selectedFormat ?? formats[0].name) ?? formats[0];
+  const format =
+    getFormat(state.tokenNameFormat ?? formats[0].name) ?? formats[0];
+  const formatType = toTokenNameFormatType(format);
+
   return (
     <AutoLayout direction="vertical" width={"fill-parent"} spacing={16}>
       <AutoLayout
@@ -51,7 +51,11 @@ export const EmptyPage: FunctionalWidget<EmptyPageProps> = ({
         fill={colors.base.fg}
         width="fill-parent"
       >
-        <NameFormat {...{ format, selectFormat, formats }} />
+        <NameFormat
+          format={format}
+          selectFormat={actions.setTokenNameFormat}
+          formats={formats}
+        />
       </AutoLayout>
       <AutoLayout
         cornerRadius={12}
@@ -62,16 +66,16 @@ export const EmptyPage: FunctionalWidget<EmptyPageProps> = ({
         fill="#fff"
         width="fill-parent"
       >
-        {synchConfig ? (
+        {state.configuration ? (
           <RefreshedContent
-            name={synchConfig.name}
-            status={synchConfig.status || "disconnected"}
-            format={format}
-            loadedIcons={loadedIcons}
-            loadIcons={loadIcons}
-            loadTokens={loadTokens}
+            name={state.configuration.name}
+            status={state.configuration.status || "disconnected"}
+            format={formatType}
+            loadedIcons={state.loadedVectors}
+            loadIcons={actions.loadIcons}
+            loadTokens={actions.loadTokens}
             openConfig={openConfig}
-            clearIcons={clearIcons}
+            clearIcons={actions.clearIcons}
           />
         ) : (
           <AutoLayout

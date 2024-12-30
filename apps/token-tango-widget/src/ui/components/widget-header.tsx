@@ -16,6 +16,7 @@ export const WidgetHeader = ({
   empty,
   ...props
 }: WidgetHeaderProps) => {
+  console.log("WidgetHeader", empty);
   return (
     <AutoLayout
       name="WidgetHeader"

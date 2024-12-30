@@ -2,7 +2,11 @@ import { colors, typography } from "@repo/bandoneon";
 import { Icon16px } from "./icon.js";
 import { VariableBullet } from "./variable-bullet.js";
 
-import { TokenNameFormatType, FormatName } from "radius-toolkit";
+import {
+  TokenNameFormatType,
+  FormatName,
+  TokenNamePortableFormatType,
+} from "radius-toolkit";
 import { URL_TOKEN_FORMAT_DOCS } from "../../constants.js";
 
 const { widget } = figma;
@@ -10,8 +14,8 @@ const { Text, AutoLayout, Frame, SVG } = widget;
 
 export type NameFormatProps = {
   variant?: "default" | "compact";
-  format: TokenNameFormatType;
-  formats: ReadonlyArray<TokenNameFormatType>;
+  format: TokenNamePortableFormatType;
+  formats: ReadonlyArray<TokenNamePortableFormatType>;
   selectFormat?: (format: FormatName) => void;
 };
 
@@ -21,8 +25,10 @@ export const NameFormat: FunctionalWidget<NameFormatProps> = ({
   format,
   selectFormat,
 }) => {
+  console.log("NameFormat", format);
   const idx = formats.indexOf(format);
   const nextFormat = formats[(idx + 1) % formats.length] ?? format;
+  console.log("NameFormat", nextFormat);
   return variant === "compact" ? (
     <AutoLayout name="FormatGroup" spacing={8} verticalAlignItems="center">
       <AutoLayout name="FormatRow" spacing={8} verticalAlignItems="center">
@@ -30,6 +36,7 @@ export const NameFormat: FunctionalWidget<NameFormatProps> = ({
           Token Format:
         </Text>
         <VariableBullet
+          key={`format-bullet-${format.name}-compact`}
           icon={selectFormat ? "switch" : "variables"}
           name={format.segments.join(format.separator)}
           variant={variant}
@@ -78,6 +85,7 @@ export function FormatDescription({
               Token Format:
             </Text>
             <VariableBullet
+              key={`format-bullet-${format.name}-default`}
               name={format.segments.join(format.separator)}
               variant={"compact"}
             />

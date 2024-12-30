@@ -10,14 +10,14 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "@figma/plugin-typings": "^1.94.0",
-    "@figma/widget-typings": "^1.9.1",
+    "@figma/plugin-typings": "^1.106.0",
+    "@figma/widget-typings": "^1.11.0",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "husky": "^9.0.11",
-    "prettier": "^3.2.5",
-    "turbo": "^2.0.4",
-    "typescript": "^5.4.5"
+    "husky": "^9.1.7",
+    "prettier": "^3.4.2",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2"
   },
   "packageManager": "pnpm@8.9.0",
   "engines": {
