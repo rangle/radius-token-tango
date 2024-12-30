@@ -1,5 +1,5 @@
 import React, { Fragment, FC } from "react";
-import { render } from "react-dom";
+import { createRoot } from "react-dom/client";
 
 import { useEffect, useState } from "react";
 import { emit, on } from "@create-figma-plugin/utilities";
@@ -21,7 +21,6 @@ import { PushMessageType, WidgetConfiguration } from "@repo/config";
 
 import "./index.css";
 import { ValidationResult } from "./components/validation";
-import { radiusLayerSubjectTypeFormat } from "radius-toolkit";
 
 import { createLogger } from "@repo/utils";
 import SpinningLogo from "./components/loading-icon";
@@ -37,8 +36,6 @@ const initialState: WidgetConfiguration = {
   filePath: "",
   createNewFile: false,
 };
-
-const defaultFormat = radiusLayerSubjectTypeFormat;
 
 const initialCommitState: PushMessageType = {
   branchName: "",
@@ -96,20 +93,6 @@ export const App: FC = () => {
       setRoute("validation");
       setState(state);
     });
-
-    // const hash = window.location.hash.substring(1);
-    // if (hash === "config") {
-    //   setRoute("config");
-    // } else if (hash === "push") {
-    //   setRoute("push");
-    // } else if (hash === "repository") {
-    //   setRoute("repository");
-    // } else if (hash === "validation") {
-    //   const state = isState(mockState) ? mockState : null;
-    //   log("warn", "MOCK", state);
-    //   setRoute("validation");
-    //   setState(state);
-    // }
   }, []);
 
   const updateState = (newState: WidgetConfiguration) => {
@@ -123,7 +106,6 @@ export const App: FC = () => {
   };
 
   log("warn", "ROUTE", route);
-
   log("debug", { state });
 
   return (
@@ -146,4 +128,10 @@ export const App: FC = () => {
   );
 };
 
-render(<App />, document.getElementById("root")!);
+const container = document.getElementById("root");
+if (container) {
+  const root = createRoot(container);
+  root.render(<App />);
+} else {
+  console.error("Root element not found");
+}

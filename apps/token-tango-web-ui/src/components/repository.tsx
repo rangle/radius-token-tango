@@ -229,7 +229,7 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
                   <Input
                     id="token"
                     type="password"
-                    placeholder="ghp_..."
+                    placeholder="ghp_... or github_pat_..."
                     autoComplete="off"
                     {...register("accessToken")}
                   />
@@ -298,7 +298,9 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
                   </SelectTrigger>
                   <SelectContent>
                     {branches.map((branch) => (
-                      <SelectItem value={branch}>{branch}</SelectItem>
+                      <SelectItem key={branch} value={branch}>
+                        {branch}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>

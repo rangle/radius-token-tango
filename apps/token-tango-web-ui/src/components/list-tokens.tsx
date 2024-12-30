@@ -233,7 +233,7 @@ export const TokenItemBar: FC<TokenItemBarProps> = ({ activeMode, token }) => {
           >
             {token.name.split(".").map((word, i) => (
               <span
-                key={i}
+                key={`${token.name}-${word}-${i}`}
                 className={
                   token.errors.some(({ segments }) => segments.includes(word))
                     ? "text-red-500 font-bold"
@@ -287,7 +287,9 @@ export const TokenItemBar: FC<TokenItemBarProps> = ({ activeMode, token }) => {
               <TooltipContent>
                 <ul>
                   {token.errors.map((error, index) => (
-                    <li key={index}>{error.message}</li>
+                    <li key={`${token.name}-error-${index}-${error.message}`}>
+                      {error.message}
+                    </li>
                   ))}
                 </ul>
               </TooltipContent>
@@ -307,7 +309,11 @@ export const TokenItemBar: FC<TokenItemBarProps> = ({ activeMode, token }) => {
               <TooltipContent>
                 <ul>
                   {token.warnings.map((warning, index) => (
-                    <li key={index}>{warning.message}</li>
+                    <li
+                      key={`${token.name}-warning-${index}-${warning.message}`}
+                    >
+                      {warning.message}
+                    </li>
                   ))}
                 </ul>
               </TooltipContent>
@@ -368,7 +374,10 @@ export const TokenItemBar: FC<TokenItemBarProps> = ({ activeMode, token }) => {
               <h4 className="font-semibold text-red-600 mb-1">Errors:</h4>
               <ul className="list-disc list-inside">
                 {token.errors.map((error, index) => (
-                  <li key={index} className="text-red-600">
+                  <li
+                    key={`${token.name}-error-detail-${index}-${error.message}`}
+                    className="text-red-600"
+                  >
                     {error.message}
                   </li>
                 ))}
@@ -380,7 +389,10 @@ export const TokenItemBar: FC<TokenItemBarProps> = ({ activeMode, token }) => {
               <h4 className="font-semibold text-yellow-800 mb-1">Warnings:</h4>
               <ul className="list-disc list-inside">
                 {token.warnings.map((warning, index) => (
-                  <li key={index} className="text-yellow-800">
+                  <li
+                    key={`${token.name}-warning-detail-${index}-${warning.message}`}
+                    className="text-yellow-800"
+                  >
                     {warning.message}
                   </li>
                 ))}

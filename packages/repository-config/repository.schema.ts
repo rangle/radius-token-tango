@@ -16,7 +16,10 @@ const githubSchema = z.object({
     ),
   accessToken: z
     .string()
-    .length(40, "Access token must be in the correct format"),
+    .regex(
+      /^(ghp_[a-zA-Z0-9]{36}|github_pat_[a-zA-Z0-9_]{82}|[a-f0-9]{40})$/,
+      "Invalid token format. Must be a valid GitHub personal access token"
+    ),
   filePath: z
     .string()
     .regex(

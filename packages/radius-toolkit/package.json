@@ -1,6 +1,6 @@
 {
   "name": "radius-toolkit",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "A toolkit for handling design tokens",
   "main": "dist/lib/radius-toolkit.cjs.js",
   "module": "dist/lib/radius-toolkit.es.js",

@@ -154,7 +154,7 @@ export const VectorItem: FC<VectorItemProps> = ({
                       <ul className="text-xs">
                         {Object.entries(vector.properties).map(
                           ([key, value]) => (
-                            <li key={key}>
+                            <li key={`${vector.name}-${key}`}>
                               <span className="font-medium">{key}:</span>{" "}
                               {value}
                             </li>

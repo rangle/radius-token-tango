@@ -74,7 +74,8 @@
       "@/*": ["./@/*"],
       "@repo/utils": ["../../../packages/utils/index.ts"],
       "@repo/config": ["../../../packages/repository-config/index.ts"],
-      "react-hook-form": ["./node_modules/react-hook-form/dist/index.d.ts"]
+      "react-hook-form": ["./node_modules/react-hook-form/dist/index.d.ts"],
+      "@radix-ui/*": ["./node_modules/@radix-ui/*"]
     },
     "typeRoots": ["node_modules/@types", "node_modules/@figma"]
   },
