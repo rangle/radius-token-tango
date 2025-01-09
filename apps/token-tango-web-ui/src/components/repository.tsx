@@ -92,16 +92,17 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
   const {
     register,
     handleSubmit,
-    formState,
+    formState: { errors, isValid },
     getValues,
     setValue,
     watch,
     clearErrors,
     reset,
+    trigger,
   } = useForm<RepositoryFormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: state,
-    mode: "onBlur",
+    mode: "onChange",
   });
 
   const onSubmit = (values: RepositoryFormSchema) => {
@@ -192,8 +193,10 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
       });
       if (status === "found") {
         setFileStatus("found");
+        setIsSaveDisabled(false);
       } else {
         setFileStatus("not-found");
+        setIsSaveDisabled(true);
       }
       setError(null);
     } catch (err) {
@@ -204,10 +207,18 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
     }
   };
 
-  const filePath = register("filePath");
+  const filePath = register("filePath", {
+    onChange: () => {
+      setFileStatus("none");
+      trigger("filePath");
+    },
+  });
 
   const watchAccessToken = watch("accessToken");
   const watchRepository = watch("repository");
+  const watchFilePath = watch("filePath");
+  const watchName = watch("name");
+  const watchUrl = watch("url");
 
   useEffect(() => {
     if (watchAccessToken && watchAccessToken.length === 40) {
@@ -272,7 +283,7 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
       setIsSaveDisabled(
         !isConnected ||
           fileStatus === "error" ||
-          fileStatus === "not-found" ||
+          (fileStatus === "not-found" && !getValues("createNewFile")) ||
           fileStatus === "none"
       );
     } else if (selectedTool === "File Download") {
@@ -284,11 +295,11 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
         setIsSaveDisabled(
           !values.name ||
             !values.url ||
-            formState.errors["url" as keyof RepositoryFormSchema] !== undefined
+            errors["url" as keyof RepositoryFormSchema] !== undefined
         );
       }
     }
-  }, [selectedTool, isConnected, fileStatus, formState.errors]);
+  }, [selectedTool, isConnected, fileStatus, errors, watchName, watchUrl]);
 
   const values = getValues();
 
@@ -343,7 +354,7 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
                   ]}
                   {...register("tool")}
                   onChange={(e) => {
-                    console.log(">> onChange", e.target.value);
+                    console.log(">> Tool onChange", e.target.value);
                     setValue(
                       "tool",
                       e.target.value as
@@ -396,9 +407,7 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
                       </div>
                       <FieldDescription
                         error={
-                          formState.errors[
-                            "accessToken" as keyof RepositoryFormSchema
-                          ]
+                          errors["accessToken" as keyof RepositoryFormSchema]
                         }
                         text={
                           <>
@@ -435,9 +444,7 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
                       </div>
                       <FieldDescription
                         error={
-                          formState.errors[
-                            "repository" as keyof RepositoryFormSchema
-                          ]
+                          errors["repository" as keyof RepositoryFormSchema]
                         }
                         text={"Name of the repository in Github"}
                       />
@@ -454,7 +461,7 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
                         disabled={!isConnected || repositories.length === 0}
                       />
                       <FieldDescription
-                        error={formState.errors.name}
+                        error={errors.name}
                         text={"What are you calling this project"}
                         className="col-span-2"
                       />
@@ -492,11 +499,7 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
                         </SelectContent>
                       </Select>
                       <FieldDescription
-                        error={
-                          formState.errors[
-                            "branch" as keyof RepositoryFormSchema
-                          ]
-                        }
+                        error={errors["branch" as keyof RepositoryFormSchema]}
                         text={"Branch to read the file from (usually 'main')"}
                       />
                     </div>
@@ -509,27 +512,26 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
                         <Input
                           id="path"
                           placeholder="path/to/tokens-file.json"
-                          {...register("filePath")}
+                          {...filePath}
                           onChange={(e) => {
-                            console.log(">> onChange", e.target.value);
+                            filePath.onChange(e);
                             setValue("filePath", e.target.value);
                           }}
-                          onBlur={handleCheckFile}
+                          onBlur={filePath.onBlur}
                           disabled={!branches.length}
                         />
                         <Button
                           variant="secondary"
                           onClick={handleCheckFile}
-                          className={`p-2 ${fileStatus === "found" ? "bg-green-500 hover:bg-green-600" : fileStatus === "error" ? "bg-red-500 hover:bg-red-600" : fileStatus === "not-found" ? "bg-yellow-500 hover:bg-yellow-500" : ""}`}
+                          className={`p-2 ${fileStatus === "found" ? "bg-green-500 hover:bg-green-600" : fileStatus === "error" ? "bg-red-500 hover:bg-red-600" : fileStatus === "not-found" || fileStatus === "create-new" ? "bg-yellow-500 hover:bg-yellow-500" : ""}`}
                           type="button"
                           aria-label="Check if file path exists"
                           disabled={
                             !isConnected ||
                             !isGithubConfig(values) ||
                             !values.filePath ||
-                            formState.errors[
-                              "filePath" as keyof RepositoryFormSchema
-                            ] !== undefined
+                            errors["filePath" as keyof RepositoryFormSchema] !==
+                              undefined
                           }
                         >
                           {fileStatus === "create-new" ? (
@@ -552,9 +554,7 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
                       ) : (
                         <FieldDescription
                           error={
-                            formState.errors[
-                              "filePath" as keyof RepositoryFormSchema
-                            ]
+                            errors["filePath" as keyof RepositoryFormSchema]
                           }
                           text={"Path to save/read the tokens JSON file"}
                         />
@@ -575,7 +575,7 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
                         {...register("name")}
                       />
                       <FieldDescription
-                        error={formState.errors.name}
+                        error={errors.name}
                         text={"What are you calling this project"}
                         className="col-span-2"
                       />
@@ -606,7 +606,7 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
                         {...register("name")}
                       />
                       <FieldDescription
-                        error={formState.errors.name}
+                        error={errors.name}
                         text={"What are you calling this project"}
                         className="col-span-2"
                       />
@@ -622,9 +622,7 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
                         {...register("url")}
                       />
                       <FieldDescription
-                        error={
-                          formState.errors["url" as keyof RepositoryFormSchema]
-                        }
+                        error={errors["url" as keyof RepositoryFormSchema]}
                         text={"The URL to fetch tokens from"}
                       />
                     </div>
@@ -646,30 +644,31 @@ export const RepositoryConfig: FC<RepositoryConfigProps> = ({
           </div>
 
           <CardFooter className="flex-none justify-between sm:justify-between border-t">
-            {selectedTool === "GitHub" && fileStatus === "not-found" && (
-              <div className="inline-flex items-center p-4 space-x-2">
-                <Checkbox
-                  id="create-new-file"
-                  onCheckedChange={(checked) => {
-                    if (checked) {
-                      setFileStatus("create-new");
-                      setValue("createNewFile", true);
-                      setIsSaveDisabled(false);
-                    } else {
-                      setFileStatus("not-found");
-                      setValue("createNewFile", false);
-                      setIsSaveDisabled(true);
-                    }
-                  }}
-                />
-                <label
-                  htmlFor="create-new-file"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Create new token file on Export
-                </label>
-              </div>
-            )}
+            {selectedTool === "GitHub" &&
+              (fileStatus === "not-found" || fileStatus === "create-new") && (
+                <div className="inline-flex items-center p-4 space-x-2">
+                  <Checkbox
+                    id="create-new-file"
+                    onCheckedChange={(checked) => {
+                      if (checked) {
+                        setFileStatus("create-new");
+                        setValue("createNewFile", true);
+                        setIsSaveDisabled(false);
+                      } else {
+                        setFileStatus("not-found");
+                        setValue("createNewFile", false);
+                        setIsSaveDisabled(true);
+                      }
+                    }}
+                  />
+                  <label
+                    htmlFor="create-new-file"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Create new token file on Export
+                  </label>
+                </div>
+              )}
 
             <div className="inline-flex items-center p-4">
               <Button
