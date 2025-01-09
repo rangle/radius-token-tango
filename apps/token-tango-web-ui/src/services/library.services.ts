@@ -7,6 +7,7 @@ import {
   VectorOutput,
   diffTokenLayers,
   formatLayerName,
+  toTokenNameFormatType,
   isExpression,
   isString,
   isTokenValidationResult,
@@ -96,8 +97,10 @@ export const toTokenValues = (
 export const toCollectionEntries = (state: State): CollectionEntry[] => {
   const { collections, issues, format, oldTokenLayers, tokenLayers } = state;
 
+  const formatType = toTokenNameFormatType(format);
+
   // convert original collection to token name collection using radius-toolkit
-  const nameCollections = toTokenNameCollection(collections, format);
+  const nameCollections = toTokenNameCollection(collections, formatType);
 
   // find which tokens were added/modified/deleted based on the difference
   // between new and old token layers

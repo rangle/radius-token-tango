@@ -1,64 +1,53 @@
-import { WidgetConfiguration } from "@repo/config";
-import { createGithubRepositoryClient } from "@repo/utils";
-
+import { RepositoryFormSchema } from "@repo/config";
 import { createLogger } from "@repo/utils";
+import { createRepositoryService, determineRepositoryType } from "@repo/utils";
+import { browserContentProcessor } from "./content-processor";
 
 const log = createLogger("WEB:Services:repository");
 
-export const testRepositoryConnection = async (
-  credentials: Pick<WidgetConfiguration, "repository" | "accessToken">
-) => {
-  const client = createGithubRepositoryClient({
-    repoFullName: credentials.repository,
-    accessToken: credentials.accessToken,
-  });
-  try {
-    const branches = await client.getBranches();
-    log("debug", "testRepositoryConnection", { branches });
+type GithubCredentials = Extract<RepositoryFormSchema, { tool: "GitHub" }>;
 
-    return { status: "online", branches } as const;
-  } catch (error) {
-    return { status: "error", error: (error as Error).message } as const;
-  }
+export const testRepositoryConnection = async (
+  credentials: Pick<GithubCredentials, "repository" | "accessToken">
+) => {
+  const service = createRepositoryService(
+    determineRepositoryType(credentials.repository)
+  );
+  return service.testRepositoryConnection(credentials, browserContentProcessor);
 };
 
 export const testFileExists = async (
   credentials: Pick<
-    WidgetConfiguration,
+    GithubCredentials,
     "repository" | "accessToken" | "branch" | "filePath"
   >
 ) => {
-  const client = createGithubRepositoryClient({
-    repoFullName: credentials.repository,
-    accessToken: credentials.accessToken,
+  const service = createRepositoryService(
+    determineRepositoryType(credentials.repository)
+  );
+  return service.testFileExists({
+    ...credentials,
   });
-  try {
-    const { filePath, branch } = credentials;
-    const file = await client.getFileDetailsByPath(filePath, branch);
-    log("debug", "testFileExists", { file });
-    return { status: "found", file } as const;
-  } catch (error) {
-    return { status: "error", error: (error as Error).message } as const;
-  }
 };
 
 export const getBranchNames = async (
-  credentials: Pick<
-    WidgetConfiguration,
-    "repository" | "accessToken" | "branch"
-  >
+  credentials: Pick<GithubCredentials, "repository" | "accessToken" | "branch">
 ) => {
-  const client = createGithubRepositoryClient({
-    repoFullName: credentials.repository,
-    accessToken: credentials.accessToken,
+  const service = createRepositoryService(
+    determineRepositoryType(credentials.repository)
+  );
+  return service.getBranchNames({
+    ...credentials,
   });
-
-  const branches = await client.getBranches();
-  log("debug", "testRepositoryConnection", { branches });
-  return branches.map((b) => b.name);
 };
 
 export const testBranchAlreadyExists = (branches: string[], branch: string) => {
-  const branchExists = branches.includes(branch);
-  return { status: branchExists ? "exists" : "not-exists" } as const;
+  const service = createRepositoryService("GitHub"); // Tool type doesn't matter for this pure function
+  return service.testBranchExists(branches, branch);
+};
+
+export const validateAccessToken = async (accessToken: string) => {
+  // For now, we'll default to GitHub since we don't have tool selection at this point
+  const service = createRepositoryService("GitHub");
+  return service.validateAccessToken(accessToken);
 };

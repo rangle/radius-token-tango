@@ -57,14 +57,47 @@ export type AppRoute =
   | "repository"
   | "validation";
 
+// Type for valid debug routes
+type DebugRouteParams = {
+  route?: AppRoute;
+  config?: string; // Base64 encoded config
+};
+
+// Parse URL parameters for debug mode
+const parseDebugParams = (): DebugRouteParams => {
+  if (typeof window === "undefined") return {};
+
+  const params = new URLSearchParams(window.location.search);
+  const route = params.get("route") as AppRoute | null;
+  const config = params.get("config");
+
+  return {
+    ...(route && { route }),
+    ...(config && { config: decodeURIComponent(config) }),
+  };
+};
+
+// Check if we're running in debug mode (browser)
+const isDebugMode = (): boolean => {
+  return window.name === "";
+};
+
 export const App: FC = () => {
-  const [route, setRoute] = useState<AppRoute>("loading");
-  const [config, setConfig] = useState<WidgetConfiguration>(initialState);
+  const [route, setRoute] = useState<AppRoute>(() => {
+    const { route: debugRoute } = parseDebugParams();
+    return debugRoute || "loading";
+  });
+
+  const [config, setConfig] = useState<WidgetConfiguration>(() => {
+    const { config: debugConfig } = parseDebugParams();
+    return debugConfig ? JSON.parse(atob(debugConfig)) : initialState;
+  });
   const [commit, setCommit] = useState<PushMessageType>(initialCommitState);
   const [state, setState] = useState<State | null>(null);
 
   // establish the initial handers for routing and updates
   useEffect(() => {
+    if (isDebugMode()) return;
     on<WidgetStateHandler>("PLUGIN_STATE_CHANGE", (state) => {
       log("warn", "PLUGIN_STATE_CHANGE", state);
       setConfig(state ?? initialState);

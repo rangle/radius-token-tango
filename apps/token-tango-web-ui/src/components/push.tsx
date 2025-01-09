@@ -77,9 +77,15 @@ export const PushConfirmation: FC<PushConfirmationProps> = ({
 
   // initial loading of branch names
   useEffect(() => {
-    getBranchNames(state).then((branches) => {
-      setBranches(branches);
-    });
+    if (state.tool === "GitHub") {
+      getBranchNames({
+        repository: state.repository,
+        accessToken: state.accessToken,
+        branch: state.branch,
+      }).then((branches) => {
+        setBranches(branches);
+      });
+    }
   }, [state]);
 
   // initial validation of the value of the form field
