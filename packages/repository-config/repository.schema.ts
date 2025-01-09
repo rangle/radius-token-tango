@@ -1,13 +1,13 @@
 import { z } from "zod";
 
-// Base schema
+// Base schema without tool
 const baseSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  tool: z.enum(["GitHub"]),
 });
 
 // Specialized Schema for GitHub
-const githubSchema = z.object({
+const githubSchema = baseSchema.extend({
+  tool: z.literal("GitHub"),
   repository: z
     .string()
     .regex(
@@ -31,13 +31,30 @@ const githubSchema = z.object({
   createNewFile: z.boolean().default(false),
 });
 
-// TODO: add support for other tools
+// Schema for File Download
+const fileDownloadSchema = baseSchema.extend({
+  tool: z.literal("File Download"),
+});
 
-// Extend base schema with tool-specific schema
+// Schema for REST Server
+const restServerSchema = baseSchema.extend({
+  tool: z.literal("REST Server"),
+  url: z.string().url("Invalid URL format"),
+  headers: z
+    .array(
+      z.object({
+        key: z.string().min(1, "Header key is required"),
+        value: z.string().min(1, "Header value is required"),
+      })
+    )
+    .default([]),
+});
+
+// Combine all schemas into a discriminated union
 export const formSchema = z.discriminatedUnion("tool", [
-  baseSchema
-    .extend({
-      tool: z.literal("GitHub"),
-    })
-    .merge(githubSchema),
+  githubSchema,
+  fileDownloadSchema,
+  restServerSchema,
 ]);
+
+export type FormSchema = z.infer<typeof formSchema>;

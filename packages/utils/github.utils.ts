@@ -10,7 +10,7 @@ export type GithubFile = {
   encoding: string;
 };
 
-export type ObjectWithSha = { sha: string };
+type ObjectWithSha = { sha: string };
 export const isObjectWithSHA = (u: unknown): u is ObjectWithSha =>
   u !== null &&
   typeof u === "object" &&
@@ -26,7 +26,7 @@ export type GithubFileDetails = {
   html_url: string;
   download_url: string;
   type: string;
-  encoding: "utf-8" | "base64";
+  encoding: "utf-8" | "base64" | "none";
   content: string;
 };
 
@@ -39,7 +39,7 @@ export const isGithubFileDetails = (u: unknown): u is GithubFileDetails =>
   "html_url" in u &&
   "download_url" in u;
 
-export type CommitUser = {
+type CommitUser = {
   name: string;
   email: string;
   date: string;
@@ -55,7 +55,7 @@ export const isCommitUser = (u: unknown): u is CommitUser =>
   "date" in u &&
   typeof u["date"] === "string";
 
-export type UserDetails = {
+type UserDetails = {
   login: string;
   id: number;
   avatar_url: string;
@@ -71,7 +71,7 @@ export const isUserDetails = (u: unknown): u is UserDetails =>
   "avatar_url" in u &&
   typeof u["avatar_url"] === "string";
 
-export type CommitData = {
+type CommitData = {
   author: CommitUser;
   committer: CommitUser;
   message: string;
@@ -90,13 +90,32 @@ export const isCommitData = (u: unknown): u is CommitData =>
   "url" in u &&
   typeof u["url"] === "string";
 
-export type CommitDetails = {
+type CommitDetails = {
   sha: string;
   node_id: string;
-  commit: CommitData;
+  commit: {
+    author: CommitUser;
+    committer: CommitUser;
+    message: string;
+    tree: {
+      sha: string;
+      url: string;
+    };
+    url: string;
+    comment_count: number;
+    verification: {
+      verified: boolean;
+      reason: string;
+      signature: string | null;
+      payload: string | null;
+    };
+  };
   url: string;
+  html_url: string;
+  comments_url: string;
   author: UserDetails;
   committer: UserDetails;
+  parents: Array<ObjectWithSha>;
 };
 
 export const isCommitDetails = (u: unknown): u is CommitDetails =>
@@ -117,7 +136,7 @@ export const isCommitDetailsArray = (u: unknown): u is Array<CommitDetails> => {
   return Array.isArray(u) && u.every((item) => isCommitDetails(item));
 };
 
-export type CommitListItem = {
+type CommitListItem = {
   name: string;
   protected: boolean;
 };
@@ -169,28 +188,28 @@ export type GithubOptions = {
   createFile: boolean;
 };
 
-export type PackageJSON = {
+type PackageJSON = {
   name?: string;
   version?: string;
   [key: string]: unknown;
 };
 
-export type LastCommit = {
-  sha: string;
-  message: string;
-  author: {
-    name: string;
-    email: string;
-    date: string;
-  };
-  committer: {
-    name: string;
-    email: string;
-    date: string;
-  };
-  autor_avatar_url?: string;
-  commiter_avatar_url?: string;
-};
+// type LastCommit = {
+//   sha: string;
+//   message: string;
+//   author: {
+//     name: string;
+//     email: string;
+//     date: string;
+//   };
+//   committer: {
+//     name: string;
+//     email: string;
+//     date: string;
+//   };
+//   autor_avatar_url?: string;
+//   commiter_avatar_url?: string;
+// };
 
 export const isPackageJSON = (u: unknown): u is PackageJSON =>
   u !== null && typeof u === "object" && ("name" in u || "version" in u);
@@ -472,11 +491,46 @@ export const createGithubRepositoryClient = ({
     return result;
   };
 
+  const userCommand = async (
+    endpoint: string,
+    method = "GET",
+    headers: HeadersInit = {}
+  ) => {
+    const response = await fetch(`https://api.github.com/${endpoint}`, {
+      method,
+      headers: {
+        Accept: "application/vnd.github+json",
+        Authorization: `Bearer ${accessToken}`,
+        "X-GitHub-Api-Version": "2022-11-28",
+        ...headers,
+      },
+    });
+
+    if (!response.ok) {
+      console.error(await response.json());
+      throw new Error(`HTTP returned code ${response.status}`);
+    }
+    return response.json();
+  };
+
+  const getRepositories = async () => {
+    const result = await userCommand("user/repos");
+    log("debug", ">>>", result);
+    // You might want to create a more specific type for repository results
+    return result as Array<{
+      full_name: string;
+      name: string;
+      private: boolean;
+      html_url: string;
+    }>;
+  };
+
   return {
     fetchRawFile,
     createCommit,
     getBaseTree,
     getBranches,
+    getRepositories,
     getFileListByPath,
     getFileDetailsByPath,
     getLastCommitByPath,

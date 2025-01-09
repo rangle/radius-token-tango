@@ -4,10 +4,10 @@
   "description": "Radius Token Tango -- a Figma widget to Synchronize Design Tokens between Figma and Code",
   "type": "module",
   "scripts": {
-    "build": "esbuild src/code.tsx --bundle --outfile=dist/code.js --target=es6 --sourcemap=inline --sources-content=true --keep-names=true --metafile=true --minify=true --log-level=warning --analyze --tree-shaking=true --legal-comments=none --define:process.env.NODE_ENV=\\\"production\\\" --banner:js=\"/* Radius Token Tango Widget - Version: %npm_package_version% */\"",
+    "build": "pnpm run tsc && esbuild src/code.tsx --bundle --outfile=dist/code.js --target=es6 --sourcemap=inline --sources-content=true --keep-names=true --metafile=true --minify=true --log-level=warning --analyze --tree-shaking=true --legal-comments=none --define:process.env.NODE_ENV=\\\"production\\\" --banner:js=\"/* Radius Token Tango Widget - Version: %npm_package_version% */\"",
     "lint": "eslint --ext .ts,.tsx --ignore-pattern node_modules .",
     "lint:fix": "eslint --ext .ts,.tsx --ignore-pattern node_modules --fix .",
-    "tsc": "tsc --noEmit -p src",
+    "tsc": "tsc --noEmit",
     "dev": "esbuild src/code.tsx --bundle --outfile=dist/code.js --target=es6 --sourcemap=inline --sources-content=true --keep-names=true --metafile=true --minify=false --watch",
     "test": "vitest"
   },

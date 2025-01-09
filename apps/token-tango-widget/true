@@ -70,7 +70,7 @@
       "format": "esm"
     },
     "src/ui/components/variable-bullet.tsx": {
-      "bytes": 3148,
+      "bytes": 3397,
       "imports": [
         {
           "path": "radius-toolkit",
@@ -96,7 +96,7 @@
       "format": "esm"
     },
     "src/ui/components/name-format.tsx": {
-      "bytes": 6727,
+      "bytes": 6841,
       "imports": [
         {
           "path": "../../packages/bandoneon/src/index.ts",
@@ -443,7 +443,7 @@
       "format": "esm"
     },
     "src/ui/components/token-change-bar.tsx": {
-      "bytes": 4595,
+      "bytes": 4640,
       "imports": [
         {
           "path": "../../packages/radius-toolkit/dist/lib/radius-toolkit.es.js",
@@ -636,7 +636,7 @@
       "format": "cjs"
     },
     "../../packages/utils/github.utils.ts": {
-      "bytes": 14611,
+      "bytes": 15535,
       "imports": [
         {
           "path": "../../node_modules/.pnpm/url-parse@1.5.10/node_modules/url-parse/index.js",
@@ -2599,187 +2599,187 @@
       "entryPoint": "src/code.tsx",
       "inputs": {
         "../../node_modules/.pnpm/requires-port@1.0.0/node_modules/requires-port/index.js": {
-          "bytesInOutput": 763
-        },
-        "../../node_modules/.pnpm/querystringify@2.2.0/node_modules/querystringify/index.js": {
-          "bytesInOutput": 1788
-        },
-        "../../node_modules/.pnpm/url-parse@1.5.10/node_modules/url-parse/index.js": {
-          "bytesInOutput": 12545
-        },
-        "../../node_modules/.pnpm/path-browserify@1.0.1/node_modules/path-browserify/index.js": {
-          "bytesInOutput": 14718
-        },
-        "../../node_modules/.pnpm/base64-js@1.5.1/node_modules/base64-js/index.js": {
-          "bytesInOutput": 4239
-        },
-        "../../node_modules/.pnpm/ieee754@1.2.1/node_modules/ieee754/index.js": {
-          "bytesInOutput": 2756
-        },
-        "../../node_modules/.pnpm/buffer@6.0.3/node_modules/buffer/index.js": {
-          "bytesInOutput": 65517
-        },
-        "src/constants.ts": {
           "bytesInOutput": 278
         },
+        "../../node_modules/.pnpm/querystringify@2.2.0/node_modules/querystringify/index.js": {
+          "bytesInOutput": 711
+        },
+        "../../node_modules/.pnpm/url-parse@1.5.10/node_modules/url-parse/index.js": {
+          "bytesInOutput": 5269
+        },
+        "../../node_modules/.pnpm/path-browserify@1.0.1/node_modules/path-browserify/index.js": {
+          "bytesInOutput": 4425
+        },
+        "../../node_modules/.pnpm/base64-js@1.5.1/node_modules/base64-js/index.js": {
+          "bytesInOutput": 1619
+        },
+        "../../node_modules/.pnpm/ieee754@1.2.1/node_modules/ieee754/index.js": {
+          "bytesInOutput": 894
+        },
+        "../../node_modules/.pnpm/buffer@6.0.3/node_modules/buffer/index.js": {
+          "bytesInOutput": 27554
+        },
+        "src/constants.ts": {
+          "bytesInOutput": 226
+        },
         "../../packages/bandoneon/src/styles/colours.ts": {
-          "bytesInOutput": 1038
+          "bytesInOutput": 661
         },
         "../../packages/bandoneon/src/styles/index.ts": {
           "bytesInOutput": 0
         },
         "../../packages/bandoneon/src/styles/typography.ts": {
-          "bytesInOutput": 1840
+          "bytesInOutput": 1183
         },
         "../../packages/bandoneon/src/styles/spacing.ts": {
-          "bytesInOutput": 435
+          "bytesInOutput": 231
         },
         "../../packages/bandoneon/src/index.ts": {
           "bytesInOutput": 0
         },
         "src/ui/components/icon.tsx": {
-          "bytesInOutput": 16812
+          "bytesInOutput": 16268
         },
         "src/ui/components/variable-bullet.tsx": {
-          "bytesInOutput": 3257
+          "bytesInOutput": 1578
         },
         "src/ui/components/name-format.tsx": {
-          "bytesInOutput": 7212
+          "bytesInOutput": 4141
         },
         "src/ui/components/status-button.tsx": {
-          "bytesInOutput": 3209
+          "bytesInOutput": 1899
         },
         "src/ui/components/short-repository-ribbon.tsx": {
-          "bytesInOutput": 4482
+          "bytesInOutput": 2658
         },
         "src/ui/components/library-button.tsx": {
-          "bytesInOutput": 3069
+          "bytesInOutput": 1486
         },
         "src/ui/components/refreshed-content.tsx": {
-          "bytesInOutput": 3321
+          "bytesInOutput": 1633
         },
         "../../packages/radius-toolkit/dist/lib/radius-toolkit.es.js": {
-          "bytesInOutput": 76285
+          "bytesInOutput": 48055
         },
         "src/ui/components/lg-button.tsx": {
-          "bytesInOutput": 2151
+          "bytesInOutput": 1038
         },
         "src/ui/pages/empty-page.tsx": {
-          "bytesInOutput": 4202
+          "bytesInOutput": 2021
         },
         "src/ui/components/error-pill.tsx": {
-          "bytesInOutput": 832
+          "bytesInOutput": 386
         },
         "src/ui/components/IssuePill.tsx": {
-          "bytesInOutput": 489
+          "bytesInOutput": 252
         },
         "src/ui/components/token-issues-summary.tsx": {
-          "bytesInOutput": 7889
+          "bytesInOutput": 3468
         },
         "src/ui/components/bullet-label.tsx": {
-          "bytesInOutput": 790
+          "bytesInOutput": 441
         },
         "src/ui/components/token-change-bar.tsx": {
-          "bytesInOutput": 4467
+          "bytesInOutput": 2161
         },
         "src/ui/components/version-bump.tsx": {
-          "bytesInOutput": 3060
+          "bytesInOutput": 1598
         },
         "src/ui/components/warning-badge.tsx": {
-          "bytesInOutput": 739
+          "bytesInOutput": 349
         },
         "src/ui/components/push-panel.tsx": {
-          "bytesInOutput": 7028
+          "bytesInOutput": 3252
         },
         "../../packages/utils/logging.utils.ts": {
-          "bytesInOutput": 537
+          "bytesInOutput": 238
         },
         "../../packages/utils/index.ts": {
           "bytesInOutput": 0
         },
         "../../packages/utils/github.utils.ts": {
-          "bytesInOutput": 11426
+          "bytesInOutput": 6322
         },
         "src/common/generator.utils.ts": {
-          "bytesInOutput": 2155
+          "bytesInOutput": 1049
         },
         "src/ui/components/success-panel.tsx": {
-          "bytesInOutput": 6833
+          "bytesInOutput": 3496
         },
         "../../node_modules/.pnpm/preact@10.25.4/node_modules/preact/dist/preact.module.js": {
-          "bytesInOutput": 15026
+          "bytesInOutput": 9967
         },
         "src/ui/pages/loaded-page.tsx": {
-          "bytesInOutput": 5972
+          "bytesInOutput": 2874
         },
         "src/ui/components/widget-header.tsx": {
-          "bytesInOutput": 10365
+          "bytesInOutput": 7699
         },
         "src/ui/components/bottom-logo.tsx": {
-          "bytesInOutput": 17379
+          "bytesInOutput": 15757
         },
         "src/ui/components/commit-ribbon.tsx": {
-          "bytesInOutput": 4162
+          "bytesInOutput": 1751
         },
         "src/ui/components/repository-ribbon.tsx": {
-          "bytesInOutput": 4783
+          "bytesInOutput": 2178
         },
         "src/ui/pages/layout.tsx": {
-          "bytesInOutput": 2311
+          "bytesInOutput": 1185
         },
         "package.json": {
-          "bytesInOutput": 33
+          "bytesInOutput": 23
         },
         "types/state.ts": {
-          "bytesInOutput": 967
+          "bytesInOutput": 431
         },
         "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/events.js": {
-          "bytesInOutput": 1582
+          "bytesInOutput": 788
         },
         "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/index.js": {
           "bytesInOutput": 0
         },
         "src/types/figma-types.ts": {
-          "bytesInOutput": 678
+          "bytesInOutput": 262
         },
         "src/dialogs/dialog-handlers.ts": {
-          "bytesInOutput": 2420
+          "bytesInOutput": 1157
         },
         "src/common/variables.utils.ts": {
-          "bytesInOutput": 2116
+          "bytesInOutput": 964
         },
         "src/services/load-tokens.services.ts": {
-          "bytesInOutput": 4091
+          "bytesInOutput": 1907
         },
         "src/hooks/use-token-management.ts": {
-          "bytesInOutput": 1539
+          "bytesInOutput": 739
         },
         "src/hooks/use-vector-management.ts": {
-          "bytesInOutput": 3321
+          "bytesInOutput": 1530
         },
         "src/services/load-github.services.ts": {
-          "bytesInOutput": 5886
+          "bytesInOutput": 2839
         },
         "src/types/widget-types.ts": {
-          "bytesInOutput": 109
+          "bytesInOutput": 40
         },
         "src/hooks/use-sync-management.ts": {
-          "bytesInOutput": 3651
+          "bytesInOutput": 1630
         },
         "src/hooks/use-routing.ts": {
-          "bytesInOutput": 1347
+          "bytesInOutput": 572
         },
         "src/hooks/use-app-state.ts": {
-          "bytesInOutput": 2372
+          "bytesInOutput": 1174
         },
         "src/types/app-state.ts": {
-          "bytesInOutput": 124
+          "bytesInOutput": 51
         },
         "src/code.tsx": {
-          "bytesInOutput": 2471
+          "bytesInOutput": 1073
         }
       },
-      "bytes": 1269629
+      "bytes": 1093294
     }
   }
 }
