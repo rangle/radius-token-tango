@@ -49,9 +49,9 @@ export interface UiCloseHandler extends EventHandler {
 }
 
 export type RepositoryTokenLayers = readonly [
-  TokenLayers,
-  PackageJSON | undefined,
-  {
+  layers: TokenLayers,
+  packagejson: PackageJSON | undefined,
+  metadata: {
     name: string;
     version: string;
     lastCommits: Array<LastCommit>;

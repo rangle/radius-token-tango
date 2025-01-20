@@ -3,7 +3,7 @@ const { AutoLayout, Text, SVG, Frame } = widget;
 
 import { WidgetHeader } from "../components/widget-header";
 import { BottomLogo } from "../components/bottom-logo";
-import { RepositoryRibbon } from "../components/repository-ribbon";
+import { PersistenceRibbon } from "../components/persistence-ribbon";
 import { colors, padding, typography } from "@repo/bandoneon";
 import { NameFormat } from "../components/name-format";
 import { AppState } from "../../types/app-state";
@@ -71,16 +71,27 @@ export const PageLayout = ({
       )}
       {synchMetadata &&
         synchMetadata.lastCommits &&
-        synchMetadata.lastCommits[0] && (
-          <RepositoryRibbon
+        synchMetadata.lastCommits[0] &&
+        synchMetadata.lastCommits[0].author && (
+          <PersistenceRibbon
             name={synchMetadata.name}
-            avatarUrl={synchMetadata.lastCommits[0].autor_avatar_url || ""}
-            commitMessage={synchMetadata.lastCommits[0].message}
-            dateTime={synchMetadata.lastCommits[0].author.date}
-            userName={synchMetadata.lastCommits[0].author.name}
-            version={synchMetadata.version}
-            openConfig={openConfig}
-            status={state.configuration !== null ? "online" : "disconnected"}
+            status={state.configuration !== null ? "connected" : "disconnected"}
+            persistenceType="repository"
+            variant="detailed"
+            metadata={{
+              repository: {
+                version: synchMetadata.version,
+                lastCommit: {
+                  message: synchMetadata.lastCommits[0].message,
+                  author: {
+                    name: synchMetadata.lastCommits[0].author.name,
+                    avatar_url: synchMetadata.lastCommits[0].author.avatar_url,
+                    date: synchMetadata.lastCommits[0].author.date,
+                  },
+                },
+              },
+            }}
+            onConfig={openConfig}
           />
         )}
 

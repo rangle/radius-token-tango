@@ -54,7 +54,7 @@ export type RepositoryFile = {
 };
 
 export type ConnectionStatus = {
-  status: "online" | "error";
+  status: "connected" | "disconnected" | "error";
   error?: string;
   repositories?: Array<{
     id: string | number;

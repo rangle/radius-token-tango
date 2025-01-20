@@ -16,6 +16,9 @@ export default defineConfig(({ command, mode }) => {
         "@": path.resolve(__dirname, "@"),
       },
     },
+    define: {
+      BUILD_ENV: JSON.stringify(mode),
+    },
     build: {
       // Enable source maps in debug mode
       sourcemap: isDebug ? "inline" : false,

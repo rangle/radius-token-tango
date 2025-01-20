@@ -16,7 +16,6 @@ import {
 } from "../../../apps/token-tango-widget/types/state";
 
 import { PushConfirmation } from "./components/push";
-import { RepositoryConfig } from "./components/repository";
 import { PushMessageType, WidgetConfiguration } from "@repo/config";
 
 import "./index.css";
@@ -24,6 +23,7 @@ import { ValidationResult } from "./components/validation";
 
 import { createLogger } from "@repo/utils";
 import SpinningLogo from "./components/loading-icon";
+import { RepositoryConfig } from "./components/repository/repository-config";
 
 const log = createLogger("WEB:index");
 

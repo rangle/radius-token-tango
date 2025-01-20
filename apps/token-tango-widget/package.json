@@ -59,6 +59,7 @@
     "@create-figma-plugin/utilities": "^3.2.0",
     "@repo/bandoneon": "workspace:*",
     "@repo/config": "workspace:*",
+    "@repo/repository": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/utils": "workspace:*",
     "buffer": "^6.0.3",

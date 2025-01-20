@@ -4,9 +4,9 @@ import {
   TokenNameFormatType,
 } from "radius-toolkit";
 import { WidgetConfiguration } from "@repo/config";
-import { RepositoryTokenLayers } from "./state";
 import { SuccessfullyPushedDetails } from "../ui/components/success-panel";
 import { LoadedTokens } from "./widget-types";
+import { RepositoryTokenLayers } from "../../types/state";
 
 /**
  * Base state that is common to all routes

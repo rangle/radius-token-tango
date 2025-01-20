@@ -1,4 +1,5 @@
 import { Icon16px, IconProps } from "./icon.js";
+import { colors } from "@repo/bandoneon";
 
 const { widget } = figma;
 const { Text, AutoLayout, Ellipse } = widget;
@@ -10,12 +11,12 @@ export type BulletLabelProps = {
 } & BaseProps &
   TextChildren;
 
-const colors: Record<BulletColour, string> = {
-  green: "#09C000",
-  amber: "#f1ba13",
-  red: "#da0000",
-  white: "#ffffff",
-  black: "#232323",
+const bulletColors: Record<BulletColour, string> = {
+  green: colors.status.bullet.green,
+  amber: colors.status.bullet.amber,
+  red: colors.status.bullet.red,
+  white: colors.status.bullet.white,
+  black: colors.status.bullet.black,
 };
 
 export const BulletLabel: FunctionalWidget<BulletLabelProps> = ({
@@ -29,8 +30,13 @@ export const BulletLabel: FunctionalWidget<BulletLabelProps> = ({
       spacing={12}
       verticalAlignItems="center"
     >
-      <Ellipse name="Icon" fill={colors[color]} width={8} height={8} />
-      <Text name="Label" fill="#232323" lineHeight="100%" fontFamily="Inter">
+      <Ellipse name="Icon" fill={bulletColors[color]} width={8} height={8} />
+      <Text
+        name="Label"
+        fill={colors.status.bullet.black}
+        lineHeight="100%"
+        fontFamily="Inter"
+      >
         {children}
       </Text>
     </AutoLayout>

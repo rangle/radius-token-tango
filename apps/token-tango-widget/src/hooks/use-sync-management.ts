@@ -1,8 +1,15 @@
 import { createLogger } from "@repo/utils";
-import { WidgetConfiguration, PushMessageType } from "@repo/config";
+import {
+  WidgetConfiguration,
+  PushMessageType,
+  isGithubConfig,
+} from "@repo/config";
 import { RepositoryTokenLayers } from "../../types/state";
 import { SuccessfullyPushedDetails } from "../ui/components/success-panel";
-import { fetchRepositoryTokenLayers, saveRepositoryTokenLayers } from "../services/load-github.services";
+import {
+  fetchRepositoryTokenLayers,
+  saveRepositoryTokenLayers,
+} from "../services/load-github.services";
 import { isValidConfiguration } from "../types/widget-types";
 import { useSyncedState } from "../types/figma-types";
 
@@ -20,29 +27,26 @@ type SyncActions = {
   saveTokens: (
     synchDetails: RepositoryTokenLayers,
     pushMessage: PushMessageType,
-    onSuccess: () => void
+    onSuccess: () => void,
   ) => Promise<void>;
   setConfiguration: (config: WidgetConfiguration | null) => void;
   updateStatus: (error?: string) => void;
 };
 
 export const useSyncManagement = (): [SyncState, SyncActions] => {
-  const [configuration, setConfiguration] = useSyncedState<WidgetConfiguration | null>(
-    "synchedState",
-    null,
-  );
+  const [configuration, setConfiguration] =
+    useSyncedState<WidgetConfiguration | null>("synchedState", null);
   const [errorMessage, setErrorMessage] = useSyncedState<string | null>(
     "errorState",
     null,
   );
-  const [synchDetails, setSynchDetails] = useSyncedState<RepositoryTokenLayers | null>(
-    "synchDetails",
-    null,
-  );
-  const [successfullyPushed, setSuccessfullyPushed] = useSyncedState<SuccessfullyPushedDetails | null>(
-    "successfullyPushedTokenDetails",
-    null,
-  );
+  const [synchDetails, setSynchDetails] =
+    useSyncedState<RepositoryTokenLayers | null>("synchDetails", null);
+  const [successfullyPushed, setSuccessfullyPushed] =
+    useSyncedState<SuccessfullyPushedDetails | null>(
+      "successfullyPushedTokenDetails",
+      null,
+    );
 
   const updateStatus = (error?: string) => {
     log("debug", ">>> UPDATING STATUS");
@@ -59,7 +63,7 @@ export const useSyncManagement = (): [SyncState, SyncActions] => {
       : setConfiguration({
           ...configuration,
           error: undefined,
-          status: "online",
+          status: "connected",
         });
   };
 
@@ -73,10 +77,15 @@ export const useSyncManagement = (): [SyncState, SyncActions] => {
     }
 
     try {
+      if (!isGithubConfig(configuration)) {
+        log("debug", "Not a Github configuration");
+        return;
+      }
+
       const details = await fetchRepositoryTokenLayers({
         credentials: {
           accessToken: configuration.accessToken,
-          repoFullName: configuration.repository,
+          repository: configuration.repository,
         },
         branch: configuration.branch,
         tokenFilePath: configuration.filePath,
@@ -85,7 +94,7 @@ export const useSyncManagement = (): [SyncState, SyncActions] => {
 
       log("debug", "synchronizing...DONE!");
       updateStatus(); // success!
-      setSynchDetails(details);
+      setSynchDetails(details as RepositoryTokenLayers);
     } catch (e: unknown) {
       log("debug", "synchronizing...ERROR!");
       setErrorMessage("Error Synchronizing with Git repository");
@@ -107,11 +116,16 @@ export const useSyncManagement = (): [SyncState, SyncActions] => {
     }
 
     try {
+      if (!isGithubConfig(configuration)) {
+        log("debug", "Not a Github configuration");
+        return;
+      }
+
       const result = await saveRepositoryTokenLayers(
         {
           credentials: {
             accessToken: configuration.accessToken,
-            repoFullName: configuration.repository,
+            repository: configuration.repository,
           },
           branch: configuration.branch,
           tokenFilePath: configuration.filePath,
@@ -122,14 +136,14 @@ export const useSyncManagement = (): [SyncState, SyncActions] => {
         branchName,
         version,
       );
-      
+
       setSuccessfullyPushed({
         branch: branchName,
         ref: configuration.branch,
         repository: configuration.repository,
-        version: version || synchDetails[1]?.version || '0.0.0'
+        version: version || synchDetails[1]?.version || "0.0.0",
       });
-      
+
       onSuccess();
     } catch (e) {
       log("debug", "WHAT??", e);
@@ -140,6 +154,6 @@ export const useSyncManagement = (): [SyncState, SyncActions] => {
 
   return [
     { configuration, errorMessage, synchDetails, successfullyPushed },
-    { synchronize, saveTokens, setConfiguration, updateStatus }
+    { synchronize, saveTokens, setConfiguration, updateStatus },
   ];
-}; 
+};

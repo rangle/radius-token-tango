@@ -14,6 +14,7 @@ import { LgButton } from "../components/lg-button";
 import { colors, typography } from "@repo/bandoneon";
 import { EmptyAppState } from "../../types/app-state";
 import { AppStateActions } from "../../hooks/use-app-state";
+import { extractPersistenceMetadata } from "../components/persistence-ribbon";
 
 type EmptyPageProps = {
   state: EmptyAppState;
@@ -39,6 +40,12 @@ export const EmptyPage: FunctionalWidget<EmptyPageProps> = ({
   const format =
     getFormat(state.tokenNameFormat ?? formats[0].name) ?? formats[0];
   const formatType = toTokenNameFormatType(format);
+
+  const configuration = state.configuration;
+
+  const metadata = configuration
+    ? extractPersistenceMetadata(state)
+    : undefined;
 
   return (
     <AutoLayout direction="vertical" width={"fill-parent"} spacing={16}>
@@ -66,12 +73,19 @@ export const EmptyPage: FunctionalWidget<EmptyPageProps> = ({
         fill="#fff"
         width="fill-parent"
       >
-        {state.configuration ? (
+        {configuration ? (
           <RefreshedContent
-            name={state.configuration.name}
-            status={state.configuration.status || "disconnected"}
-            format={formatType}
-            loadedIcons={state.loadedVectors}
+            name={configuration.name}
+            status={configuration.status || "disconnected"}
+            persistenceType={
+              configuration.tool === "GitHub"
+                ? "repository"
+                : configuration.tool === "File Download"
+                  ? "file-download"
+                  : "rest-server"
+            }
+            metadata={metadata}
+            loadedIcons={state.loadedVectors ?? undefined}
             loadIcons={actions.loadIcons}
             loadTokens={actions.loadTokens}
             openConfig={openConfig}

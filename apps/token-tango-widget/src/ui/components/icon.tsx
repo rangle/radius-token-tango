@@ -192,6 +192,20 @@ const iconSrc = {
       <circle cx="12" cy="12" r="2" fill="currentColor" />
     </svg>
   `,
+  changes: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12.6667 2.66667L11.7333 3.6L13.0667 4.93333H5.33333V6.26667H13.0667L11.7333 7.6L12.6667 8.53333L15.3333 5.86667L12.6667 2.66667ZM3.33333 9.73333L4.26667 8.8L2.93333 7.46667H10.6667V6.13333H2.93333L4.26667 4.8L3.33333 3.86667L0.666667 6.53333L3.33333 9.73333Z" fill="#262626"/>
+    </svg>`,
+  modified: `
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-13h4v4h-4zm0 6h4v4h-4z" fill="currentColor"/>
+  </svg>
+  `,
+  fileAdd: `
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-plus2 "><path d="M4 22h14a2 2 0 0 0 2-2V7.5L14.5 2H6a2 2 0 0 0-2 2v4"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M3 15h6"></path><path d="M6 12v6"></path></svg>
+  `,
+  server: `
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-server "><rect width="20" height="8" x="2" y="2" rx="2" ry="2"></rect><rect width="20" height="8" x="2" y="14" rx="2" ry="2"></rect><line x1="6" x2="6.01" y1="6" y2="6"></line><line x1="6" x2="6.01" y1="18" y2="18"></line></svg>
+  `,
 };
 
 export type IconType = keyof typeof iconSrc;
@@ -208,6 +222,7 @@ export function Icon16px({
   size = 16,
   ...props
 }: IconProps) {
+  console.log(">>>>>>>>>>>>>>>>>>>>>>>> ICON", icon, color, size);
   const source = iconSrc[icon].replaceAll(`#262626`, color);
   return (
     <AutoLayout name="static-icon-button" overflow="visible" padding={2}>

@@ -12,7 +12,8 @@
     "test": "echo 'no tests needed'"
   },
   "dependencies": {
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "@repo/utils": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.3.3",

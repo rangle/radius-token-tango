@@ -6,7 +6,7 @@
       "format": "esm"
     },
     "../../packages/bandoneon/src/styles/colours.ts": {
-      "bytes": 1093,
+      "bytes": 1719,
       "imports": [],
       "format": "esm"
     },
@@ -59,7 +59,7 @@
       "format": "esm"
     },
     "src/ui/components/icon.tsx": {
-      "bytes": 16708,
+      "bytes": 18356,
       "imports": [
         {
           "path": "<runtime>",
@@ -152,8 +152,13 @@
       ],
       "format": "esm"
     },
-    "src/ui/components/short-repository-ribbon.tsx": {
-      "bytes": 4100,
+    "../../packages/utils/src/persistence.ts": {
+      "bytes": 1679,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/ui/components/persistence-ribbon.tsx": {
+      "bytes": 10179,
       "imports": [
         {
           "path": "../../packages/bandoneon/src/index.ts",
@@ -161,14 +166,39 @@
           "original": "@repo/bandoneon"
         },
         {
-          "path": "./icon.js",
+          "path": "src/ui/components/icon.tsx",
           "kind": "import-statement",
-          "external": true
+          "original": "./icon"
         },
         {
           "path": "src/ui/components/status-button.tsx",
           "kind": "import-statement",
           "original": "./status-button.js"
+        },
+        {
+          "path": "./button.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../../packages/utils/src/persistence.ts",
+          "kind": "import-statement",
+          "original": "@repo/utils/src/persistence"
+        },
+        {
+          "path": "../../types/persistence-metadata",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "@repo/config",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../../types/widget-types",
+          "kind": "import-statement",
+          "external": true
         },
         {
           "path": "<runtime>",
@@ -178,8 +208,8 @@
       ],
       "format": "esm"
     },
-    "src/ui/components/library-button.tsx": {
-      "bytes": 2782,
+    "src/ui/components/button.tsx": {
+      "bytes": 1987,
       "imports": [
         {
           "path": "../../packages/bandoneon/src/index.ts",
@@ -200,47 +230,22 @@
       "format": "esm"
     },
     "src/ui/components/refreshed-content.tsx": {
-      "bytes": 3616,
+      "bytes": 3469,
       "imports": [
         {
-          "path": "radius-toolkit",
+          "path": "../../packages/bandoneon/src/index.ts",
           "kind": "import-statement",
-          "external": true
+          "original": "@repo/bandoneon"
         },
         {
-          "path": "./button",
+          "path": "src/ui/components/persistence-ribbon.tsx",
           "kind": "import-statement",
-          "external": true
+          "original": "./persistence-ribbon"
         },
         {
-          "path": "./icon",
+          "path": "src/ui/components/button.tsx",
           "kind": "import-statement",
-          "external": true
-        },
-        {
-          "path": "./name-format",
-          "kind": "import-statement",
-          "external": true
-        },
-        {
-          "path": "./round-button",
-          "kind": "import-statement",
-          "external": true
-        },
-        {
-          "path": "src/ui/components/short-repository-ribbon.tsx",
-          "kind": "import-statement",
-          "original": "./short-repository-ribbon"
-        },
-        {
-          "path": "@repo/bandoneon",
-          "kind": "import-statement",
-          "external": true
-        },
-        {
-          "path": "src/ui/components/library-button.tsx",
-          "kind": "import-statement",
-          "original": "./library-button"
+          "original": "./button"
         },
         {
           "path": "<runtime>",
@@ -283,7 +288,7 @@
       "format": "esm"
     },
     "src/ui/pages/empty-page.tsx": {
-      "bytes": 4509,
+      "bytes": 4968,
       "imports": [
         {
           "path": "src/constants.ts",
@@ -324,6 +329,32 @@
           "path": "../../hooks/use-app-state",
           "kind": "import-statement",
           "external": true
+        },
+        {
+          "path": "src/ui/components/persistence-ribbon.tsx",
+          "kind": "import-statement",
+          "original": "../components/persistence-ribbon"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/ui/components/library-button.tsx": {
+      "bytes": 2782,
+      "imports": [
+        {
+          "path": "../../packages/bandoneon/src/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/bandoneon"
+        },
+        {
+          "path": "src/ui/components/icon.tsx",
+          "kind": "import-statement",
+          "original": "./icon.js"
         },
         {
           "path": "<runtime>",
@@ -427,12 +458,17 @@
       "format": "esm"
     },
     "src/ui/components/bullet-label.tsx": {
-      "bytes": 886,
+      "bytes": 1081,
       "imports": [
         {
           "path": "./icon.js",
           "kind": "import-statement",
           "external": true
+        },
+        {
+          "path": "../../packages/bandoneon/src/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/bandoneon"
         },
         {
           "path": "<runtime>",
@@ -582,7 +618,7 @@
       "format": "esm"
     },
     "../../packages/utils/logging.utils.ts": {
-      "bytes": 630,
+      "bytes": 2057,
       "imports": [
         {
           "path": "<runtime>",
@@ -636,7 +672,7 @@
       "format": "cjs"
     },
     "../../packages/utils/github.utils.ts": {
-      "bytes": 15535,
+      "bytes": 15917,
       "imports": [
         {
           "path": "../../node_modules/.pnpm/url-parse@1.5.10/node_modules/url-parse/index.js",
@@ -656,8 +692,108 @@
       ],
       "format": "esm"
     },
+    "../../packages/utils/gitlab.utils.ts": {
+      "bytes": 6820,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/url-parse@1.5.10/node_modules/url-parse/index.js",
+          "kind": "import-statement",
+          "original": "url-parse"
+        },
+        {
+          "path": "../../packages/utils/logging.utils.ts",
+          "kind": "import-statement",
+          "original": "./logging.utils"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../packages/utils/repository.interface.ts": {
+      "bytes": 4084,
+      "imports": [
+        {
+          "path": "./token-layers.types",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../packages/utils/token-layers.types.ts": {
+      "bytes": 456,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../packages/utils/github.service.ts": {
+      "bytes": 10950,
+      "imports": [
+        {
+          "path": "../../packages/utils/repository.interface.ts",
+          "kind": "import-statement",
+          "original": "./repository.interface"
+        },
+        {
+          "path": "../../packages/utils/github.utils.ts",
+          "kind": "import-statement",
+          "original": "./github.utils"
+        },
+        {
+          "path": "../../packages/utils/logging.utils.ts",
+          "kind": "import-statement",
+          "original": "./logging.utils"
+        },
+        {
+          "path": "../../packages/utils/token-layers.types.ts",
+          "kind": "import-statement",
+          "original": "./token-layers.types"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../packages/utils/repository.factory.ts": {
+      "bytes": 679,
+      "imports": [
+        {
+          "path": "./repository.interface",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../../packages/utils/github.service.ts",
+          "kind": "import-statement",
+          "original": "./github.service"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
     "../../packages/utils/index.ts": {
-      "bytes": 65,
+      "bytes": 244,
       "imports": [
         {
           "path": "../../packages/utils/logging.utils.ts",
@@ -668,6 +804,31 @@
           "path": "../../packages/utils/github.utils.ts",
           "kind": "import-statement",
           "original": "./github.utils"
+        },
+        {
+          "path": "../../packages/utils/gitlab.utils.ts",
+          "kind": "import-statement",
+          "original": "./gitlab.utils"
+        },
+        {
+          "path": "../../packages/utils/repository.interface.ts",
+          "kind": "import-statement",
+          "original": "./repository.interface"
+        },
+        {
+          "path": "../../packages/utils/repository.factory.ts",
+          "kind": "import-statement",
+          "original": "./repository.factory"
+        },
+        {
+          "path": "../../packages/utils/github.service.ts",
+          "kind": "import-statement",
+          "original": "./github.service"
+        },
+        {
+          "path": "../../packages/utils/src/persistence.ts",
+          "kind": "import-statement",
+          "original": "./src/persistence"
         }
       ],
       "format": "esm"
@@ -756,7 +917,7 @@
       "format": "esm"
     },
     "src/ui/pages/loaded-page.tsx": {
-      "bytes": 6657,
+      "bytes": 6675,
       "imports": [
         {
           "path": "../components/name-format",
@@ -863,60 +1024,8 @@
       ],
       "format": "esm"
     },
-    "src/ui/components/commit-ribbon.tsx": {
-      "bytes": 3472,
-      "imports": [
-        {
-          "path": "src/ui/components/icon.tsx",
-          "kind": "import-statement",
-          "original": "./icon.js"
-        },
-        {
-          "path": "<runtime>",
-          "kind": "import-statement",
-          "external": true
-        }
-      ],
-      "format": "esm"
-    },
-    "src/ui/components/repository-ribbon.tsx": {
-      "bytes": 4093,
-      "imports": [
-        {
-          "path": "./button.js",
-          "kind": "import-statement",
-          "external": true
-        },
-        {
-          "path": "src/ui/components/commit-ribbon.tsx",
-          "kind": "import-statement",
-          "original": "./commit-ribbon.js"
-        },
-        {
-          "path": "src/ui/components/icon.tsx",
-          "kind": "import-statement",
-          "original": "./icon.js"
-        },
-        {
-          "path": "src/ui/components/short-repository-ribbon.tsx",
-          "kind": "import-statement",
-          "original": "./short-repository-ribbon.js"
-        },
-        {
-          "path": "src/ui/components/status-button.tsx",
-          "kind": "import-statement",
-          "original": "./status-button.js"
-        },
-        {
-          "path": "<runtime>",
-          "kind": "import-statement",
-          "external": true
-        }
-      ],
-      "format": "esm"
-    },
     "src/ui/pages/layout.tsx": {
-      "bytes": 2703,
+      "bytes": 3024,
       "imports": [
         {
           "path": "src/ui/components/widget-header.tsx",
@@ -929,9 +1038,9 @@
           "original": "../components/bottom-logo"
         },
         {
-          "path": "src/ui/components/repository-ribbon.tsx",
+          "path": "src/ui/components/persistence-ribbon.tsx",
           "kind": "import-statement",
-          "original": "../components/repository-ribbon"
+          "original": "../components/persistence-ribbon"
         },
         {
           "path": "../../packages/bandoneon/src/index.ts",
@@ -962,11 +1071,11 @@
       "format": "esm"
     },
     "package.json": {
-      "bytes": 2587,
+      "bytes": 2635,
       "imports": []
     },
     "types/state.ts": {
-      "bytes": 4171,
+      "bytes": 4202,
       "imports": [
         {
           "path": "@create-figma-plugin/utilities",
@@ -2266,6 +2375,107 @@
       ],
       "format": "esm"
     },
+    "../../packages/repository-config/repository.types.ts": {
+      "bytes": 953,
+      "imports": [
+        {
+          "path": "zod",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./repository.schema",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "@repo/utils",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../node_modules/.pnpm/zod@3.24.1/node_modules/zod/lib/index.mjs": {
+      "bytes": 156114,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../packages/repository-config/repository.schema.ts": {
+      "bytes": 1537,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/zod@3.24.1/node_modules/zod/lib/index.mjs",
+          "kind": "import-statement",
+          "original": "zod"
+        }
+      ],
+      "format": "esm"
+    },
+    "../../packages/repository-config/push.types.ts": {
+      "bytes": 220,
+      "imports": [
+        {
+          "path": "zod",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./push.schema",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../packages/repository-config/push.schema.ts": {
+      "bytes": 294,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/zod@3.24.1/node_modules/zod/lib/index.mjs",
+          "kind": "import-statement",
+          "original": "zod"
+        }
+      ],
+      "format": "esm"
+    },
+    "../../packages/repository-config/index.ts": {
+      "bytes": 134,
+      "imports": [
+        {
+          "path": "../../packages/repository-config/repository.types.ts",
+          "kind": "import-statement",
+          "original": "./repository.types"
+        },
+        {
+          "path": "../../packages/repository-config/repository.schema.ts",
+          "kind": "import-statement",
+          "original": "./repository.schema"
+        },
+        {
+          "path": "../../packages/repository-config/push.types.ts",
+          "kind": "import-statement",
+          "original": "./push.types"
+        },
+        {
+          "path": "../../packages/repository-config/push.schema.ts",
+          "kind": "import-statement",
+          "original": "./push.schema"
+        }
+      ],
+      "format": "esm"
+    },
     "../../node_modules/.pnpm/path-browserify@1.0.1/node_modules/path-browserify/index.js": {
       "bytes": 16166,
       "imports": [
@@ -2314,8 +2524,24 @@
       ],
       "format": "cjs"
     },
+    "src/services/content-processor.ts": {
+      "bytes": 642,
+      "imports": [
+        {
+          "path": "../../node_modules/.pnpm/buffer@6.0.3/node_modules/buffer/index.js",
+          "kind": "import-statement",
+          "original": "buffer"
+        },
+        {
+          "path": "@repo/utils",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
     "src/services/load-github.services.ts": {
-      "bytes": 7903,
+      "bytes": 2642,
       "imports": [
         {
           "path": "../../node_modules/.pnpm/path-browserify@1.0.1/node_modules/path-browserify/index.js",
@@ -2323,19 +2549,9 @@
           "original": "path-browserify"
         },
         {
-          "path": "../../node_modules/.pnpm/buffer@6.0.3/node_modules/buffer/index.js",
-          "kind": "import-statement",
-          "original": "buffer"
-        },
-        {
           "path": "../../packages/utils/index.ts",
           "kind": "import-statement",
           "original": "@repo/utils"
-        },
-        {
-          "path": "radius-toolkit",
-          "kind": "import-statement",
-          "external": true
         },
         {
           "path": "../../packages/utils/index.ts",
@@ -2346,6 +2562,11 @@
           "path": "../../types/state",
           "kind": "import-statement",
           "external": true
+        },
+        {
+          "path": "src/services/content-processor.ts",
+          "kind": "import-statement",
+          "original": "./content-processor"
         },
         {
           "path": "<runtime>",
@@ -2387,7 +2608,7 @@
       "format": "esm"
     },
     "src/hooks/use-sync-management.ts": {
-      "bytes": 4369,
+      "bytes": 4646,
       "imports": [
         {
           "path": "../../packages/utils/index.ts",
@@ -2395,9 +2616,9 @@
           "original": "@repo/utils"
         },
         {
-          "path": "@repo/config",
+          "path": "../../packages/repository-config/index.ts",
           "kind": "import-statement",
-          "external": true
+          "original": "@repo/config"
         },
         {
           "path": "../../types/state",
@@ -2444,7 +2665,7 @@
       "format": "esm"
     },
     "src/hooks/use-app-state.ts": {
-      "bytes": 3716,
+      "bytes": 3732,
       "imports": [
         {
           "path": "src/hooks/use-token-management.ts",
@@ -2500,7 +2721,7 @@
       "format": "esm"
     },
     "src/types/app-state.ts": {
-      "bytes": 1648,
+      "bytes": 1658,
       "imports": [
         {
           "path": "radius-toolkit",
@@ -2513,17 +2734,17 @@
           "external": true
         },
         {
-          "path": "./state",
-          "kind": "import-statement",
-          "external": true
-        },
-        {
           "path": "../ui/components/success-panel",
           "kind": "import-statement",
           "external": true
         },
         {
           "path": "./widget-types",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../../types/state",
           "kind": "import-statement",
           "external": true
         },
@@ -2599,187 +2820,220 @@
       "entryPoint": "src/code.tsx",
       "inputs": {
         "../../node_modules/.pnpm/requires-port@1.0.0/node_modules/requires-port/index.js": {
-          "bytesInOutput": 278
+          "bytesInOutput": 763
         },
         "../../node_modules/.pnpm/querystringify@2.2.0/node_modules/querystringify/index.js": {
-          "bytesInOutput": 711
+          "bytesInOutput": 1788
         },
         "../../node_modules/.pnpm/url-parse@1.5.10/node_modules/url-parse/index.js": {
-          "bytesInOutput": 5269
+          "bytesInOutput": 12545
         },
         "../../node_modules/.pnpm/path-browserify@1.0.1/node_modules/path-browserify/index.js": {
-          "bytesInOutput": 4425
+          "bytesInOutput": 14718
         },
         "../../node_modules/.pnpm/base64-js@1.5.1/node_modules/base64-js/index.js": {
-          "bytesInOutput": 1619
+          "bytesInOutput": 4239
         },
         "../../node_modules/.pnpm/ieee754@1.2.1/node_modules/ieee754/index.js": {
-          "bytesInOutput": 894
+          "bytesInOutput": 2756
         },
         "../../node_modules/.pnpm/buffer@6.0.3/node_modules/buffer/index.js": {
-          "bytesInOutput": 27554
+          "bytesInOutput": 65517
         },
         "src/constants.ts": {
-          "bytesInOutput": 226
+          "bytesInOutput": 278
         },
         "../../packages/bandoneon/src/styles/colours.ts": {
-          "bytesInOutput": 661
+          "bytesInOutput": 1696
         },
         "../../packages/bandoneon/src/styles/index.ts": {
           "bytesInOutput": 0
         },
         "../../packages/bandoneon/src/styles/typography.ts": {
-          "bytesInOutput": 1183
+          "bytesInOutput": 1840
         },
         "../../packages/bandoneon/src/styles/spacing.ts": {
-          "bytesInOutput": 231
+          "bytesInOutput": 435
         },
         "../../packages/bandoneon/src/index.ts": {
           "bytesInOutput": 0
         },
         "src/ui/components/icon.tsx": {
-          "bytesInOutput": 16268
+          "bytesInOutput": 18470
         },
         "src/ui/components/variable-bullet.tsx": {
-          "bytesInOutput": 1578
+          "bytesInOutput": 3599
         },
         "src/ui/components/name-format.tsx": {
-          "bytesInOutput": 4141
+          "bytesInOutput": 7324
         },
         "src/ui/components/status-button.tsx": {
-          "bytesInOutput": 1899
+          "bytesInOutput": 3209
         },
-        "src/ui/components/short-repository-ribbon.tsx": {
-          "bytesInOutput": 2658
+        "../../packages/utils/src/persistence.ts": {
+          "bytesInOutput": 558
         },
-        "src/ui/components/library-button.tsx": {
-          "bytesInOutput": 1486
+        "src/ui/components/persistence-ribbon.tsx": {
+          "bytesInOutput": 9909
+        },
+        "src/ui/components/button.tsx": {
+          "bytesInOutput": 1699
         },
         "src/ui/components/refreshed-content.tsx": {
-          "bytesInOutput": 1633
+          "bytesInOutput": 3745
         },
         "../../packages/radius-toolkit/dist/lib/radius-toolkit.es.js": {
-          "bytesInOutput": 48055
+          "bytesInOutput": 76285
         },
         "src/ui/components/lg-button.tsx": {
-          "bytesInOutput": 1038
+          "bytesInOutput": 2149
         },
         "src/ui/pages/empty-page.tsx": {
-          "bytesInOutput": 2021
+          "bytesInOutput": 4485
+        },
+        "src/ui/components/library-button.tsx": {
+          "bytesInOutput": 3077
         },
         "src/ui/components/error-pill.tsx": {
-          "bytesInOutput": 386
+          "bytesInOutput": 834
         },
         "src/ui/components/IssuePill.tsx": {
-          "bytesInOutput": 252
+          "bytesInOutput": 489
         },
         "src/ui/components/token-issues-summary.tsx": {
-          "bytesInOutput": 3468
+          "bytesInOutput": 7889
         },
         "src/ui/components/bullet-label.tsx": {
-          "bytesInOutput": 441
+          "bytesInOutput": 980
         },
         "src/ui/components/token-change-bar.tsx": {
-          "bytesInOutput": 2161
+          "bytesInOutput": 4518
         },
         "src/ui/components/version-bump.tsx": {
-          "bytesInOutput": 1598
+          "bytesInOutput": 3060
         },
         "src/ui/components/warning-badge.tsx": {
-          "bytesInOutput": 349
+          "bytesInOutput": 739
         },
         "src/ui/components/push-panel.tsx": {
-          "bytesInOutput": 3252
+          "bytesInOutput": 7028
         },
         "../../packages/utils/logging.utils.ts": {
-          "bytesInOutput": 238
+          "bytesInOutput": 1302
         },
         "../../packages/utils/index.ts": {
           "bytesInOutput": 0
         },
         "../../packages/utils/github.utils.ts": {
-          "bytesInOutput": 6322
+          "bytesInOutput": 12326
+        },
+        "../../packages/utils/gitlab.utils.ts": {
+          "bytesInOutput": 99
+        },
+        "../../packages/utils/repository.interface.ts": {
+          "bytesInOutput": 848
+        },
+        "../../packages/utils/token-layers.types.ts": {
+          "bytesInOutput": 279
+        },
+        "../../packages/utils/github.service.ts": {
+          "bytesInOutput": 10928
+        },
+        "../../packages/utils/repository.factory.ts": {
+          "bytesInOutput": 350
         },
         "src/common/generator.utils.ts": {
-          "bytesInOutput": 1049
+          "bytesInOutput": 2155
         },
         "src/ui/components/success-panel.tsx": {
-          "bytesInOutput": 3496
+          "bytesInOutput": 6833
         },
         "../../node_modules/.pnpm/preact@10.25.4/node_modules/preact/dist/preact.module.js": {
-          "bytesInOutput": 9967
+          "bytesInOutput": 15026
         },
         "src/ui/pages/loaded-page.tsx": {
-          "bytesInOutput": 2874
+          "bytesInOutput": 6015
         },
         "src/ui/components/widget-header.tsx": {
-          "bytesInOutput": 7699
+          "bytesInOutput": 10359
         },
         "src/ui/components/bottom-logo.tsx": {
-          "bytesInOutput": 15757
-        },
-        "src/ui/components/commit-ribbon.tsx": {
-          "bytesInOutput": 1751
-        },
-        "src/ui/components/repository-ribbon.tsx": {
-          "bytesInOutput": 2178
+          "bytesInOutput": 17379
         },
         "src/ui/pages/layout.tsx": {
-          "bytesInOutput": 1185
+          "bytesInOutput": 2614
         },
         "package.json": {
-          "bytesInOutput": 23
+          "bytesInOutput": 33
         },
         "types/state.ts": {
-          "bytesInOutput": 431
+          "bytesInOutput": 967
         },
         "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/events.js": {
-          "bytesInOutput": 788
+          "bytesInOutput": 1582
         },
         "../../node_modules/.pnpm/@create-figma-plugin+utilities@3.2.1/node_modules/@create-figma-plugin/utilities/lib/index.js": {
           "bytesInOutput": 0
         },
         "src/types/figma-types.ts": {
-          "bytesInOutput": 262
+          "bytesInOutput": 678
         },
         "src/dialogs/dialog-handlers.ts": {
-          "bytesInOutput": 1157
+          "bytesInOutput": 2420
         },
         "src/common/variables.utils.ts": {
-          "bytesInOutput": 964
+          "bytesInOutput": 2116
         },
         "src/services/load-tokens.services.ts": {
-          "bytesInOutput": 1907
+          "bytesInOutput": 4091
         },
         "src/hooks/use-token-management.ts": {
-          "bytesInOutput": 739
+          "bytesInOutput": 1539
         },
         "src/hooks/use-vector-management.ts": {
-          "bytesInOutput": 1530
+          "bytesInOutput": 3327
+        },
+        "../../packages/repository-config/repository.types.ts": {
+          "bytesInOutput": 103
+        },
+        "../../packages/repository-config/index.ts": {
+          "bytesInOutput": 0
+        },
+        "../../node_modules/.pnpm/zod@3.24.1/node_modules/zod/lib/index.mjs": {
+          "bytesInOutput": 138110
+        },
+        "../../packages/repository-config/repository.schema.ts": {
+          "bytesInOutput": 1284
+        },
+        "../../packages/repository-config/push.schema.ts": {
+          "bytesInOutput": 239
         },
         "src/services/load-github.services.ts": {
-          "bytesInOutput": 2839
+          "bytesInOutput": 1124
+        },
+        "src/services/content-processor.ts": {
+          "bytesInOutput": 476
         },
         "src/types/widget-types.ts": {
-          "bytesInOutput": 40
+          "bytesInOutput": 109
         },
         "src/hooks/use-sync-management.ts": {
-          "bytesInOutput": 1630
+          "bytesInOutput": 3874
         },
         "src/hooks/use-routing.ts": {
-          "bytesInOutput": 572
+          "bytesInOutput": 1347
         },
         "src/hooks/use-app-state.ts": {
-          "bytesInOutput": 1174
+          "bytesInOutput": 2372
         },
         "src/types/app-state.ts": {
-          "bytesInOutput": 51
+          "bytesInOutput": 124
         },
         "src/code.tsx": {
-          "bytesInOutput": 1073
+          "bytesInOutput": 2471
         }
       },
-      "bytes": 1093294
+      "bytes": 1811816
     }
   }
 }

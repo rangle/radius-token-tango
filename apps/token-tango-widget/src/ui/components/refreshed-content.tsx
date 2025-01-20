@@ -1,131 +1,145 @@
-import { TokenNameFormatType } from "radius-toolkit";
-import { Button } from "./button";
-import { Icon16px } from "./icon";
-import { FormatDescription, NameFormat } from "./name-format";
-import { RoundButton } from "./round-button";
+import { colors, typography } from "@repo/bandoneon";
 import {
-  SmallRepositoryRibbon,
-  SmallRepositoryRibbonProps,
-} from "./short-repository-ribbon";
-import { colors } from "@repo/bandoneon";
-import { LibraryButton } from "./library-button";
+  PersistenceRibbon,
+  PersistenceRibbonProps,
+} from "./persistence-ribbon";
+import { Button } from "./button";
 
 const { widget } = figma;
-const { Text, AutoLayout, Frame } = widget;
+const { Text, AutoLayout } = widget;
 
 export type RefreshedContentProps = {
-  loadedIcons: number | null;
-  loadTokens: () => void;
-  loadIcons: () => void;
-  clearIcons: () => void;
-  openConfig: () => void;
-  format: TokenNameFormatType;
-} & SmallRepositoryRibbonProps;
+  name: string;
+  lastRefreshed?: string;
+  onRefresh?: () => void;
+  onClose?: () => void;
+  loadedIcons?: number;
+  loadIcons?: () => void;
+  clearIcons?: () => void;
+  loadTokens?: () => void;
+  openConfig?: () => void;
+} & PersistenceRibbonProps;
 
+/**
+ * Displays the current connection status and available actions
+ */
 export const RefreshedContent: FunctionalWidget<RefreshedContentProps> = ({
   name,
+  lastRefreshed,
+  onRefresh,
+  onClose,
   status,
-  loadTokens,
+  persistenceType,
   loadedIcons,
-  clearIcons,
   loadIcons,
+  clearIcons,
+  loadTokens,
   openConfig,
+  ...props
 }) => {
+  const isConnected = status === "connected" || status === "complete";
+  console.log(">>>>>>>>>>>>>>>>>>>>>>>> REFRESHED CONTENT", {
+    name,
+    status,
+    persistenceType,
+    isConnected,
+  });
   return (
     <AutoLayout
-      name="ContentContainer"
+      name="RefreshedContent"
       overflow="visible"
       direction="vertical"
       spacing={8}
-      width="fill-parent"
-      verticalAlignItems="center"
-      horizontalAlignItems="center"
+      width={"hug-contents"}
+      {...props}
     >
       <AutoLayout
-        name="ContentContainerInternal"
+        name="Header"
+        overflow="visible"
+        spacing={8}
+        width={"hug-contents"}
+        verticalAlignItems="center"
+      >
+        <PersistenceRibbon
+          name={name}
+          status={status}
+          persistenceType={persistenceType}
+          onConfig={openConfig}
+          {...props}
+        />
+        {onClose && (
+          <Button
+            name="CloseButton"
+            onClick={onClose}
+            icon="close"
+            variant="ghost"
+          />
+        )}
+      </AutoLayout>
+      {lastRefreshed && (
+        <AutoLayout
+          name="LastRefreshed"
+          overflow="visible"
+          spacing={8}
+          width={"hug-contents"}
+          verticalAlignItems="center"
+        >
+          <Text
+            name="LastRefreshed"
+            fill={colors.text.secondary}
+            {...typography.buttonSm}
+          >
+            Last refreshed: {lastRefreshed}
+          </Text>
+          {onRefresh && (
+            <Button
+              name="RefreshButton"
+              onClick={onRefresh}
+              icon="refresh"
+              variant="ghost"
+              state={status !== "connected" ? "disabled" : "default"}
+            />
+          )}
+        </AutoLayout>
+      )}
+      <AutoLayout
+        name="Actions"
         overflow="visible"
         direction="vertical"
-        spacing={24}
-        width="fill-parent"
-        verticalAlignItems="center"
-        horizontalAlignItems="center"
+        spacing={8}
+        width={"hug-contents"}
       >
-        <AutoLayout
-          name="Frame1000002081"
-          overflow="visible"
-          direction="vertical"
-          spacing={16}
-          verticalAlignItems="end"
-          horizontalAlignItems="center"
-        >
-          <AutoLayout
-            name="Frame 1000002079"
-            overflow="visible"
-            direction="vertical"
-            spacing={8}
-            height={60}
-            verticalAlignItems="center"
-            horizontalAlignItems="center"
-            onClick={openConfig}
+        {loadTokens && (
+          <Button
+            name="LoadTokensButton"
+            onClick={isConnected ? loadTokens : undefined}
+            icon="radius"
+            variant="ghost"
+            state={!isConnected ? "disabled" : "default"}
           >
-            <SmallRepositoryRibbon name={name} status={status} />
-            <Text
-              name="Change repository"
-              fill="#262626"
-              verticalAlignText="center"
-              horizontalAlignText="center"
-              lineHeight="150%"
-              fontFamily="Inter"
-              fontSize={14}
-              fontWeight={700}
-              textDecoration="underline"
-            >
-              Change repository settings
-            </Text>
-          </AutoLayout>
-        </AutoLayout>
-        <InitialActionButtonBar
-          {...{ status, loadedIcons, loadIcons, loadTokens, clearIcons }}
-        />
+            Load tokens
+          </Button>
+        )}
+        {loadedIcons ? (
+          <Button
+            name="ClearIconsButton"
+            onClick={clearIcons}
+            icon="star"
+            variant="ghost"
+          >
+            {`Loaded vectors (${loadedIcons})`}
+          </Button>
+        ) : (
+          <Button
+            name="LoadIconsButton"
+            onClick={loadIcons}
+            icon="star"
+            variant="ghost"
+          >
+            Select your vectors
+          </Button>
+        )}
       </AutoLayout>
-    </AutoLayout>
-  );
-};
-
-export type InitialActionButtonBarProps = {
-  status: SmallRepositoryRibbonProps["status"];
-  loadedIcons: number | null;
-  loadIcons: () => void;
-  clearIcons: () => void;
-  loadTokens: () => void;
-};
-
-export const InitialActionButtonBar: FunctionalWidget<
-  InitialActionButtonBarProps
-> = ({ status, loadedIcons, clearIcons, loadIcons, loadTokens }) => {
-  return (
-    <AutoLayout spacing={4}>
-      {loadedIcons ? (
-        <LibraryButton
-          icon="star"
-          onClick={clearIcons}
-          label={`Loaded vectors`}
-          count={loadedIcons}
-          state="loaded"
-        ></LibraryButton>
-      ) : (
-        <LibraryButton
-          icon="star"
-          onClick={loadIcons}
-          label="Load selected vectors"
-        ></LibraryButton>
-      )}
-      <LibraryButton
-        icon="variables"
-        state={status !== "online" ? "inactive" : "default"}
-        label="Let's load your tokens"
-        onClick={status === "online" ? loadTokens : undefined}
-      ></LibraryButton>
     </AutoLayout>
   );
 };

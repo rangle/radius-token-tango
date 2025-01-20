@@ -4,3 +4,4 @@ export * from "./gitlab.utils";
 export * from "./repository.interface";
 export * from "./repository.factory";
 export * from "./github.service";
+export * from "./src/persistence";

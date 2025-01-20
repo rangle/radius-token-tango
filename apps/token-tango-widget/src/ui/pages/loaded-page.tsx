@@ -42,7 +42,7 @@ export const LoadedPage: FunctionalWidget<LoadedPageProps> = ({
   log("debug", "BEGIN RENDERING LOADED PAGE 1", state.successfullyPushed);
 
   const { collections, inspectedAt, tokenLayers } = state.parsedTokens;
-  const [previousTokenLayers, packageJson, meta] = state.synchDetails;
+  const [previousTokenLayers, packageJson, meta] = state.synchDetails || [];
 
   const summary = getSummaryOfCollections(collections, state.allErrors);
 
@@ -107,7 +107,7 @@ export const LoadedPage: FunctionalWidget<LoadedPageProps> = ({
           <SuccessPanel details={state.successfullyPushed} />
         ) : (
           <PushPanel
-            previousVersion={meta.version}
+            previousVersion={meta?.version || "0.0.0"}
             diff={[added, modified, deleted]}
             issues={[addedErrs, modifiedErrs]}
             reloadTokens={actions.loadTokens}

@@ -5,6 +5,13 @@ export const status = {
   neutral: "#0077B2",
   fg: "#ffffff",
   info: "#696969",
+  bullet: {
+    green: "#09C000",
+    amber: "#f1ba13",
+    red: "#da0000",
+    white: "#ffffff",
+    black: "#232323",
+  },
 } as const;
 
 export const base = {
@@ -56,6 +63,39 @@ export const success = {
   muted: "#defadd",
 } as const;
 
+export const text = {
+  primary: "#262626",
+  secondary: "#696969",
+  muted: "#808080",
+} as const;
+
+export const button = {
+  default: {
+    bg: "#000000",
+    fg: "#ffffff",
+    disabled: {
+      bg: "#e7e7e7",
+      fg: "#808080",
+    },
+  },
+  ghost: {
+    fg: "#262626",
+    disabled: {
+      fg: "#808080",
+    },
+  },
+  round: {
+    default: {
+      bg: "#232323",
+      fg: "#FFFFFF",
+    },
+    disabled: {
+      bg: "#e7e7e7",
+      fg: "#808080",
+    },
+  },
+} as const;
+
 export const colors = {
   white: "#ffffff",
   black: "#000000",
@@ -67,4 +107,6 @@ export const colors = {
   library,
   active,
   success,
+  text,
+  button,
 } as const;

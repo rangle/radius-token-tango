@@ -12,6 +12,7 @@ import {
   isGithubFileDetails,
   isPackageJSON,
   githubUrlToPath,
+  GithubCredentials,
 } from "./github.utils";
 import { createLogger } from "./logging.utils";
 import {
@@ -27,10 +28,7 @@ const log = createLogger("utils:github-service");
  * while providing a consistent interface for different repository tools.
  */
 export class GitHubService implements RepositoryService {
-  private adaptCredentials(creds: RepositoryCredentials): {
-    accessToken: string;
-    repoFullName: string;
-  } {
+  private adaptCredentials(creds: RepositoryCredentials): GithubCredentials {
     log("debug", "Adapting credentials for repository:", creds.repository);
     return {
       accessToken: creds.accessToken,
@@ -38,77 +36,53 @@ export class GitHubService implements RepositoryService {
     };
   }
 
-  //   private adaptOptions(options: RepositoryOptions): GithubOptions {
-  //     log(
-  //       "debug",
-  //       "Adapting options for repository:",
-  //       options.credentials.repository
-  //     );
-  //     return {
-  //       credentials: this.adaptCredentials(options.credentials),
-  //       branch: options.branch,
-  //       tokenFilePath: options.tokenFilePath,
-  //       createFile: options.createFile,
-  //     };
-  //   }
-
   async validateAccessToken(accessToken: string): Promise<ConnectionStatus> {
-    log("debug", "Validating access token");
-    const client = createGithubRepositoryClient({
-      repoFullName: "", // Not needed for validation
-      accessToken,
-    });
-
     try {
+      const client = createGithubRepositoryClient({
+        accessToken,
+        repoFullName: "", // Not needed for validation
+      });
       const repositories = await client.getRepositories();
-      log("info", "Access token validation successful");
       return {
-        status: "online",
+        status: "connected",
         repositories: repositories.map((repo) => ({
-          id: repo.name,
+          id: repo.name, // Using name as id since GitHub API doesn't return numeric id in this context
           name: repo.name,
           full_name: repo.full_name,
         })),
       };
     } catch (error) {
-      log("error", "Access token validation failed:", (error as Error).message);
+      log("error", "Failed to validate access token:", error);
       return {
         status: "error",
-        error: (error as Error).message,
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
       };
     }
   }
 
   async testRepositoryConnection(
-    credentials: Pick<RepositoryCredentials, "repository" | "accessToken">
+    credentials: Pick<RepositoryCredentials, "repository" | "accessToken">,
+    contentProcessor = defaultContentProcessor
   ): Promise<ConnectionStatus> {
-    log("debug", "Testing repository connection for:", credentials.repository);
-    const client = createGithubRepositoryClient(
-      this.adaptCredentials(credentials as RepositoryCredentials)
-    );
-
     try {
+      const client = createGithubRepositoryClient(
+        this.adaptCredentials(credentials as RepositoryCredentials)
+      );
       const branches = await client.getBranches();
-      const repositories = await client.getRepositories();
-      log("info", "Repository connection test successful");
       return {
-        status: "online",
-        repositories: repositories.map((repo) => ({
-          id: repo.name,
-          name: repo.name,
-          full_name: repo.full_name,
+        status: "connected",
+        branches: branches.map((branch) => ({
+          name: branch.name,
+          protected: branch.protected || false,
         })),
-        branches,
       };
     } catch (error) {
-      log(
-        "error",
-        "Repository connection test failed:",
-        (error as Error).message
-      );
+      log("error", "Failed to test repository connection:", error);
       return {
         status: "error",
-        error: (error as Error).message,
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
       };
     }
   }
@@ -223,6 +197,8 @@ export class GitHubService implements RepositoryService {
     const lastCommitsFromRepo = await client.getLastCommitByPath(
       fileToGetCommitsFrom?.path ?? "/"
     );
+
+    console.log("lastCommitsFromRepo", lastCommitsFromRepo);
 
     const lastCommits = lastCommitsFromRepo.map(
       ({

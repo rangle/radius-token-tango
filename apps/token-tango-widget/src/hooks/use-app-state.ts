@@ -2,7 +2,7 @@ import { useTokenManagement } from "./use-token-management";
 import { useVectorManagement } from "./use-vector-management";
 import { useSyncManagement } from "./use-sync-management";
 import { useRouting } from "./use-routing";
-import { getFormat, toTokenNameFormatType } from "radius-toolkit";
+import { FormatName, getFormat, toTokenNameFormatType } from "radius-toolkit";
 import { AppState, EmptyAppState, LoadedAppState } from "../types/app-state";
 import { createLogger } from "@repo/utils";
 import { waitForTask } from "../types/figma-types";
@@ -18,7 +18,7 @@ export type AppStateActions = {
   loadIcons: () => Promise<void>;
   clearIcons: () => void;
   toggleVectors: () => void;
-  setTokenNameFormat: (format: string) => void;
+  setTokenNameFormat: (format: FormatName) => void;
   synchronize: () => Promise<void>;
   saveTokens: (
     synchDetails: Parameters<

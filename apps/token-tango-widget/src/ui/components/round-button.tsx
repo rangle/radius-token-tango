@@ -1,4 +1,5 @@
 import { Icon16px, IconProps } from "./icon.js";
+import { colors } from "@repo/bandoneon";
 
 const { widget } = figma;
 const { Text, AutoLayout } = widget;
@@ -11,10 +12,10 @@ export type RoundButtonProps = {
   IconProps &
   AutoLayoutProps;
 
-const colorScheme = {
-  default: ["#232323", "#FFFFFF"],
-  disabled: ["#e7e7e7", "#808080"],
-};
+const getButtonColors = (variant: RoundButtonProps["variant"]) => ({
+  bg: colors.button.round[variant ?? "default"].bg,
+  fg: colors.button.round[variant ?? "default"].fg,
+});
 
 export const RoundButton: FunctionalWidget<RoundButtonProps> = ({
   children,
@@ -23,7 +24,7 @@ export const RoundButton: FunctionalWidget<RoundButtonProps> = ({
   icon,
   ...props
 }) => {
-  const [bg, fg] = colorScheme[variant];
+  const { bg, fg } = getButtonColors(variant);
   return (
     <AutoLayout
       name="RoundButton"
