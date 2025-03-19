@@ -8,6 +8,14 @@ export type TemplateLoaderOptions = {
 };
 
 /**
+ * Represents a file to be generated with a name and optional metadata
+ */
+export type FileTemplate = {
+  name: string;
+  [key: string]: unknown;
+};
+
+/**
  * A module that exports a template render function
  * and optionally a function to format the file name
  * @see TemplateRenderFunction
@@ -16,7 +24,12 @@ export type TemplateModule = {
   name?: string;
   formatFileName?:
     | ((name: string, options: { kebabCase: boolean }) => string)
-    | ((name: string) => string);
+    | ((name: string) => string)
+    | ((
+        name: string,
+        options: { kebabCase: boolean }
+      ) => string[] | FileTemplate[])
+    | ((name: string) => string[] | FileTemplate[]);
   render: TemplateRenderFunction;
 };
 

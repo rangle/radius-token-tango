@@ -4,7 +4,22 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+    },
+    "@repo/web-ui#build": {
+      "outputs": ["dist/**"]
+    },
+    "@repo/widget#build": {
+      "outputs": ["dist/**"]
+    },
+    "radius-toolkit#build": {
+      "outputs": ["dist/lib/**", "dist/cli/**", "dist/types/**"]
+    },
+    "@repo/config#build": {
+      "outputs": []
+    },
+    "@repo/utils#build": {
+      "outputs": []
     },
     "lint": {
       "dependsOn": ["^lint"]

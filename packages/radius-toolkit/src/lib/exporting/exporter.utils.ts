@@ -30,6 +30,7 @@ export type TemplateOptions = {
   processValue?: GeneratorMappingFunction;
   dsName?: string;
   ignoreLayers?: string[];
+  fileInfo?: string | { name: string; [key: string]: unknown };
 };
 
 export type ServiceOptions = TemplateOptions & {

@@ -41,10 +41,11 @@ const readTokens = async (
 const writeTarget = async (
   { writeFile, writeToStdout }: SystemOperations,
   target: ServiceOptions["target"],
-  buffer: Buffer
+  buffer: Buffer,
+  customFileName?: string
 ) => {
   if ("fileName" in target) {
-    return writeFile(target.fileName, buffer);
+    return writeFile(customFileName || target.fileName, buffer);
   }
   if ("sink" in target) {
     return target.sink(buffer);
@@ -109,20 +110,72 @@ export const generateFileService = async (
   { source, target, operations, ...renderOptions }: ServiceOptions,
   pwd: string
 ) => {
-  const { name, render } = templateModule;
+  const { name, render, formatFileName } = templateModule;
+
   if (!name) throw new Error("Template module must have a name");
-  return readTokens(operations, source)
-    .then((input) =>
-      Promise.all([parseData(input), loadGeneratorMappings(name, pwd)])
-    )
-    .then(([data, mappings]) => {
-      return render(data, {
-        processValue: createReplaceFunction(mappings[name]),
-        ...renderOptions,
-      });
-    })
-    .then((buffer) => writeTarget(operations, target, buffer))
-    .catch((e) => {
-      log("error", "ERROR:", e);
+
+  try {
+    const input = await readTokens(operations, source);
+    const [data, mappings] = await Promise.all([
+      parseData(input),
+      loadGeneratorMappings(name, pwd),
+    ]);
+
+    // Handle case where formatFileName exists and returns an array
+    if (formatFileName && "fileName" in target) {
+      const baseName = target.fileName;
+      // Get the file name(s) from formatFileName
+      const fileNameResult = formatFileName(baseName, { kebabCase: true });
+
+      if (Array.isArray(fileNameResult)) {
+        // Display warning about multiple files being generated
+        const fileNames = fileNameResult.map((item) =>
+          typeof item === "string" ? item : item.name
+        );
+
+        log(
+          "warn",
+          `Multiple files will be generated from template '${name}':`
+        );
+        fileNames.forEach((fileName) => {
+          log("warn", `  - ${fileName}`);
+        });
+
+        if (target.fileName) {
+          log(
+            "warn",
+            `Note: The provided output filename '${target.fileName}' will be ignored.`
+          );
+        }
+
+        // Multiple files to generate
+        return Promise.all(
+          fileNameResult.map((fileItem) => {
+            const fileInfo = typeof fileItem === "string" ? fileItem : fileItem;
+            const fileName =
+              typeof fileItem === "string" ? fileItem : fileItem.name;
+
+            const buffer = render(data, {
+              processValue: createReplaceFunction(mappings[name]),
+              fileInfo,
+              ...renderOptions,
+            });
+
+            return writeTarget(operations, target, buffer, fileName);
+          })
+        );
+      }
+    }
+
+    // Default single file generation
+    const buffer = await render(data, {
+      processValue: createReplaceFunction(mappings[name]),
+      ...renderOptions,
     });
+
+    return writeTarget(operations, target, buffer);
+  } catch (e) {
+    log("error", "ERROR:", e);
+    throw e;
+  }
 };

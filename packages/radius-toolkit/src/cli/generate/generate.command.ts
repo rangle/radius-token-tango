@@ -57,23 +57,42 @@ export const registerGenerateCommand = (program: Command) => {
           ],
         }
       );
-      const outputFile =
-        options.output ??
-        templateModule.formatFileName?.(fileName, { kebabCase: true }) ??
-        `${fileName}.${options.template}`;
 
-      log("info", "SAVING: ", outputFile);
+      // If formatFileName is not provided, default to a simple output filename
+      let outputFile = options.output;
 
-      return await generateFileService(
-        templateModule,
-        {
-          source: { fileName },
-          target: {
-            fileName: outputFile,
+      if (!outputFile && templateModule.formatFileName) {
+        const formattedName = templateModule.formatFileName(fileName, {
+          kebabCase: true,
+        });
+        // Check if formatFileName returns an array (multi-file generation)
+        if (!Array.isArray(formattedName)) {
+          outputFile = formattedName;
+        }
+        // If it's an array, we'll use the custom handling in generateFileService
+      }
+
+      // If we still don't have an output file, use a default format
+      if (!outputFile) {
+        outputFile = `${fileName}.${options.template}`;
+      }
+
+      log("info", "SAVING TO: ", outputFile);
+
+      try {
+        await generateFileService(
+          templateModule,
+          {
+            source: { fileName },
+            target: {
+              fileName: outputFile,
+            },
+            operations: systemOperations,
           },
-          operations: systemOperations,
-        },
-        pwd
-      );
+          pwd
+        );
+      } catch (error) {
+        log("error", "Failed to generate files:", error);
+      }
     });
 };
