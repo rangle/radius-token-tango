@@ -15,7 +15,7 @@ export type PushPanelProps = {
   issues: [FormatValidationResult[], FormatValidationResult[]];
   previousVersion: string;
   reloadTokens: () => void;
-  pushTokens: (branch: string, message: string, version: string) => void;
+  pushTokens: (branch: string, message: string, version: string, skipVersionUpdate: boolean) => void;
   openIssues: () => void;
 } & BaseProps &
   TextChildren;
@@ -38,10 +38,14 @@ export const PushPanel: FunctionalWidget<PushPanelProps> = ({
     "manuallyBump",
     false,
   );
+  const [skipVersionUpdate, setSkipVersionUpdate] = useSyncedState<boolean>(
+    "skipVersionUpdate",
+    false,
+  );
   const [added, modified, deleted] = diff;
   const [addedErrs, modifiedErrs] = issues;
 
-  const newVersion = semVerBump(previousVersion, [
+  const newVersion = skipVersionUpdate ? previousVersion : semVerBump(previousVersion, [
     added.length > 0,
     modified.length > 0,
     deleted.length > 0 || manuallyBump,
@@ -117,15 +121,24 @@ export const PushPanel: FunctionalWidget<PushPanelProps> = ({
           checked={ignoreIssues}
           setChecked={setIgnoreIssues}
         />
+        <CheckBox
+          label="Skip version update"
+          checked={skipVersionUpdate}
+          onClick={() => setManuallyBump(false)}
+          setChecked={setSkipVersionUpdate}
+        />
         {deleted.length === 0 && (
           <CheckBox
             label="Manually bump version"
             checked={manuallyBump}
             setChecked={setManuallyBump}
+            disabled={skipVersionUpdate}
+            color={skipVersionUpdate ? "#999" : undefined}
           />
         )}
+
       </AutoLayout>
-      <AutoLayout padding={8} horizontalAlignItems={"center"}>
+      <AutoLayout padding={8} horizontalAlignItems={"center"} opacity={skipVersionUpdate ? 0.5 : 1}>
         <VersionBump from={previousVersion} to={newVersion} />
       </AutoLayout>
       <AutoLayout
@@ -150,18 +163,17 @@ export const PushPanel: FunctionalWidget<PushPanelProps> = ({
             name="PushToGithubButton"
             icon="github"
             variant={canPush ? "success" : "disabled"}
-            onClick={
-              canPush
-                ? () =>
-                    pushTokens(
-                      ...createCommitDetails(
-                        newVersion,
-                        deleted,
-                        added,
-                        modified,
-                        manuallyBump,
-                      ),
-                    )
+            onClick={canPush ? () =>
+                pushTokens(
+                  ...createCommitDetails(
+                    newVersion,
+                    deleted,
+                    added,
+                    modified,
+                    manuallyBump,
+                  ),
+                  skipVersionUpdate
+                )
                 : undefined
             }
           ></LgButton>
@@ -175,21 +187,32 @@ export type CheckBoxProps = {
   label: string;
   checked: boolean;
   setChecked: (checked: boolean) => void;
+  disabled?: boolean;
+  color?: string;
 } & BaseProps;
 
 export const CheckBox: FunctionalWidget<CheckBoxProps> = ({
   label,
   checked,
   setChecked,
+  disabled,
+  color,
   ...props
 }) => {
+  const handleClick = () => {
+    if (!disabled) {
+      setChecked(!checked);
+    }
+  };
+
   return (
     <AutoLayout
       name="CheckBox"
       overflow="visible"
       spacing={8}
       verticalAlignItems="center"
-      onClick={() => setChecked(!checked)}
+      onClick={handleClick}
+      opacity={disabled ? 0.5 : 1}
       {...props}
     >
       <Frame
@@ -200,9 +223,9 @@ export const CheckBox: FunctionalWidget<CheckBoxProps> = ({
         overflow="visible"
         width={20}
         height={20}
-        onClick={() => setChecked(!checked)}
+        onClick={handleClick}
       >
-        {checked ? (
+        {!disabled && checked ? (
           <Icon16px
             name="check_24px"
             icon="check"
@@ -213,7 +236,7 @@ export const CheckBox: FunctionalWidget<CheckBoxProps> = ({
           <></>
         )}
       </Frame>
-      <Text name={label} {...typography.small} fill={colors.black}>
+      <Text name={label} {...typography.small} fill={color || colors.black}>
         {label}
       </Text>
     </AutoLayout>
