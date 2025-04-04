@@ -206,6 +206,7 @@ export const saveRepositoryTokenLayers = async (
   message: string,
   destinationBranch?: string,
   version?: string,
+  skipVersionUpdate?: boolean,
 ) => {
   const client = createGithubRepositoryClient(options.credentials);
 
@@ -223,8 +224,8 @@ export const saveRepositoryTokenLayers = async (
         path: options.tokenFilePath,
         content: JSON.stringify(tokenLayers, undefined, 2),
       },
-      // increment package.json version
-      ...(packageFileDetails && packagejson
+      // increment package.json version only if not skipping version update
+      ...(packageFileDetails && packagejson && !skipVersionUpdate
         ? [
             {
               encoding: "utf-8",

@@ -42,7 +42,7 @@ type LoadedPageProps = {
   clearIcons: () => void;
   reloadTokens: () => void;
   openIssues: () => void;
-  pushTokens: (branch: string, message: string, version: string) => void;
+  pushTokens: (branch: string, message: string, version: string, skipVersionUpdate: boolean) => void;
 };
 
 const sum =

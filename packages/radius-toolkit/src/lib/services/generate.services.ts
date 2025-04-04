@@ -23,7 +23,7 @@ const readTokens = async (
     return loadFile(source.fileName);
   }
   if ("content" in source) {
-    return Buffer.from(source.content);
+    return Buffer.from(source.content as string);
   }
   if ("stdin" in source) {
     return readStdin();

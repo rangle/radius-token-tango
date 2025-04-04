@@ -411,7 +411,7 @@ function saveTokensToRepository(
 ) {
   return async (
     synchDetails: RepositoryTokenLayers | null,
-    { branchName, commitMessage, version }: PushMessageType,
+    { branchName, commitMessage, version, skipVersionUpdate }: PushMessageType,
     done: () => void,
   ) => {
     log("debug", "saving tokens...");
@@ -441,6 +441,7 @@ function saveTokensToRepository(
       commitMessage,
       branchName,
       version,
+      skipVersionUpdate
     )
       .then(done)
       .catch((e) => {
@@ -547,8 +548,8 @@ function createIssueDialogCallback(state: State): () => void {
 function createPushTokensDialogCallback(
   synchConfiguration: WidgetConfiguration | null,
   setConfirmPushDialogData: (newValue: PushMessageType) => void,
-): (branch: string, message: string, version: string) => void {
-  return (branchName, commitMessage, version) =>
+): (branch: string, message: string, version: string, skipVersionUpdate: boolean) => void {
+  return (branchName, commitMessage, version, skipVersionUpdate) =>
     new Promise((resolve) => {
       figma.showUI(__html__, {
         title: "Confirm Push to Github",
@@ -563,6 +564,7 @@ function createPushTokensDialogCallback(
         ...synchConfiguration,
         branchName,
         commitMessage,
+        skipVersionUpdate,
       });
       on<UiCommitHandler>("UI_COMMIT_CHANGE", (msg) => {
         setConfirmPushDialogData({ ...msg, version });
