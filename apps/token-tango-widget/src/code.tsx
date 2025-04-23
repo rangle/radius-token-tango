@@ -26,25 +26,13 @@ import {
   FormatName,
   FormatValidationResult,
   TokenCollection,
-  isTokenCollection,
   TokenLayers,
-  TokenNameCollection,
   TokenNameFormatType,
   formats,
-  toTokenNameCollection,
-  VectorOutput,
 } from "radius-toolkit";
 import { SuccessfullyPushedDetails } from "./ui/components/success-panel";
-
 import { createLogger } from "@repo/utils";
-import {
-  isComponent,
-  isComponentSet,
-  isComposite,
-  isFrame,
-  isInstance,
-  isVector,
-} from "./common/figma.types";
+import { useVectorManagement } from "./hooks/use-vector-management";
 
 const log = createLogger("WIDGET:code");
 
@@ -84,19 +72,8 @@ export function Widget() {
     "persistedTokens",
     null,
   );
-  const [persistedVectors, setPersistedVectors] = useSyncedState<string | null>(
-    "persistedVectors",
-    null,
-  );
-  const [loadedVectors, setLoadedVectors] = useSyncedState<number | null>(
-    "loadedVectors",
-    null,
-  );
 
-  const [withVectors, setWithVectors] = useSyncedState<boolean>(
-    "withVectors",
-    false,
-  );
+  const [vectorState, vectorActions] = useVectorManagement();
 
   const [allErrors, setAllErrors] = useSyncedState<FormatValidationResult[]>(
     "allErrors",
@@ -147,116 +124,6 @@ export function Widget() {
     );
   };
 
-  type LayerRender = undefined | VectorOutput;
-
-  const removeSuffix = (name: string) => name.split("#")[0] ?? name;
-
-  const renderLayer = async (
-    node: SceneNode,
-    parent: string | undefined = undefined,
-    isVariant: boolean = false,
-  ): Promise<LayerRender[]> => {
-    console.log("RENDERING LAYER", node.name, parent, node.type);
-    const result: LayerRender[] = [];
-    if (!isComposite(node)) {
-      log("debug", "Not a composite node", node.name, parent, node.type);
-      return result;
-    }
-    // this is a component or an instance therefore an individual vector
-    if (isComponent(node) || isInstance(node)) {
-      console.log(
-        "BEFORE RENDERING LAYER",
-        node,
-        isComponent(node),
-        isInstance(node),
-        isVariant,
-      );
-
-      const source = await node.exportAsync({ format: "SVG_STRING" });
-
-      console.log(
-        "AFTER EXPORTING",
-        node.name,
-        source,
-        isComponent(node),
-        isVariant,
-      );
-
-      console.log("VARIANT PROPERTIES", node.variantProperties);
-
-      const properties =
-        isComponent(node) && !isVariant
-          ? getPropertyDefinitions(node, removeSuffix)
-          : node.variantProperties ?? {};
-
-      console.log("AFTER RENDERING LAYER", node.name, "properties", properties);
-      const description = isComponent(node) ? node.description : "";
-      console.log(
-        "AFTER RENDERING LAYER",
-        node.name,
-        "description",
-        description,
-      );
-
-      result.push({
-        name: node.name,
-        description,
-        source,
-        parent,
-        properties,
-      });
-      return result;
-    }
-
-    console.log("FINISHED LOADING", result.length, "items");
-    // this is also an individual vector wrapped in a frame
-    if (isFrame(node) && node.children.every(isVector)) {
-      const source = await node.exportAsync({ format: "SVG_STRING" });
-      result.push({
-        name: node.name,
-        description: "",
-        source,
-        parent,
-        properties: {},
-      });
-      return result;
-    }
-
-    // if this is a layer with children, we need to render each child
-    if (node.children) {
-      console.log("OBJECT WITH CHILDREN", node.name, node.children.length);
-      const isThisAComponentSet = isComponentSet(node);
-      console.log("IS COMPONENT SET", isThisAComponentSet);
-      await Promise.all(
-        node.children.map(async (child) => {
-          const childResult = (
-            await renderLayer(child, node.name, isThisAComponentSet)
-          ).filter((r) => (Array.isArray(r) ? r.length > 0 : r));
-          result.push(...childResult);
-        }),
-      );
-    }
-    return result;
-  };
-
-  const doLoadIcons = async () => {
-    log("debug", ">>> LOADING YOUR ICONS");
-    const selected = figma.currentPage.selection;
-    if (selected.length === 0) {
-      log("debug", "No layers selected");
-      return;
-    }
-    const result = (
-      await Promise.all(selected.map((object) => renderLayer(object)))
-    )
-      .flatMap((r) => r)
-      .filter(Boolean);
-
-    log("debug", "RESULT", result);
-    setLoadedVectors(result.length);
-    setPersistedVectors(JSON.stringify(result));
-  };
-
   return (
     <PageLayout
       synched={synchConfiguration !== null}
@@ -276,18 +143,14 @@ export function Widget() {
           selectedFormat={tokenNameFormat}
           selectFormat={(newFormat) => setTokenNameFormat(newFormat)}
           synchConfig={synchConfiguration}
-          loadedIcons={loadedVectors}
+          loadedIcons={vectorState.loadedVectors}
           loadIcons={() => {
             log("debug", "Loading your icons!");
-            waitForTask(doLoadIcons());
+            waitForTask(vectorActions.loadVectors());
           }}
-          withVectors={withVectors}
-          toggleWithVectors={() => setWithVectors(!withVectors)}
-          clearIcons={() => {
-            log("debug", "Clearing your icons!");
-            setPersistedVectors(null);
-            setLoadedVectors(null);
-          }}
+          withVectors={vectorState.withVectors}
+          toggleWithVectors={vectorActions.toggleVectors}
+          clearIcons={vectorActions.clearVectors}
           loadTokens={async () => {
             log("debug", "Loading your tokens!");
             waitForTask(doLoadTokensAndSynch());
@@ -304,17 +167,13 @@ export function Widget() {
           issues={allErrors}
           successfullyPushed={successfullyPushed}
           synchDetails={synchDetails}
-          loadedIcons={loadedVectors}
-          loadIcons={doLoadIcons}
-          clearIcons={() => {
-            log("debug", "Clearing your icons!");
-            setPersistedVectors(null);
-            setLoadedVectors(null);
-          }}
+          loadedIcons={vectorState.loadedVectors}
+          loadIcons={vectorActions.loadVectors}
+          clearIcons={vectorActions.clearVectors}
           openIssues={createIssueDialogCallback(
             getState(
               persistedTokens,
-              persistedVectors,
+              vectorState.persistedVectors,
               synchDetails,
               format,
               allErrors,
@@ -331,7 +190,7 @@ export function Widget() {
 
               const { tokenLayers, vectors, packagejson, meta } = getState(
                 persistedTokens,
-                persistedVectors,
+                vectorState.persistedVectors,
                 synchDetails,
                 format,
                 allErrors,
@@ -365,27 +224,6 @@ export function Widget() {
 }
 
 widget.register(Widget);
-
-function getPropertyDefinitions(
-  node: ComponentNode,
-  removeSuffix: (name: string) => string,
-) {
-  console.log("[getPropertyDefinitions] GETTING PROPS FROM", node.name);
-  try {
-    return Object.entries(node.componentPropertyDefinitions).reduce(
-      (acc, [name, { defaultValue }]) => {
-        return { ...acc, [removeSuffix(name)]: String(defaultValue) };
-      },
-      {} as Record<string, string>,
-    );
-  } catch (e) {
-    console.error(
-      `[getPropertyDefinitions] Error getting props from ${node.name}`,
-      e,
-    );
-    throw e;
-  }
-}
 
 async function loadVariables(
   format: TokenNameFormatType,
