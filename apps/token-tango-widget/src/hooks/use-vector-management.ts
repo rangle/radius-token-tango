@@ -55,7 +55,6 @@ export const useVectorManagement = (): [VectorState, {
         // Add the component set itself first
         try {
           const componentSetSource = await node.exportAsync({ format: "SVG_STRING" });
-          log("debug", "Component Set source", componentSetSource);
           result.push({
             name: node.name,
             description: "",
@@ -78,7 +77,7 @@ export const useVectorManagement = (): [VectorState, {
                     const source = await child.exportAsync({ format: "SVG_STRING" });
                     return [{
                       name: child.name,
-                      description: "",
+                      description: `${node.name} ${child.name}`,
                       source,
                       parent: node.name,
                       properties: {},
@@ -91,7 +90,6 @@ export const useVectorManagement = (): [VectorState, {
                 }
               })
             );
-            
             // Flatten and filter the results
             const flattenedResults = childResults.flat().filter(Boolean);
             result.push(...flattenedResults);
@@ -132,7 +130,7 @@ export const useVectorManagement = (): [VectorState, {
       if (isComponent(node)) {
         // Check if it's a variant component (has a parent that's a component set)
         const isVariantComponent = node.parent && isComponentSet(node.parent);
-        
+
         if (!isVariantComponent) {
           // Only try to get properties for non-variant components
           properties = Object.entries(node.componentPropertyDefinitions).reduce(
