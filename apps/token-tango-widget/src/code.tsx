@@ -187,6 +187,10 @@ export function Widget() {
             synchConfiguration,
             (edits) => {
               log("debug", "PUSHING TO THE REPOSITORY", edits);
+              if (edits === "cancel") {
+                log("debug", "Push cancelled by user", edits);
+                return;
+              }
 
               const { tokenLayers, vectors, packagejson, meta } = getState(
                 persistedTokens,
@@ -385,7 +389,7 @@ function createIssueDialogCallback(state: State): () => void {
 
 function createPushTokensDialogCallback(
   synchConfiguration: WidgetConfiguration | null,
-  setConfirmPushDialogData: (newValue: PushMessageType) => void,
+  setConfirmPushDialogData: (newState: PushMessageType | "cancel") => void,
 ): (branch: string, message: string, version: string, skipVersionUpdate: boolean) => void {
   return (branchName, commitMessage, version, skipVersionUpdate) =>
     new Promise((resolve) => {
@@ -409,6 +413,7 @@ function createPushTokensDialogCallback(
         resolve("close");
       });
       on<UiCloseHandler>("UI_CLOSE", () => {
+        setConfirmPushDialogData("cancel");
         resolve("close");
       });
     });
