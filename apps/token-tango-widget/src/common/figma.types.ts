@@ -8,7 +8,7 @@ export const isComponentSet = (n: BaseNode | null): n is ComponentSetNode =>
   !!n && n.type === "COMPONENT_SET";
 export const isGroup = (n: BaseNode | null): n is GroupNode =>
   !!n && n.type === "GROUP";
-export const isVector = (n: BaseNode | null): n is GroupNode =>
+export const isVector = (n: BaseNode | null): n is VectorNode =>
   !!n && n.type === "VECTOR";
 
 export type Composite =
@@ -16,11 +16,13 @@ export type Composite =
   | InstanceNode
   | ComponentNode
   | ComponentSetNode
-  | GroupNode;
+  | GroupNode
+  | VectorNode;
 
 export const isComposite = (n: SceneNode): n is Composite =>
   isFrame(n) ||
   isInstance(n) ||
   isComponent(n) ||
   isComponentSet(n) ||
-  isGroup(n);
+  isGroup(n) ||
+  isVector(n);
