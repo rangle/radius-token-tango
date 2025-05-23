@@ -51,7 +51,9 @@ export const PushPanel: FunctionalWidget<PushPanelProps> = ({
     deleted.length > 0 || manuallyBump,
   ]);
 
-  const canPush = ignoreIssues || addedErrs.length + modifiedErrs.length === 0;
+  const hasChanges = added.length > 0 || modified.length > 0 || deleted.length > 0;
+  
+  const canPush = (ignoreIssues || addedErrs.length + modifiedErrs.length === 0) && hasChanges;
 
   return (
     <AutoLayout
