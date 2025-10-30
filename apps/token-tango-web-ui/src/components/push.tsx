@@ -30,6 +30,7 @@ import {
 import { FieldDescription } from "./field-description";
 
 const log = createLogger("WEB:push");
+//NOTE: create logger has a depth restriction in development mode. So we need to use warn or error instead of debug.
 
 export type PushConfirmationProps = {
   state: PushMessageType & WidgetConfiguration;
@@ -40,14 +41,25 @@ export const PushConfirmation: FC<PushConfirmationProps> = ({
   state,
   updateState,
 }) => {
+  log("debug", "PushConfirmation component rendered", { state });
+
   const [branchStatus, setBranchStatus] = useState<
     "exists" | "not-exists" | "error" | undefined
   >(undefined);
 
   const [branches, setBranches] = useState<string[]>([]);
 
+  const handleCancel = () => {
+    log("debug", "Cancel button clicked");
+    emit<UiCloseHandler>("UI_CLOSE");
+  };
+
   const onSubmit = ({ branchName, commitMessage }: PushMessageType) => {
-    log("debug", ">>>>>>>>>>>>>>>>>>>>>>>>>", branchName, commitMessage);
+
+    log("debug", "Form submitted", { branchStatus, branchName, commitMessage });
+    if (branchStatus !== "not-exists") {
+      return;
+    }
     return updateState({
       branchName,
       commitMessage,
@@ -61,13 +73,22 @@ export const PushConfirmation: FC<PushConfirmationProps> = ({
       mode: "onBlur",
     });
 
+  const handleFormSubmit = handleSubmit((data) => {
+    log("debug", "Form submit handler called", { branchStatus, data });
+    if (branchStatus !== "not-exists") {
+      return;
+    }
+    onSubmit(data);
+  });
+
   const handleCheckIfPushable = async (branch: string) => {
+    log("debug", "Checking if branch is pushable", { branch });
     const result = testBranchAlreadyExists(branches, branch);
-    log("warn", "TEST BRANCH", result, branches);
     setBranchStatus(result.status);
   };
 
   watch(({ branchName }) => {
+    log("debug", "Branch name changed", { branchName });
     if (branchName) {
       handleCheckIfPushable(branchName);
     } else {
@@ -77,13 +98,16 @@ export const PushConfirmation: FC<PushConfirmationProps> = ({
 
   // initial loading of branch names
   useEffect(() => {
+    log("debug", "Loading branch names");
     getBranchNames(state).then((branches) => {
+      log("debug", "Branch names loaded", { branches });
       setBranches(branches);
     });
   }, [state]);
 
   // initial validation of the value of the form field
   useEffect(() => {
+    log("debug", "Initial branch validation", { state });
     handleCheckIfPushable(state.branchName);
   }, [branches]);
 
@@ -97,7 +121,7 @@ export const PushConfirmation: FC<PushConfirmationProps> = ({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+        <form onSubmit={handleFormSubmit} className="grid gap-4">
           <div className="grid gap-1">
             <Label htmlFor="branch">Branch Name</Label>
             <Input
@@ -135,7 +159,13 @@ export const PushConfirmation: FC<PushConfirmationProps> = ({
             />
           </div>
           <div className="flex justify-end gap-2">
-            <Button variant="outline">Cancel</Button>
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={handleCancel}
+            >
+              Cancel
+            </Button>
             <Button type="submit" disabled={branchStatus !== "not-exists"}>
               Confirm and Push
             </Button>
