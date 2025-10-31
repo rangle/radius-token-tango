@@ -9,9 +9,9 @@ export const indexAllVariables = <T extends Pick<TokenLayers, "layers">>({
     (acc, variable) => {
       return acc[variable.name]
         ? {
-            ...acc,
-            [variable.name]: `${acc[variable.name]}--${variable.value}`,
-          }
+          ...acc,
+          [variable.name]: `${acc[variable.name]}--${variable.value}`,
+        }
         : { ...acc, [variable.name]: variable.value };
     },
     {} as Record<string, string>
@@ -36,11 +36,15 @@ export const diffTokenLayers = (
 export type BumpType = "minor" | "patch" | "major";
 export type BumpStrategy = (version: string) => (idx: 0 | 1 | 2) => BumpType;
 
+// the strategy is different based on whether the version number is currently under 1.0.0 or not
+// under 1.0.0, the major version number is never bumped - only the minor and patch numbers
 const bumpStrategies: BumpStrategy = (version) =>
   semver.lt(version, "1.0.0")
     ? (idx) => (["minor", "patch", "patch"] as const)[idx]
     : (idx) => (["major", "minor", "patch"] as const)[idx];
 
+// bump the version number based on the changes to the tokens (see bumpStrategies above)
+// when you want to do a stable release and bump the major number, you must do this manually in the package.json of your tokens package
 export const semVerBump = (
   version: string,
   changes: [additions: boolean, modifications: boolean, breaking: boolean]
@@ -57,14 +61,21 @@ export const semVerBump = (
   );
 };
 
-// semVerBump("0.0.0", [false, false, false]) /* 0.1.0 */; //?
+// Expected results - semVerBump(version, [minor changes, patch changes, major changes])
+
+// Version numbers under 1.0.0
+
+// semVerBump("0.0.0", [false, false, false]) /* 0.0.0 */; //?
 // semVerBump("0.0.0", [true, false, false]) /* 0.1.0 */; //?
 // semVerBump("0.0.0", [false, true, false]) /* 0.1.0 */; //?
-// semVerBump("0.0.0", [false, false, true]) /* 0.1.0 */; //?
+// semVerBump("0.0.0", [false, false, true]) /* 0.0.1 */; //?
 // semVerBump("0.1.0", [false, false, false]) /* 0.1.0 */; //?
 // semVerBump("0.1.0", [false, false, true]) /* 0.2.0 */; //?
 // semVerBump("0.1.0", [false, true, false]) /* 0.1.1 */; //?
 // semVerBump("0.1.0", [true, false, false]) /* 0.1.1 */; //?
+
+// Version numbers equal to or greater than 1.0.0
+
 // semVerBump("1.1.0", [false, false, true]) /* 1.0.0 */; //?
 // semVerBump("1.1.0", [false, true, false]) /* 1.1.1 */; //?
 // semVerBump("2.1.0", [true, false, false]) /* 2.2.0 */; //?
